@@ -1,0 +1,18 @@
+
+                Mon Feb 10 12:28:03 2014
+12:28:03 prostrct create comienza sesión userpc en CON:. (451)
+12:28:03 Error en el Registry 5: No se pudo crear la llave 'RESTAURANTE_PROGRESS' para el Visualizador de Evento. (5175)
+12:28:03 Fin de sesión prostrct create. (334)
+12:28:03 procopy comienza sesión userpc en CON:. (451)
+12:28:04 Fin de sesión procopy. (334)
+
+                Mon Feb 10 12:28:04 2014
+12:28:04 procopy get default SQL DBA comienza sesión userpc en CON:. (451)
+12:28:04 Fin de sesión procopy get default SQL DBA. (334)
+
+                Mon Feb 10 12:29:47 2014
+12:29:47 Single-user comienza sesión userpc en CON:. (451)
+12:29:47 Error en el Registry 5: No se pudo crear la llave 'RESTAURANTE_PROGRESS' para el Visualizador de Evento. (5175)
+12:29:47 Inicio de la Fase de Physical Redo en 0 . (5326)
+12:29:47 Fase Física del "Redo" Terminada en blq 0 off 376 act 0. (7161)
+14:58:39 Fin de sesión Single-user. (334)

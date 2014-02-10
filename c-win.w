@@ -51,7 +51,8 @@ CREATE WIDGET-POOL.
 &Scoped-define FRAME-NAME DEFAULT-FRAME
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BUTTON-1 
+&Scoped-Define ENABLED-OBJECTS FILL-IN-27 BUTTON-1 
+&Scoped-Define DISPLAYED-OBJECTS FILL-IN-27 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -71,10 +72,16 @@ DEFINE BUTTON BUTTON-1
      LABEL "Button 1" 
      SIZE 15 BY 1.14.
 
+DEFINE VARIABLE FILL-IN-27 AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Prueba" 
+     VIEW-AS FILL-IN 
+     SIZE 14 BY 1 NO-UNDO.
+
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME DEFAULT-FRAME
+     FILL-IN-27 AT ROW 2.67 COL 25 COLON-ALIGNED
      BUTTON-1 AT ROW 5.76 COL 27
     WITH 1 DOWN NO-BOX KEEP-TAB-ORDER OVERLAY 
          SIDE-LABELS NO-UNDERLINE THREE-D 
@@ -230,7 +237,9 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE BUTTON-1 
+  DISPLAY FILL-IN-27 
+      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
+  ENABLE FILL-IN-27 BUTTON-1 
       WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
   {&OPEN-BROWSERS-IN-QUERY-DEFAULT-FRAME}
   VIEW C-Win.

@@ -50,6 +50,9 @@ CREATE WIDGET-POOL.
 /* Name of first Frame and/or Browse and/or first Query                 */
 &Scoped-define FRAME-NAME DEFAULT-FRAME
 
+/* Standard List Definitions                                            */
+&Scoped-Define ENABLED-OBJECTS BUTTON-1 
+
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
 
@@ -63,9 +66,16 @@ CREATE WIDGET-POOL.
 /* Define the widget handle for the window                              */
 DEFINE VAR C-Win AS WIDGET-HANDLE NO-UNDO.
 
+/* Definitions of the field level widgets                               */
+DEFINE BUTTON BUTTON-1 
+     LABEL "Button 1" 
+     SIZE 15 BY 1.14.
+
+
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME DEFAULT-FRAME
+     BUTTON-1 AT ROW 5.76 COL 27
     WITH 1 DOWN NO-BOX KEEP-TAB-ORDER OVERLAY 
          SIDE-LABELS NO-UNDERLINE THREE-D 
          AT COL 1 ROW 1
@@ -220,7 +230,8 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  VIEW FRAME DEFAULT-FRAME IN WINDOW C-Win.
+  ENABLE BUTTON-1 
+      WITH FRAME DEFAULT-FRAME IN WINDOW C-Win.
   {&OPEN-BROWSERS-IN-QUERY-DEFAULT-FRAME}
   VIEW C-Win.
 END PROCEDURE.

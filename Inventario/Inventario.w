@@ -1,5 +1,8 @@
 &ANALYZE-SUSPEND _VERSION-NUMBER UIB_v9r12 GUI
 &ANALYZE-RESUME
+/* Connected Databases 
+          restaurante      PROGRESS
+*/
 &Scoped-define WINDOW-NAME CURRENT-WINDOW
 &Scoped-define FRAME-NAME Dialog-Frame
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Dialog-Frame 
@@ -41,9 +44,34 @@
 
 /* Name of first Frame and/or Browse and/or first Query                 */
 &Scoped-define FRAME-NAME Dialog-Frame
+&Scoped-define BROWSE-NAME BROWSE-8
+
+/* Internal Tables (found by Frame, Query & Browse Queries)             */
+&Scoped-define INTERNAL-TABLES PRODUCTO STOCK UNIDAD_MEDIDA
+
+/* Definitions for BROWSE BROWSE-8                                      */
+&Scoped-define FIELDS-IN-QUERY-BROWSE-8 PRODUCTO.CODIGO ~
+PRODUCTO.DESCRIPCION STOCK.CANTIDAD UNIDAD_MEDIDA.DESCRIPCION ~
+STOCK.F_CADUCIDAD STOCK.F_INGRESO STOCK.LOTE 
+&Scoped-define ENABLED-FIELDS-IN-QUERY-BROWSE-8 
+&Scoped-define QUERY-STRING-BROWSE-8 FOR EACH PRODUCTO NO-LOCK, ~
+      EACH STOCK WHERE STOCK.ID_PRODUCTO = PRODUCTO.ID_PRODUCTO NO-LOCK, ~
+      EACH UNIDAD_MEDIDA WHERE UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD NO-LOCK INDEXED-REPOSITION
+&Scoped-define OPEN-QUERY-BROWSE-8 OPEN QUERY BROWSE-8 FOR EACH PRODUCTO NO-LOCK, ~
+      EACH STOCK WHERE STOCK.ID_PRODUCTO = PRODUCTO.ID_PRODUCTO NO-LOCK, ~
+      EACH UNIDAD_MEDIDA WHERE UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD NO-LOCK INDEXED-REPOSITION.
+&Scoped-define TABLES-IN-QUERY-BROWSE-8 PRODUCTO STOCK UNIDAD_MEDIDA
+&Scoped-define FIRST-TABLE-IN-QUERY-BROWSE-8 PRODUCTO
+&Scoped-define SECOND-TABLE-IN-QUERY-BROWSE-8 STOCK
+&Scoped-define THIRD-TABLE-IN-QUERY-BROWSE-8 UNIDAD_MEDIDA
+
+
+/* Definitions for DIALOG-BOX Dialog-Frame                              */
+&Scoped-define OPEN-BROWSERS-IN-QUERY-Dialog-Frame ~
+    ~{&OPEN-QUERY-BROWSE-8}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Btn_OK Btn_Cancel Btn_Help 
+&Scoped-Define ENABLED-OBJECTS BROWSE-8 Btn_OK Btn_Cancel 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -63,24 +91,42 @@ DEFINE BUTTON Btn_Cancel AUTO-END-KEY
      SIZE 15 BY 1.14
      BGCOLOR 8 .
 
-DEFINE BUTTON Btn_Help 
-     LABEL "&Help" 
-     SIZE 15 BY 1.14
-     BGCOLOR 8 .
-
 DEFINE BUTTON Btn_OK AUTO-GO 
      LABEL "OK" 
      SIZE 15 BY 1.14
      BGCOLOR 8 .
 
+/* Query definitions                                                    */
+&ANALYZE-SUSPEND
+DEFINE QUERY BROWSE-8 FOR 
+      PRODUCTO, 
+      STOCK, 
+      UNIDAD_MEDIDA SCROLLING.
+&ANALYZE-RESUME
+
+/* Browse definitions                                                   */
+DEFINE BROWSE BROWSE-8
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-8 Dialog-Frame _STRUCTURED
+  QUERY BROWSE-8 NO-LOCK DISPLAY
+      PRODUCTO.CODIGO FORMAT "X(10)":U
+      PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 71.4
+      STOCK.CANTIDAD FORMAT "->,>>>,>>9":U
+      UNIDAD_MEDIDA.DESCRIPCION FORMAT "X(50)":U WIDTH 33.4
+      STOCK.F_CADUCIDAD FORMAT "99/99/99":U
+      STOCK.F_INGRESO FORMAT "99/99/99":U
+      STOCK.LOTE FORMAT "X(10)":U WIDTH 27.6
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 190 BY 24.05 EXPANDABLE.
+
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
-     Btn_OK AT ROW 1.52 COL 49
-     Btn_Cancel AT ROW 2.76 COL 49
-     Btn_Help AT ROW 4.76 COL 49
-     SPACE(1.13) SKIP(6.38)
+     BROWSE-8 AT ROW 1.95 COL 11
+     Btn_OK AT ROW 1.95 COL 225.8
+     Btn_Cancel AT ROW 3.91 COL 225.6
+     SPACE(5.19) SKIP(21.56)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "<insert dialog title>"
@@ -104,11 +150,35 @@ DEFINE FRAME Dialog-Frame
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR DIALOG-BOX Dialog-Frame
                                                                         */
+/* BROWSE-TAB BROWSE-8 1 Dialog-Frame */
 ASSIGN 
        FRAME Dialog-Frame:SCROLLABLE       = FALSE
        FRAME Dialog-Frame:HIDDEN           = TRUE.
 
 /* _RUN-TIME-ATTRIBUTES-END */
+&ANALYZE-RESUME
+
+
+/* Setting information for Queries and Browse Widgets fields            */
+
+&ANALYZE-SUSPEND _QUERY-BLOCK BROWSE BROWSE-8
+/* Query rebuild information for BROWSE BROWSE-8
+     _TblList          = "Restaurante.PRODUCTO,Restaurante.STOCK WHERE Restaurante.PRODUCTO ...,Restaurante.UNIDAD_MEDIDA WHERE Restaurante.PRODUCTO ..."
+     _Options          = "NO-LOCK INDEXED-REPOSITION"
+     _JoinCode[2]      = "STOCK.ID_PRODUCTO = PRODUCTO.ID_PRODUCTO"
+     _JoinCode[3]      = "UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD"
+     _FldNameList[1]   = Restaurante.PRODUCTO.CODIGO
+     _FldNameList[2]   > Restaurante.PRODUCTO.DESCRIPCION
+"PRODUCTO.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "71.4" yes no no "U" "" ""
+     _FldNameList[3]   = Restaurante.STOCK.CANTIDAD
+     _FldNameList[4]   > Restaurante.UNIDAD_MEDIDA.DESCRIPCION
+"UNIDAD_MEDIDA.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "33.4" yes no no "U" "" ""
+     _FldNameList[5]   = Restaurante.STOCK.F_CADUCIDAD
+     _FldNameList[6]   = Restaurante.STOCK.F_INGRESO
+     _FldNameList[7]   > Restaurante.STOCK.LOTE
+"STOCK.LOTE" ? ? "character" ? ? ? ? ? ? no ? no no "27.6" yes no no "U" "" ""
+     _Query            is OPENED
+*/  /* BROWSE BROWSE-8 */
 &ANALYZE-RESUME
 
  
@@ -128,18 +198,7 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME Btn_Help
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Help Dialog-Frame
-ON CHOOSE OF Btn_Help IN FRAME Dialog-Frame /* Help */
-OR HELP OF FRAME {&FRAME-NAME}
-DO: /* Call Help Function (or a simple message). */
-  MESSAGE "Help for File: {&FILE-NAME}" VIEW-AS ALERT-BOX INFORMATION.
-END.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-
+&Scoped-define BROWSE-NAME BROWSE-8
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dialog-Frame 
@@ -196,7 +255,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Btn_OK Btn_Cancel Btn_Help 
+  ENABLE BROWSE-8 Btn_OK Btn_Cancel 
       WITH FRAME Dialog-Frame.
   VIEW FRAME Dialog-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}

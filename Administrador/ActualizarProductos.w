@@ -42,6 +42,10 @@
 /* Name of first Frame and/or Browse and/or first Query                 */
 &Scoped-define FRAME-NAME Dlg_UpdateProd
 
+/* Standard List Definitions                                            */
+&Scoped-Define ENABLED-OBJECTS Fill_Codigo Fill_Descripcion FILL-IN-3 
+&Scoped-Define DISPLAYED-OBJECTS Fill_Codigo Fill_Descripcion FILL-IN-3 
+
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
 
@@ -54,10 +58,30 @@
 
 /* Define a dialog box                                                  */
 
+/* Definitions of the field level widgets                               */
+DEFINE VARIABLE FILL-IN-3 AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Fill 3" 
+     VIEW-AS FILL-IN 
+     SIZE 14 BY 1 NO-UNDO.
+
+DEFINE VARIABLE Fill_Codigo AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Código" 
+     VIEW-AS FILL-IN 
+     SIZE 14 BY 1 NO-UNDO.
+
+DEFINE VARIABLE Fill_Descripcion AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Descripción" 
+     VIEW-AS FILL-IN 
+     SIZE 14 BY 1 NO-UNDO.
+
+
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_UpdateProd
-     SPACE(64.14) SKIP(11.29)
+     Fill_Codigo AT ROW 2.91 COL 19 COLON-ALIGNED
+     Fill_Descripcion AT ROW 4.81 COL 19 COLON-ALIGNED
+     FILL-IN-3 AT ROW 7.67 COL 20 COLON-ALIGNED
+     SPACE(44.99) SKIP(7.42)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Actualizar Productos".
@@ -160,6 +184,10 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
+  DISPLAY Fill_Codigo Fill_Descripcion FILL-IN-3 
+      WITH FRAME Dlg_UpdateProd.
+  ENABLE Fill_Codigo Fill_Descripcion FILL-IN-3 
+      WITH FRAME Dlg_UpdateProd.
   VIEW FRAME Dlg_UpdateProd.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_UpdateProd}
 END PROCEDURE.

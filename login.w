@@ -23,6 +23,8 @@
 /*----------------------------------------------------------------------*/
 
 /* ***************************  Definitions  ************************** */
+/*Libreries ---                                                         */
+{login.i}
 
 /* Parameters Definitions ---                                           */
 
@@ -42,9 +44,6 @@
 /* Name of first Frame and/or Browse and/or first Query                 */
 &Scoped-define FRAME-NAME Dialog-Frame
 
-/* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Btn_OK Btn_Cancel Btn_Help 
-
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
 
@@ -58,33 +57,45 @@
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
-DEFINE BUTTON Btn_Cancel AUTO-END-KEY 
-     LABEL "Cancel" 
-     SIZE 15 BY 1.14
-     BGCOLOR 8 .
-
-DEFINE BUTTON Btn_Help 
-     LABEL "&Help" 
-     SIZE 15 BY 1.14
-     BGCOLOR 8 .
-
 DEFINE BUTTON Btn_OK AUTO-GO 
      LABEL "OK" 
      SIZE 15 BY 1.14
      BGCOLOR 8 .
 
+DEFINE VARIABLE Fill-Contrasena AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Contraseña" 
+     VIEW-AS FILL-IN 
+     SIZE 40 BY 1
+     BGCOLOR 15 FGCOLOR 0  NO-UNDO.
+
+DEFINE VARIABLE Fill-Usuario AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Usuario" 
+     VIEW-AS FILL-IN 
+     SIZE 40 BY 1
+     BGCOLOR 15  NO-UNDO.
+
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
-     Btn_OK AT ROW 1.52 COL 49
-     Btn_Cancel AT ROW 2.76 COL 49
-     Btn_Help AT ROW 4.76 COL 49
-     SPACE(1.13) SKIP(6.38)
+     SPACE(100.42) SKIP(17.16)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "<insert dialog title>"
-         DEFAULT-BUTTON Btn_OK CANCEL-BUTTON Btn_Cancel.
+         FGCOLOR 8 
+         TITLE "<insert dialog title>".
+
+DEFINE FRAME Frame-Login
+     Fill-Usuario AT ROW 8.52 COL 35 COLON-ALIGNED
+     Fill-Contrasena AT ROW 10.43 COL 35 COLON-ALIGNED
+     Btn_OK AT ROW 12.33 COL 62
+     "Bienvenido al Sistema le Seminaré" VIEW-AS TEXT
+          SIZE 69 BY 1.19 AT ROW 2.71 COL 16.4
+          FGCOLOR 15 FONT 70
+    WITH 1 DOWN KEEP-TAB-ORDER OVERLAY 
+         SIDE-LABELS THREE-D 
+         AT COL 1 ROW 1
+         SIZE 100 BY 17.14
+         BGCOLOR 12 .
 
 
 /* *********************** Procedure Settings ************************ */
@@ -102,12 +113,17 @@ DEFINE FRAME Dialog-Frame
 /* ***********  Runtime Attributes and AppBuilder Settings  *********** */
 
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
+/* REPARENT FRAME */
+ASSIGN FRAME Frame-Login:FRAME = FRAME Dialog-Frame:HANDLE.
+
 /* SETTINGS FOR DIALOG-BOX Dialog-Frame
                                                                         */
 ASSIGN 
        FRAME Dialog-Frame:SCROLLABLE       = FALSE
        FRAME Dialog-Frame:HIDDEN           = TRUE.
 
+/* SETTINGS FOR FRAME Frame-Login
+   UNDERLINE                                                            */
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
 
@@ -128,18 +144,47 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME Btn_Help
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Help Dialog-Frame
-ON CHOOSE OF Btn_Help IN FRAME Dialog-Frame /* Help */
-OR HELP OF FRAME {&FRAME-NAME}
-DO: /* Call Help Function (or a simple message). */
-  MESSAGE "Help for File: {&FILE-NAME}" VIEW-AS ALERT-BOX INFORMATION.
+&Scoped-define SELF-NAME Frame-Login
+&Scoped-define FRAME-NAME Frame-Login
+&Scoped-define SELF-NAME Btn_OK
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_OK Dialog-Frame
+ON CHOOSE OF Btn_OK IN FRAME Frame-Login /* OK */
+DO:
+    DEF VAR vcharUsuario AS CHAR.
+    DEF VAR vcharContrasena AS CHAR.
+    DEF VAR vcharCadEncript AS CHAR.
+
+    vcharUsuario = Fill-Usuario:SCREEN-VALUE.
+    vcharContrasena = Fill-Contrasena:SCREEN-VALUE.
+
+    IF vcharUsuario = "" OR vcharContrasena ="" THEN DO:
+      MESSAGE "Usuario o contraseña Inválidos" VIEW-AS ALERT-BOX.
+    END.
+    ELSE DO:
+      vcharCadEncript = getEncrypt(vcharContrasena).
+      MESSAGE vcharCadEncript VIEW-AS ALERT-BOX.
+    END.     
 END.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Fill-Contrasena
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Fill-Contrasena Dialog-Frame
+ON ANY-PRINTABLE OF Fill-Contrasena IN FRAME Frame-Login /* Contraseña */
+DO:
+    ASSIGN Fill-Contrasena = Fill-Contrasena + KEY-LABEL(LAST-KEY). 
+    APPLY KEYLABEL(42). 
+    RETURN NO-APPLY. 
+
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define FRAME-NAME Dialog-Frame
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dialog-Frame 
@@ -180,6 +225,7 @@ PROCEDURE disable_UI :
 ------------------------------------------------------------------------------*/
   /* Hide all frames. */
   HIDE FRAME Dialog-Frame.
+  HIDE FRAME Frame-Login.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
@@ -196,10 +242,13 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Btn_OK Btn_Cancel Btn_Help 
-      WITH FRAME Dialog-Frame.
   VIEW FRAME Dialog-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}
+  DISPLAY Fill-Usuario Fill-Contrasena 
+      WITH FRAME Frame-Login.
+  ENABLE Fill-Usuario Fill-Contrasena Btn_OK 
+      WITH FRAME Frame-Login.
+  {&OPEN-BROWSERS-IN-QUERY-Frame-Login}
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

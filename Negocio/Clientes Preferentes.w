@@ -43,10 +43,10 @@
 &Scoped-define FRAME-NAME Dialog-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS FILL-IN-20 FILL-IN-21 FILL-IN-22 FILL-IN-23 ~
-FILL-IN-25 FILL-IN-24 FILL-IN-26 Btn_OK Btn_Cancel 
-&Scoped-Define DISPLAYED-OBJECTS FILL-IN-20 FILL-IN-21 FILL-IN-22 ~
-FILL-IN-23 FILL-IN-25 FILL-IN-24 FILL-IN-26 
+&Scoped-Define ENABLED-OBJECTS Name LastName1 LastName2 Address Birthdate ~
+e-mail Btn_OK Btn_Cancel 
+&Scoped-Define DISPLAYED-OBJECTS Name LastName1 LastName2 Address Birthdate ~
+e-mail 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -71,55 +71,49 @@ DEFINE BUTTON Btn_OK AUTO-GO
      SIZE 15 BY 1.14
      BGCOLOR 8 .
 
-DEFINE VARIABLE FILL-IN-20 AS CHARACTER FORMAT "A(25)":U 
-     LABEL "Nombre" 
-     VIEW-AS FILL-IN 
-     SIZE 30 BY 1 NO-UNDO.
-
-DEFINE VARIABLE FILL-IN-21 AS CHARACTER FORMAT "A(25)":U 
-     LABEL "Apellido Paterno" 
-     VIEW-AS FILL-IN 
-     SIZE 30 BY 1 NO-UNDO.
-
-DEFINE VARIABLE FILL-IN-22 AS CHARACTER FORMAT "A(25)":U 
-     LABEL "Apellido Materno" 
-     VIEW-AS FILL-IN 
-     SIZE 30 BY 1 NO-UNDO.
-
-DEFINE VARIABLE FILL-IN-23 AS CHARACTER FORMAT "X(50)":U 
+DEFINE VARIABLE Address AS CHARACTER FORMAT "X(50)":U 
      LABEL "Domicilio" 
      VIEW-AS FILL-IN 
      SIZE 50 BY 3.81 NO-UNDO.
 
-DEFINE VARIABLE FILL-IN-24 AS CHARACTER FORMAT "9(10)":U 
-     LABEL "Teléfono" 
-     VIEW-AS FILL-IN 
-     SIZE 19 BY 1 NO-UNDO.
-
-DEFINE VARIABLE FILL-IN-25 AS DATE FORMAT "99/99/9999":U 
+DEFINE VARIABLE Birthdate AS DATE FORMAT "99/99/9999":U 
      LABEL "Fecha Nacimiento" 
      VIEW-AS FILL-IN 
      SIZE 17 BY 1 NO-UNDO.
 
-DEFINE VARIABLE FILL-IN-26 AS CHARACTER FORMAT "X(35)":U 
+DEFINE VARIABLE e-mail AS CHARACTER FORMAT "X(35)":U 
      LABEL "Correo Electrónico" 
      VIEW-AS FILL-IN 
      SIZE 40 BY 1 NO-UNDO.
+
+DEFINE VARIABLE LastName1 AS CHARACTER FORMAT "A(25)":U 
+     LABEL "Apellido Paterno" 
+     VIEW-AS FILL-IN 
+     SIZE 30 BY 1 NO-UNDO.
+
+DEFINE VARIABLE LastName2 AS CHARACTER FORMAT "A(25)":U 
+     LABEL "Apellido Materno" 
+     VIEW-AS FILL-IN 
+     SIZE 30 BY 1 NO-UNDO.
+
+DEFINE VARIABLE Name AS CHARACTER FORMAT "A(25)":U 
+     LABEL "Nombre" 
+     VIEW-AS FILL-IN 
+     SIZE 30 BY 1 NO-UNDO.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
-     FILL-IN-20 AT ROW 1.95 COL 19 COLON-ALIGNED
-     FILL-IN-21 AT ROW 3.38 COL 19 COLON-ALIGNED
-     FILL-IN-22 AT ROW 5.05 COL 19 COLON-ALIGNED
-     FILL-IN-23 AT ROW 6.71 COL 19 COLON-ALIGNED
-     FILL-IN-25 AT ROW 11.24 COL 19 COLON-ALIGNED
-     FILL-IN-24 AT ROW 12.91 COL 19 COLON-ALIGNED
-     FILL-IN-26 AT ROW 14.57 COL 19 COLON-ALIGNED
-     Btn_OK AT ROW 17.19 COL 21
-     Btn_Cancel AT ROW 17.19 COL 41
-     SPACE(23.19) SKIP(1.95)
+     Name AT ROW 1.95 COL 19 COLON-ALIGNED
+     LastName1 AT ROW 3.38 COL 19 COLON-ALIGNED
+     LastName2 AT ROW 5.05 COL 19 COLON-ALIGNED
+     Address AT ROW 6.71 COL 19 COLON-ALIGNED
+     Birthdate AT ROW 11.24 COL 19 COLON-ALIGNED
+     e-mail AT ROW 13.14 COL 19 COLON-ALIGNED
+     Btn_OK AT ROW 15.52 COL 20
+     Btn_Cancel AT ROW 15.52 COL 38
+     SPACE(26.19) SKIP(3.62)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Clientes Preferentes"
@@ -223,11 +217,9 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  DISPLAY FILL-IN-20 FILL-IN-21 FILL-IN-22 FILL-IN-23 FILL-IN-25 FILL-IN-24 
-          FILL-IN-26 
+  DISPLAY Name LastName1 LastName2 Address Birthdate e-mail 
       WITH FRAME Dialog-Frame.
-  ENABLE FILL-IN-20 FILL-IN-21 FILL-IN-22 FILL-IN-23 FILL-IN-25 FILL-IN-24 
-         FILL-IN-26 Btn_OK Btn_Cancel 
+  ENABLE Name LastName1 LastName2 Address Birthdate e-mail Btn_OK Btn_Cancel 
       WITH FRAME Dialog-Frame.
   VIEW FRAME Dialog-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}

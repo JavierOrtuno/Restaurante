@@ -44,7 +44,7 @@
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Name LastName1 LastName2 Address Birthdate ~
-e-mail Btn_OK Btn_Cancel 
+e-mail BUTTON-28 Btn_Cancel 
 &Scoped-Define DISPLAYED-OBJECTS Name LastName1 LastName2 Address Birthdate ~
 e-mail 
 
@@ -66,37 +66,36 @@ DEFINE BUTTON Btn_Cancel AUTO-END-KEY
      SIZE 15 BY 1.14
      BGCOLOR 8 .
 
-DEFINE BUTTON Btn_OK AUTO-GO 
-     LABEL "OK" 
-     SIZE 15 BY 1.14
-     BGCOLOR 8 .
+DEFINE BUTTON BUTTON-28 
+     LABEL "Insertar" 
+     SIZE 15 BY 1.14.
 
-DEFINE VARIABLE Address AS CHARACTER FORMAT "X(50)":U 
+DEFINE VARIABLE Address AS CHARACTER FORMAT "X(40)":U 
      LABEL "Domicilio" 
      VIEW-AS FILL-IN 
-     SIZE 50 BY 3.81 NO-UNDO.
+     SIZE 51 BY 1.19 NO-UNDO.
 
-DEFINE VARIABLE Birthdate AS DATE FORMAT "99/99/9999":U 
+DEFINE VARIABLE Birthdate AS DATE FORMAT "99/99/99":U 
      LABEL "Fecha Nacimiento" 
      VIEW-AS FILL-IN 
-     SIZE 17 BY 1 NO-UNDO.
+     SIZE 15 BY 1 NO-UNDO.
 
 DEFINE VARIABLE e-mail AS CHARACTER FORMAT "X(35)":U 
      LABEL "Correo Electrónico" 
      VIEW-AS FILL-IN 
      SIZE 40 BY 1 NO-UNDO.
 
-DEFINE VARIABLE LastName1 AS CHARACTER FORMAT "A(25)":U 
+DEFINE VARIABLE LastName1 AS CHARACTER FORMAT "X(25)":U 
      LABEL "Apellido Paterno" 
      VIEW-AS FILL-IN 
      SIZE 30 BY 1 NO-UNDO.
 
-DEFINE VARIABLE LastName2 AS CHARACTER FORMAT "A(25)":U 
+DEFINE VARIABLE LastName2 AS CHARACTER FORMAT "X(25)":U 
      LABEL "Apellido Materno" 
      VIEW-AS FILL-IN 
      SIZE 30 BY 1 NO-UNDO.
 
-DEFINE VARIABLE Name AS CHARACTER FORMAT "A(25)":U 
+DEFINE VARIABLE Name AS CHARACTER FORMAT "X(25)":U 
      LABEL "Nombre" 
      VIEW-AS FILL-IN 
      SIZE 30 BY 1 NO-UNDO.
@@ -109,14 +108,14 @@ DEFINE FRAME Dialog-Frame
      LastName1 AT ROW 3.38 COL 19 COLON-ALIGNED
      LastName2 AT ROW 5.05 COL 19 COLON-ALIGNED
      Address AT ROW 6.71 COL 19 COLON-ALIGNED
-     Birthdate AT ROW 11.24 COL 19 COLON-ALIGNED
-     e-mail AT ROW 13.14 COL 19 COLON-ALIGNED
-     Btn_OK AT ROW 15.52 COL 20
-     Btn_Cancel AT ROW 15.52 COL 38
-     SPACE(26.19) SKIP(3.62)
+     Birthdate AT ROW 8.62 COL 19 COLON-ALIGNED
+     e-mail AT ROW 10.29 COL 19 COLON-ALIGNED
+     BUTTON-28 AT ROW 12.43 COL 21
+     Btn_Cancel AT ROW 12.43 COL 39
+     SPACE(21.39) SKIP(1.37)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "Clientes Preferentes"
+         TITLE "Insertar Clientes"
          CANCEL-BUTTON Btn_Cancel.
 
 
@@ -152,9 +151,34 @@ ASSIGN
 
 &Scoped-define SELF-NAME Dialog-Frame
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame Dialog-Frame
-ON WINDOW-CLOSE OF FRAME Dialog-Frame /* Clientes Preferentes */
+ON WINDOW-CLOSE OF FRAME Dialog-Frame /* Insertar Clientes */
 DO:
   APPLY "END-ERROR":U TO SELF.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME BUTTON-28
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-28 Dialog-Frame
+ON CHOOSE OF BUTTON-28 IN FRAME Dialog-Frame /* Insertar */
+DO:
+	IF NAME:SCREEN-VALUE = "" OR address:SCREEN-VALUE = "" OR e-mail:SCREEN-VALUE = ""
+		THEN MESSAGE "Nombre, Domicilio y Correo son obligatorios" VIEW-AS ALERT-BOX.
+	ELSE
+        DO.
+            CREATE Cliente.
+		    CREATE Persona.
+		    ASSIGN  
+                Persona.Nombres = Name:Screen-Value
+  			    Persona.A_Paterno = lastname1:screen-value
+  			    Persona.A_Materno = lastname2:screen-value
+  			    Persona.Domicilio = address:screen-value
+ 			    Persona.F_Nacimiento = date(birthdate:screen-value)
+			    Persona.correo = e-mail:screen-value
+		   	    Cliente.ID_Persona = Persona.ID_Persona.
+        END.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -219,7 +243,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY Name LastName1 LastName2 Address Birthdate e-mail 
       WITH FRAME Dialog-Frame.
-  ENABLE Name LastName1 LastName2 Address Birthdate e-mail Btn_OK Btn_Cancel 
+  ENABLE Name LastName1 LastName2 Address Birthdate e-mail BUTTON-28 Btn_Cancel 
       WITH FRAME Dialog-Frame.
   VIEW FRAME Dialog-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}

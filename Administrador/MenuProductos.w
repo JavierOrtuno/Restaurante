@@ -4,8 +4,8 @@
           restaurante      PROGRESS
 */
 &Scoped-define WINDOW-NAME CURRENT-WINDOW
-&Scoped-define FRAME-NAME Dialog-Frame
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Dialog-Frame 
+&Scoped-define FRAME-NAME Dlg_MenuProd
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Dlg_MenuProd 
 /*------------------------------------------------------------------------
 
   File: 
@@ -44,7 +44,7 @@
 &Scoped-define DB-AWARE no
 
 /* Name of first Frame and/or Browse and/or first Query                 */
-&Scoped-define FRAME-NAME Dialog-Frame
+&Scoped-define FRAME-NAME Dlg_MenuProd
 &Scoped-define BROWSE-NAME Bws_Productos
 
 /* Internal Tables (found by Frame, Query & Browse Queries)             */
@@ -61,8 +61,8 @@ getUnidadMedida(PRODUCTO.ID_UNIDAD)
 &Scoped-define FIRST-TABLE-IN-QUERY-Bws_Productos PRODUCTO
 
 
-/* Definitions for DIALOG-BOX Dialog-Frame                              */
-&Scoped-define OPEN-BROWSERS-IN-QUERY-Dialog-Frame ~
+/* Definitions for DIALOG-BOX Dlg_MenuProd                              */
+&Scoped-define OPEN-BROWSERS-IN-QUERY-Dlg_MenuProd ~
     ~{&OPEN-QUERY-Bws_Productos}
 
 /* Standard List Definitions                                            */
@@ -93,7 +93,7 @@ DEFINE QUERY Bws_Productos FOR
 
 /* Browse definitions                                                   */
 DEFINE BROWSE Bws_Productos
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS Bws_Productos Dialog-Frame _STRUCTURED
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS Bws_Productos Dlg_MenuProd _STRUCTURED
   QUERY Bws_Productos NO-LOCK DISPLAY
       PRODUCTO.CODIGO FORMAT "X(10)":U WIDTH 14.2
       PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 58.2
@@ -108,13 +108,13 @@ DEFINE BROWSE Bws_Productos
 
 /* ************************  Frame Definitions  *********************** */
 
-DEFINE FRAME Dialog-Frame
+DEFINE FRAME Dlg_MenuProd
      Bws_Productos AT ROW 2.19 COL 18
      Btn_Agregar AT ROW 11 COL 26.2
      SPACE(115.79) SKIP(2.75)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "<insert dialog title>".
+         TITLE "Productos".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -132,12 +132,12 @@ DEFINE FRAME Dialog-Frame
 /* ***********  Runtime Attributes and AppBuilder Settings  *********** */
 
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
-/* SETTINGS FOR DIALOG-BOX Dialog-Frame
+/* SETTINGS FOR DIALOG-BOX Dlg_MenuProd
                                                                         */
-/* BROWSE-TAB Bws_Productos 1 Dialog-Frame */
+/* BROWSE-TAB Bws_Productos 1 Dlg_MenuProd */
 ASSIGN 
-       FRAME Dialog-Frame:SCROLLABLE       = FALSE
-       FRAME Dialog-Frame:HIDDEN           = TRUE.
+       FRAME Dlg_MenuProd:SCROLLABLE       = FALSE
+       FRAME Dlg_MenuProd:HIDDEN           = TRUE.
 
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
@@ -167,9 +167,9 @@ ASSIGN
 
 /* ************************  Control Triggers  ************************ */
 
-&Scoped-define SELF-NAME Dialog-Frame
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame Dialog-Frame
-ON WINDOW-CLOSE OF FRAME Dialog-Frame /* <insert dialog title> */
+&Scoped-define SELF-NAME Dlg_MenuProd
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dlg_MenuProd Dlg_MenuProd
+ON WINDOW-CLOSE OF FRAME Dlg_MenuProd /* Productos */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -181,7 +181,7 @@ END.
 &Scoped-define BROWSE-NAME Bws_Productos
 &UNDEFINE SELF-NAME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dialog-Frame 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dlg_MenuProd 
 
 
 /* ***************************  Main Block  *************************** */
@@ -207,7 +207,7 @@ RUN disable_UI.
 
 /* **********************  Internal Procedures  *********************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Dialog-Frame  _DEFAULT-DISABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Dlg_MenuProd  _DEFAULT-DISABLE
 PROCEDURE disable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     DISABLE the User Interface
@@ -218,13 +218,13 @@ PROCEDURE disable_UI :
                we are ready to "clean-up" after running.
 ------------------------------------------------------------------------------*/
   /* Hide all frames. */
-  HIDE FRAME Dialog-Frame.
+  HIDE FRAME Dlg_MenuProd.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Dialog-Frame  _DEFAULT-ENABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Dlg_MenuProd  _DEFAULT-ENABLE
 PROCEDURE enable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     ENABLE the User Interface
@@ -236,9 +236,9 @@ PROCEDURE enable_UI :
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
   ENABLE Bws_Productos Btn_Agregar 
-      WITH FRAME Dialog-Frame.
-  VIEW FRAME Dialog-Frame.
-  {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}
+      WITH FRAME Dlg_MenuProd.
+  VIEW FRAME Dlg_MenuProd.
+  {&OPEN-BROWSERS-IN-QUERY-Dlg_MenuProd}
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

@@ -103,15 +103,15 @@ DEFINE BROWSE Bws_Productos
             WIDTH 22.8
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS NO-COLUMN-SCROLLING SEPARATORS SIZE 126.4 BY 8.1 EXPANDABLE.
+    WITH NO-BOX NO-ROW-MARKERS NO-COLUMN-SCROLLING SEPARATORS SIZE 126.4 BY 8.1 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_MenuProd
      Bws_Productos AT ROW 2.19 COL 18
-     Btn_Agregar AT ROW 11 COL 26.2
-     SPACE(115.79) SKIP(2.75)
+     Btn_Agregar AT ROW 11.29 COL 24.8
+     SPACE(117.19) SKIP(2.46)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Productos".
@@ -172,6 +172,17 @@ ASSIGN
 ON WINDOW-CLOSE OF FRAME Dlg_MenuProd /* Productos */
 DO:
   APPLY "END-ERROR":U TO SELF.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Btn_Agregar
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Agregar Dlg_MenuProd
+ON CHOOSE OF Btn_Agregar IN FRAME Dlg_MenuProd /* Agregar */
+DO:
+    RUN ActualizarProductos.w.
 END.
 
 /* _UIB-CODE-BLOCK-END */

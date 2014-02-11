@@ -34,6 +34,17 @@
 
 /* ************************  Function Prototypes ********************** */
 
+&IF DEFINED(EXCLUDE-getCatUnidad) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getCatUnidad Method-Library 
+FUNCTION getCatUnidad RETURNS CHARACTER
+    ( /* parameter-definitions */ )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 &IF DEFINED(EXCLUDE-getUnidadMedida) = 0 &THEN
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getUnidadMedida Method-Library 
@@ -68,13 +79,6 @@ FUNCTION getUnidadMedida RETURNS CHARACTER
 /* END WINDOW DEFINITION */
                                                                         */
 &ANALYZE-RESUME
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _XFTR "MethodLibraryCues" Method-Library _INLINE
-/* Actions: adecomm/_so-cue.w ? adecomm/_so-cued.p ? adecomm/_so-cuew.p */
-/* Method Library,uib,70080
-Destroy on next read */
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _INCLUDED-LIB Method-Library 
 /* ************************* Included-Libraries *********************** */
@@ -96,6 +100,33 @@ Destroy on next read */
 
 
 /* ************************  Function Implementations ***************** */
+
+&IF DEFINED(EXCLUDE-getCatUnidad) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getCatUnidad Method-Library 
+FUNCTION getCatUnidad RETURNS CHARACTER
+    ( /* parameter-definitions */ ) :
+    /*------------------------------------------------------------------------------
+        Purpose: Retorna Estructura del Catálogo de Unidades de Medida 
+        Notes: Formato(SIGLAS, ID, SIGLAS, ID ...)
+        Author:
+            I.S.C. Fco. Javier Ortuño Colchado
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vcharCatalogo AS CHARACTER.
+
+    FOR EACH UNIDAD_MEDIDA NO-LOCK:
+        vcharCatalogo = vcharCatalogo + 
+            UNIDAD_MEDIDA.DESCRIPCION + "," +
+            STRING(UNIDAD_MEDIDA.ID_UNIDAD) + ",".
+    END.
+    
+    RETURN TRIM(vcharCatalogo, ",").
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
 
 &IF DEFINED(EXCLUDE-getUnidadMedida) = 0 &THEN
 

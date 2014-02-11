@@ -19,7 +19,7 @@
       <none>
 
   Author: 
-
+    I.S.C. Fco. Javier Ortuño Colchado
   Created: 
 ------------------------------------------------------------------------*/
 /*          This .W file was created with the Progress AppBuilder.       */
@@ -100,7 +100,6 @@ DEFINE BROWSE Bws_Productos
       PRODUCTO.CANT_MINIMA COLUMN-LABEL "CANT.  MÍNIMA" FORMAT "->,>>>,>>9":U
             WIDTH 24.2
       getUnidadMedida(PRODUCTO.ID_UNIDAD) COLUMN-LABEL "UNIDAD DE MEDIDA" FORMAT "X(50)":U
-            WIDTH 22.8
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
     WITH NO-BOX NO-ROW-MARKERS NO-COLUMN-SCROLLING SEPARATORS SIZE 126.4 BY 8.1 EXPANDABLE.
@@ -150,13 +149,13 @@ ASSIGN
      _TblList          = "Restaurante.PRODUCTO"
      _Options          = "NO-LOCK INDEXED-REPOSITION"
      _FldNameList[1]   > Restaurante.PRODUCTO.CODIGO
-"CODIGO" ? ? "character" ? ? ? ? ? ? no ? no no "14.2" yes no no "U" "" ""
+"PRODUCTO.CODIGO" ? ? "character" ? ? ? ? ? ? no ? no no "14.2" yes no no "U" "" ""
      _FldNameList[2]   > Restaurante.PRODUCTO.DESCRIPCION
-"DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "58.2" yes no no "U" "" ""
+"PRODUCTO.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "58.2" yes no no "U" "" ""
      _FldNameList[3]   > Restaurante.PRODUCTO.CANT_MINIMA
-"CANT_MINIMA" "CANT.  MÍNIMA" ? "integer" ? ? ? ? ? ? no ? no no "24.2" yes no no "U" "" ""
+"PRODUCTO.CANT_MINIMA" "CANT.  MÍNIMA" ? "integer" ? ? ? ? ? ? no ? no no "24.2" yes no no "U" "" ""
      _FldNameList[4]   > "_<CALC>"
-"getUnidadMedida(PRODUCTO.ID_UNIDAD)" "UNIDAD DE MEDIDA" "X(50)" ? ? ? ? ? ? ? no ? no no "22.8" yes no no "U" "" ""
+"getUnidadMedida(PRODUCTO.ID_UNIDAD)" "UNIDAD DE MEDIDA" "X(50)" ? ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE Bws_Productos */
 &ANALYZE-RESUME
@@ -182,7 +181,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Agregar Dlg_MenuProd
 ON CHOOSE OF Btn_Agregar IN FRAME Dlg_MenuProd /* Agregar */
 DO:
-    RUN ActualizarProductos.w.
+    RUN ActualizarProductos.w(1).
 END.
 
 /* _UIB-CODE-BLOCK-END */

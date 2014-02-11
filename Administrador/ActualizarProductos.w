@@ -16,15 +16,16 @@
       <none>
 
   Author: 
-
+    I.S.C. Fco. Javier Ortuño Colchado  
   Created: 
 ------------------------------------------------------------------------*/
 /*          This .W file was created with the Progress AppBuilder.       */
 /*----------------------------------------------------------------------*/
 
 /* ***************************  Definitions  ************************** */
-
+{productos.i}
 /* Parameters Definitions ---                                           */
+DEFINE INPUT PARAMETER pinIntEvento AS INTEGER.
 
 /* Local Variable Definitions ---                                       */
 
@@ -43,8 +44,10 @@
 &Scoped-define FRAME-NAME Dlg_UpdateProd
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Fill_Codigo Fill_Descripcion FILL-IN-3 
-&Scoped-Define DISPLAYED-OBJECTS Fill_Codigo Fill_Descripcion FILL-IN-3 
+&Scoped-Define ENABLED-OBJECTS Fill_Codigo Fill_Descripcion Fill_Cantidad ~
+List_Unidad Btn_Aceptar Btn_Cancelar 
+&Scoped-Define DISPLAYED-OBJECTS Fill_Codigo Fill_Descripcion Fill_Cantidad ~
+List_Unidad 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -59,29 +62,47 @@
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
-DEFINE VARIABLE FILL-IN-3 AS CHARACTER FORMAT "X(256)":U 
-     LABEL "Fill 3" 
-     VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+DEFINE BUTTON Btn_Aceptar 
+     LABEL "Aceptar" 
+     SIZE 20 BY 2.38.
 
-DEFINE VARIABLE Fill_Codigo AS CHARACTER FORMAT "X(256)":U 
+DEFINE BUTTON Btn_Cancelar 
+     LABEL "Cancelar" 
+     SIZE 20 BY 2.38.
+
+DEFINE VARIABLE List_Unidad AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Unidad" 
+     VIEW-AS COMBO-BOX INNER-LINES 5
+     LIST-ITEM-PAIRS "Seleccionar"," 0"
+     DROP-DOWN-LIST
+     SIZE 21 BY 1 NO-UNDO.
+
+DEFINE VARIABLE Fill_Cantidad AS INTEGER FORMAT "->,>>>,>>9":U INITIAL 0 
+     LABEL "Cant. Mínima" 
+     VIEW-AS FILL-IN 
+     SIZE 11 BY 1 NO-UNDO.
+
+DEFINE VARIABLE Fill_Codigo AS CHARACTER FORMAT "X(10)":U 
      LABEL "Código" 
      VIEW-AS FILL-IN 
      SIZE 14 BY 1 NO-UNDO.
 
-DEFINE VARIABLE Fill_Descripcion AS CHARACTER FORMAT "X(256)":U 
+DEFINE VARIABLE Fill_Descripcion AS CHARACTER FORMAT "X(100)":U 
      LABEL "Descripción" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 31 BY 1 NO-UNDO.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_UpdateProd
-     Fill_Codigo AT ROW 2.91 COL 19 COLON-ALIGNED
-     Fill_Descripcion AT ROW 4.81 COL 19 COLON-ALIGNED
-     FILL-IN-3 AT ROW 7.67 COL 20 COLON-ALIGNED
-     SPACE(44.99) SKIP(7.42)
+     Fill_Codigo AT ROW 4.24 COL 19 COLON-ALIGNED
+     Fill_Descripcion AT ROW 6.14 COL 19 COLON-ALIGNED
+     Fill_Cantidad AT ROW 8.05 COL 19 COLON-ALIGNED
+     List_Unidad AT ROW 9.95 COL 19 COLON-ALIGNED
+     Btn_Aceptar AT ROW 12.43 COL 16.8
+     Btn_Cancelar AT ROW 12.43 COL 46.8
+     SPACE(14.19) SKIP(1.28)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Actualizar Productos".
@@ -121,7 +142,25 @@ ASSIGN
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dlg_UpdateProd Dlg_UpdateProd
 ON WINDOW-CLOSE OF FRAME Dlg_UpdateProd /* Actualizar Productos */
 DO:
-  APPLY "END-ERROR":U TO SELF.
+    APPLY "END-ERROR":U TO SELF.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Btn_Aceptar
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Aceptar Dlg_UpdateProd
+ON CHOOSE OF Btn_Aceptar IN FRAME Dlg_UpdateProd /* Aceptar */
+DO:
+    CASE pinIntEvento:
+        WHEN 1 THEN DO:
+            MESSAGE "NUEVO" VIEW-AS ALERT-BOX.
+        END.
+        WHEN 2 THEN DO:
+            MESSAGE "ACTUALIZACION" VIEW-AS ALERT-BOX.
+        END.
+    END CASE.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -146,6 +185,7 @@ MAIN-BLOCK:
 DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
    ON END-KEY UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK:
   RUN enable_UI.
+  RUN setInitial.
   WAIT-FOR GO OF FRAME {&FRAME-NAME}.
 END.
 RUN disable_UI.
@@ -184,12 +224,31 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  DISPLAY Fill_Codigo Fill_Descripcion FILL-IN-3 
+  DISPLAY Fill_Codigo Fill_Descripcion Fill_Cantidad List_Unidad 
       WITH FRAME Dlg_UpdateProd.
-  ENABLE Fill_Codigo Fill_Descripcion FILL-IN-3 
+  ENABLE Fill_Codigo Fill_Descripcion Fill_Cantidad List_Unidad Btn_Aceptar 
+         Btn_Cancelar 
       WITH FRAME Dlg_UpdateProd.
   VIEW FRAME Dlg_UpdateProd.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_UpdateProd}
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE setInitial Dlg_UpdateProd 
+PROCEDURE setInitial :
+/*------------------------------------------------------------------------------
+      Purpose: Inicialización del Dialogo de Registro de Productos    
+      Parameters: <none>
+      Author:
+        I.S.C. Fco. Javier Ortuño Colchado
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vcharCatUnidad AS CHARACTER.
+
+    vcharCatUnidad = getCatUnidad().        
+    ASSIGN List_Unidad:LIST-ITEM-PAIRS IN FRAME Dlg_UpdateProd = vcharCatUnidad.
+    
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

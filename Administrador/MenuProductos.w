@@ -26,6 +26,7 @@
 /*----------------------------------------------------------------------*/
 
 /* ***************************  Definitions  ************************** */
+{productos.i}
 
 /* Parameters Definitions ---                                           */
 
@@ -51,7 +52,8 @@
 
 /* Definitions for BROWSE Bws_Productos                                 */
 &Scoped-define FIELDS-IN-QUERY-Bws_Productos PRODUCTO.CODIGO ~
-PRODUCTO.DESCRIPCION PRODUCTO.CANT_MINIMA PRODUCTO.ID_UNIDAD 
+PRODUCTO.DESCRIPCION PRODUCTO.CANT_MINIMA ~
+getUnidadMedida(PRODUCTO.ID_UNIDAD) 
 &Scoped-define ENABLED-FIELDS-IN-QUERY-Bws_Productos 
 &Scoped-define QUERY-STRING-Bws_Productos FOR EACH PRODUCTO NO-LOCK INDEXED-REPOSITION
 &Scoped-define OPEN-QUERY-Bws_Productos OPEN QUERY Bws_Productos FOR EACH PRODUCTO NO-LOCK INDEXED-REPOSITION.
@@ -94,19 +96,20 @@ DEFINE BROWSE Bws_Productos
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS Bws_Productos Dialog-Frame _STRUCTURED
   QUERY Bws_Productos NO-LOCK DISPLAY
       PRODUCTO.CODIGO FORMAT "X(10)":U WIDTH 14.2
-      PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 61.2
+      PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 58.2
       PRODUCTO.CANT_MINIMA COLUMN-LABEL "CANT.  MÍNIMA" FORMAT "->,>>>,>>9":U
-            WIDTH 20.2
-      PRODUCTO.ID_UNIDAD COLUMN-LABEL "UNIDAD MEDIDA" WIDTH 23.8
+            WIDTH 24.2
+      getUnidadMedida(PRODUCTO.ID_UNIDAD) COLUMN-LABEL "UNIDAD DE MEDIDA" FORMAT "X(50)":U
+            WIDTH 22.8
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS NO-SCROLLBAR-VERTICAL SIZE 126.4 BY 6.43 EXPANDABLE.
+    WITH NO-ROW-MARKERS NO-COLUMN-SCROLLING SEPARATORS SIZE 126.4 BY 8.1 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
-     Bws_Productos AT ROW 3.38 COL 18
+     Bws_Productos AT ROW 2.19 COL 18
      Btn_Agregar AT ROW 11 COL 26.2
      SPACE(115.79) SKIP(2.75)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
@@ -123,15 +126,6 @@ DEFINE FRAME Dialog-Frame
    Other Settings: COMPILE
  */
 &ANALYZE-RESUME _END-PROCEDURE-SETTINGS
-
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _INCLUDED-LIB Dialog-Frame 
-/* ************************* Included-Libraries *********************** */
-
-{librerias/productos.i}
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
 
 
 
@@ -158,11 +152,11 @@ ASSIGN
      _FldNameList[1]   > Restaurante.PRODUCTO.CODIGO
 "CODIGO" ? ? "character" ? ? ? ? ? ? no ? no no "14.2" yes no no "U" "" ""
      _FldNameList[2]   > Restaurante.PRODUCTO.DESCRIPCION
-"DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "61.2" yes no no "U" "" ""
+"DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "58.2" yes no no "U" "" ""
      _FldNameList[3]   > Restaurante.PRODUCTO.CANT_MINIMA
-"CANT_MINIMA" "CANT.  MÍNIMA" ? "integer" ? ? ? ? ? ? no ? no no "20.2" yes no no "U" "" ""
+"CANT_MINIMA" "CANT.  MÍNIMA" ? "integer" ? ? ? ? ? ? no ? no no "24.2" yes no no "U" "" ""
      _FldNameList[4]   > "_<CALC>"
-"PRODUCTO.ID_UNIDAD" "UNIDAD MEDIDA" ? ? ? ? ? ? ? ? no ? no no "23.8" yes no no "U" "" ""
+"getUnidadMedida(PRODUCTO.ID_UNIDAD)" "UNIDAD DE MEDIDA" "X(50)" ? ? ? ? ? ? ? no ? no no "22.8" yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE Bws_Productos */
 &ANALYZE-RESUME

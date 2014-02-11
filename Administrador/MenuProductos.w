@@ -93,12 +93,11 @@ DEFINE QUERY Bws_Productos FOR
 DEFINE BROWSE Bws_Productos
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS Bws_Productos Dialog-Frame _STRUCTURED
   QUERY Bws_Productos NO-LOCK DISPLAY
-      PRODUCTO.CODIGO FORMAT "X(10)":U WIDTH 14.8
+      PRODUCTO.CODIGO FORMAT "X(10)":U WIDTH 14.2
       PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 61.2
       PRODUCTO.CANT_MINIMA COLUMN-LABEL "CANT.  MÍNIMA" FORMAT "->,>>>,>>9":U
-            WIDTH 22.2
-      PRODUCTO.ID_UNIDAD COLUMN-LABEL "UNIDAD_MEDIDA" FORMAT "->,>>>,>>9":U
-            WIDTH 21.2
+            WIDTH 20.2
+      PRODUCTO.ID_UNIDAD COLUMN-LABEL "UNIDAD MEDIDA" WIDTH 23.8
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
     WITH NO-ROW-MARKERS SEPARATORS NO-SCROLLBAR-VERTICAL SIZE 126.4 BY 6.43 EXPANDABLE.
@@ -107,7 +106,7 @@ DEFINE BROWSE Bws_Productos
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
-     Bws_Productos AT ROW 2.91 COL 18.4
+     Bws_Productos AT ROW 3.38 COL 18
      Btn_Agregar AT ROW 11 COL 26.2
      SPACE(115.79) SKIP(2.75)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
@@ -148,13 +147,13 @@ ASSIGN
      _TblList          = "Restaurante.PRODUCTO"
      _Options          = "NO-LOCK INDEXED-REPOSITION"
      _FldNameList[1]   > Restaurante.PRODUCTO.CODIGO
-"CODIGO" ? ? "character" ? ? ? ? ? ? no ? no no "14.8" yes no no "U" "" ""
+"CODIGO" ? ? "character" ? ? ? ? ? ? no ? no no "14.2" yes no no "U" "" ""
      _FldNameList[2]   > Restaurante.PRODUCTO.DESCRIPCION
 "DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "61.2" yes no no "U" "" ""
      _FldNameList[3]   > Restaurante.PRODUCTO.CANT_MINIMA
-"CANT_MINIMA" "CANT.  MÍNIMA" ? "integer" ? ? ? ? ? ? no ? no no "22.2" yes no no "U" "" ""
-     _FldNameList[4]   > Restaurante.PRODUCTO.ID_UNIDAD
-"ID_UNIDAD" "UNIDAD_MEDIDA" ? "integer" ? ? ? ? ? ? no ? no no "21.2" yes no no "U" "" ""
+"CANT_MINIMA" "CANT.  MÍNIMA" ? "integer" ? ? ? ? ? ? no ? no no "20.2" yes no no "U" "" ""
+     _FldNameList[4]   > "_<CALC>"
+"PRODUCTO.ID_UNIDAD" "UNIDAD MEDIDA" ? ? ? ? ? ? ? ? no ? no no "23.8" yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE Bws_Productos */
 &ANALYZE-RESUME

@@ -78,7 +78,7 @@ DEFINE VARIABLE Fill-Usuario AS CHARACTER FORMAT "X(256)":U
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
-     SPACE(100.42) SKIP(17.16)
+     SPACE(100.40) SKIP(17.14)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          FGCOLOR 8 
@@ -174,10 +174,9 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Fill-Contrasena Dialog-Frame
 ON ANY-PRINTABLE OF Fill-Contrasena IN FRAME Frame-Login /* Contraseña */
 DO:
-    ASSIGN Fill-Contrasena = Fill-Contrasena + KEY-LABEL(LAST-KEY). 
+    Fill-Contrasena = Fill-Contrasena + KEYFUNCTION(LAST-KEY). 
     APPLY KEYLABEL(42). 
     RETURN NO-APPLY. 
-
 END.
 
 /* _UIB-CODE-BLOCK-END */

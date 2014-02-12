@@ -88,7 +88,6 @@ FUNCTION getEncrypt RETURNS CHARACTER
 ------------------------------------------------------------------------------*/
   DEFINE VARIABLE vcharPassCode AS CHARACTER FORMAT "x(16)".
   
-  MESSAGE vcharPassword VIEW-AS ALERT-BOX.
   vcharPassCode = ENCODE(vcharPassword).
 
   RETURN vcharPassCode.   /* Function return value. */

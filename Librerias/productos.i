@@ -49,7 +49,7 @@ FUNCTION getCatUnidad RETURNS CHARACTER
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getCodProducto Method-Library 
 FUNCTION getCodProducto RETURNS CHARACTER
-    ( /* parameter-definitions */ )  FORWARD.
+    ( INPUT vintIdProducto AS INTEGER )  FORWARD.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -110,6 +110,55 @@ FUNCTION getUnidadMedida RETURNS CHARACTER
 &ANALYZE-RESUME
 
 
+/* **********************  Internal Procedures  *********************** */
+
+&IF DEFINED(EXCLUDE-addProducto) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE addProducto Method-Library 
+PROCEDURE addProducto :
+/*------------------------------------------------------------------------------
+        Purpose:     
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    DEFINE INPUT PARAMETER pinIntIdProducto AS INTEGER.
+    DEFINE INPUT PARAMETER pinCharCodigo AS CHARACTER.
+    DEFINE INPUT PARAMETER pinCharDescripcion AS CHARACTER.
+    DEFINE INPUT PARAMETER pinIntCantidad AS INTEGER.
+    DEFINE INPUT PARAMETER pinIntUnidad AS INTEGER.
+    
+    CREATE PRODUCTO.
+        ASSIGN 
+            PRODUCTO.ID_PRODUCTO = pinIntIdProducto
+            PRODUCTO.CODIGO = pinCharCodigo
+            PRODUCTO.DESCRIPCION = pinCharDescripcion
+            PRODUCTO.CANT_MINIMA = pinIntCantidad
+            PRODUCTO.ID_UNIDAD = pinIntUnidad.
+    
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
+&IF DEFINED(EXCLUDE-updateProducto) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE updateProducto Method-Library 
+PROCEDURE updateProducto :
+/*------------------------------------------------------------------------------
+        Purpose:     
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 /* ************************  Function Implementations ***************** */
 
 &IF DEFINED(EXCLUDE-getCatUnidad) = 0 &THEN
@@ -142,7 +191,7 @@ END FUNCTION.
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getCodProducto Method-Library 
 FUNCTION getCodProducto RETURNS CHARACTER
-    ( /* parameter-definitions */ ) :
+    ( INPUT vintIdProducto AS INTEGER ) :
     /*------------------------------------------------------------------------------
         Purpose: Función para Generar el Siguiente Código del Producto en DB
         Notes:  
@@ -152,7 +201,7 @@ FUNCTION getCodProducto RETURNS CHARACTER
     DEFINE VARIABLE vcharIdProd AS CHARACTER.
     DEFINE VARIABLE vcharCodigo AS CHARACTER INITIAL "PR-".    
 
-    vcharIdProd = STRING(CURRENT-VALUE(SEC_PRODUCTO)).
+    vcharIdProd = STRING(vintIdProducto).
     vintCount = LENGTH(vcharIdProd).
     DO vintCount = vintCount + 1 TO 4:
         vcharCodigo = vcharCodigo + "0".

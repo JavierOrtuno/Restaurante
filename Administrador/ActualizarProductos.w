@@ -29,6 +29,7 @@ DEFINE INPUT PARAMETER pinIntEvento AS INTEGER.
 DEFINE INPUT PARAMETER pinRowId AS ROWID.
 
 /* Local Variable Definitions ---                                       */
+DEFINE VARIABLE vintIdProducto AS INTEGER.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -184,14 +185,14 @@ DO:
     IF validarRegistroProd(vcharDescripcion, vintCantidad, vintUnidad) = FALSE THEN DO:
         MESSAGE "Todos los Campos son Requeridos" VIEW-AS ALERT-BOX.
     END.
+    ASSIGN 
+        Fill_Codigo Fill_Descripcion Fill_Cantidad List_Unidad.
     CASE pinIntEvento:
         WHEN 1 THEN DO:
-            MESSAGE "NUEVO" VIEW-AS ALERT-BOX.
-
+            RUN addProducto(vintIdProducto, Fill_Codigo, Fill_Descripcion, INTEGER(Fill_Cantidad), List_Unidad).
         END.
         WHEN 2 THEN DO:
-            MESSAGE "ACTUALIZACION" VIEW-AS ALERT-BOX.
-
+            RUN updateProducto.
         END.
     END CASE.
 END.
@@ -311,7 +312,8 @@ PROCEDURE setInitial :
     ASSIGN List_Unidad:LIST-ITEM-PAIRS IN FRAME {&FRAME-NAME} = vcharCatUnidad.
     CASE pinIntEvento:
         WHEN 1 THEN DO:
-            Fill_Codigo:SCREEN-VALUE = getCodProducto().
+            vintIdProducto = NEXT-VALUE(SEC_PRODUCTO).
+            Fill_Codigo:SCREEN-VALUE = getCodProducto(vintIdProducto).
         END.
         WHEN 2 THEN DO:
             RUN asignarValores.

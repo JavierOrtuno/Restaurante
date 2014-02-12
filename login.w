@@ -58,7 +58,7 @@
 
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_OK AUTO-GO 
-     LABEL "OK" 
+     LABEL "&Ingresar" 
      SIZE 15 BY 1.14
      BGCOLOR 8 .
 
@@ -66,7 +66,7 @@ DEFINE VARIABLE Fill-Contrasena AS CHARACTER FORMAT "X(256)":U
      LABEL "Contraseña" 
      VIEW-AS FILL-IN 
      SIZE 40 BY 1
-     BGCOLOR 15 FGCOLOR 0  NO-UNDO.
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE Fill-Usuario AS CHARACTER FORMAT "X(256)":U 
      LABEL "Usuario" 
@@ -74,28 +74,40 @@ DEFINE VARIABLE Fill-Usuario AS CHARACTER FORMAT "X(256)":U
      SIZE 40 BY 1
      BGCOLOR 15  NO-UNDO.
 
+DEFINE RECTANGLE RECT-1
+     EDGE-PIXELS 8  NO-FILL 
+     SIZE 61 BY 10.48
+     BGCOLOR 15 FGCOLOR 15 .
+
+DEFINE RECTANGLE RECT-3
+     EDGE-PIXELS 8  NO-FILL 
+     SIZE 100.6 BY 17.05
+     BGCOLOR 15 .
+
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
-     SPACE(100.40) SKIP(17.14)
+     SPACE(101.00) SKIP(17.14)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          FGCOLOR 8 
          TITLE "<insert dialog title>".
 
 DEFINE FRAME Frame-Login
-     Fill-Usuario AT ROW 8.52 COL 35 COLON-ALIGNED
-     Fill-Contrasena AT ROW 10.43 COL 35 COLON-ALIGNED
+     Fill-Usuario AT ROW 8.62 COL 35 COLON-ALIGNED
+     Fill-Contrasena AT ROW 10.52 COL 35 COLON-ALIGNED BLANK 
      Btn_OK AT ROW 12.33 COL 62
-     "Bienvenido al Sistema le Seminaré" VIEW-AS TEXT
-          SIZE 69 BY 1.19 AT ROW 2.71 COL 16.4
-          FGCOLOR 15 FONT 70
+     RECT-3 AT ROW 1 COL 1
+     RECT-1 AT ROW 5.76 COL 21
+     "                Bienvenido al Sistema le Seminaré" VIEW-AS TEXT
+          SIZE 100 BY 2.91 AT ROW 1 COL 1.2
+          BGCOLOR 15 FGCOLOR 1 FONT 70
     WITH 1 DOWN KEEP-TAB-ORDER OVERLAY 
          SIDE-LABELS THREE-D 
          AT COL 1 ROW 1
-         SIZE 100 BY 17.14
-         BGCOLOR 12 .
+         SIZE 101 BY 17.14
+         BGCOLOR 16 .
 
 
 /* *********************** Procedure Settings ************************ */
@@ -124,6 +136,8 @@ ASSIGN
 
 /* SETTINGS FOR FRAME Frame-Login
    UNDERLINE                                                            */
+/* SETTINGS FOR RECTANGLE RECT-3 IN FRAME Frame-Login
+   NO-ENABLE                                                            */
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
 
@@ -144,39 +158,42 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME Frame-Login
 &Scoped-define FRAME-NAME Frame-Login
 &Scoped-define SELF-NAME Btn_OK
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_OK Dialog-Frame
-ON CHOOSE OF Btn_OK IN FRAME Frame-Login /* OK */
+ON CHOOSE OF Btn_OK IN FRAME Frame-Login /* Ingresar */
 DO:
+    /*Variables Locales*/
     DEF VAR vcharUsuario AS CHAR.
     DEF VAR vcharContrasena AS CHAR.
     DEF VAR vcharCadEncript AS CHAR.
 
     vcharUsuario = Fill-Usuario:SCREEN-VALUE.
     vcharContrasena = Fill-Contrasena:SCREEN-VALUE.
-
-    IF vcharUsuario = "" OR vcharContrasena ="" THEN DO:
-      MESSAGE "Usuario o contraseña Inválidos" VIEW-AS ALERT-BOX.
+    
+    /*Verificacion de campos no nulos*/
+    IF vcharUsuario = "" OR vcharContrasena = "" THEN DO:
+      MESSAGE "Usuario o contraseña inválidos" VIEW-AS ALERT-BOX.
+      RETURN NO-APPLY.
     END.
+    
+    /*verificacion de existencia en la base de datos*/
     ELSE DO:
       vcharCadEncript = getEncrypt(vcharContrasena).
-      MESSAGE vcharCadEncript VIEW-AS ALERT-BOX.
+      FIND Usuario WHERE Usuario.contrasenia = vcharCadEncript AND Usuario.usuario = vcharUsuario NO-ERROR.
+
+      IF AVAILABLE Usuario THEN DO:
+
+         HIDE ALL. 
+         RUN MENU.w.
+      END.
+
+      ELSE DO:
+        MESSAGE "Usuario o contraseña inválidos" VIEW-AS ALERT-BOX.
+        RETURN NO-APPLY.
+      END.
+
     END.     
-END.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-
-&Scoped-define SELF-NAME Fill-Contrasena
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Fill-Contrasena Dialog-Frame
-ON ANY-PRINTABLE OF Fill-Contrasena IN FRAME Frame-Login /* Contraseña */
-DO:
-    Fill-Contrasena = Fill-Contrasena + KEYFUNCTION(LAST-KEY). 
-    APPLY KEYLABEL(42). 
-    RETURN NO-APPLY. 
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -245,7 +262,7 @@ PROCEDURE enable_UI :
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}
   DISPLAY Fill-Usuario Fill-Contrasena 
       WITH FRAME Frame-Login.
-  ENABLE Fill-Usuario Fill-Contrasena Btn_OK 
+  ENABLE Fill-Usuario Fill-Contrasena Btn_OK RECT-1 
       WITH FRAME Frame-Login.
   {&OPEN-BROWSERS-IN-QUERY-Frame-Login}
 END PROCEDURE.

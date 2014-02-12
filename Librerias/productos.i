@@ -45,10 +45,10 @@ FUNCTION getCatUnidad RETURNS CHARACTER
 
 &ENDIF
 
-&IF DEFINED(EXCLUDE-getNextIdProducto) = 0 &THEN
+&IF DEFINED(EXCLUDE-getCodProducto) = 0 &THEN
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getNextIdProducto Method-Library 
-FUNCTION getNextIdProducto RETURNS INTEGER
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getCodProducto Method-Library 
+FUNCTION getCodProducto RETURNS CHARACTER
     ( /* parameter-definitions */ )  FORWARD.
 
 /* _UIB-CODE-BLOCK-END */
@@ -119,9 +119,8 @@ FUNCTION getCatUnidad RETURNS CHARACTER
     ( /* parameter-definitions */ ) :
     /*------------------------------------------------------------------------------
         Purpose: Retorna Estructura del Catálogo de Unidades de Medida 
-        Notes: Formato(SIGLAS, ID, SIGLAS, ID ...)
-        Author:
-            I.S.C. Fco. Javier Ortuño Colchado
+        Notes: Formato(DESCRIPCION, ID, DESCRIPCION, ID ...)
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vcharCatalogo AS CHARACTER.
 
@@ -139,18 +138,28 @@ END FUNCTION.
 
 &ENDIF
 
-&IF DEFINED(EXCLUDE-getNextIdProducto) = 0 &THEN
+&IF DEFINED(EXCLUDE-getCodProducto) = 0 &THEN
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getNextIdProducto Method-Library 
-FUNCTION getNextIdProducto RETURNS INTEGER
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getCodProducto Method-Library 
+FUNCTION getCodProducto RETURNS CHARACTER
     ( /* parameter-definitions */ ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
+        Purpose: Función para Generar el Siguiente Código del Producto en DB
         Notes:  
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
-    DEFINE VARIABLE vintId AS INTEGER.
+    DEFINE VARIABLE vintCount AS INTEGER.
+    DEFINE VARIABLE vcharIdProd AS CHARACTER.
+    DEFINE VARIABLE vcharCodigo AS CHARACTER INITIAL "PR-".    
 
-    RETURN 0.
+    vcharIdProd = STRING(CURRENT-VALUE(SEC_PRODUCTO)).
+    vintCount = LENGTH(vcharIdProd).
+    DO vintCount = vintCount + 1 TO 4:
+        vcharCodigo = vcharCodigo + "0".
+    END.
+    vcharCodigo = vcharCodigo + vcharIdProd.
+
+    RETURN vcharCodigo.
 END FUNCTION.
 
 /* _UIB-CODE-BLOCK-END */
@@ -164,8 +173,9 @@ END FUNCTION.
 FUNCTION getUnidadMedida RETURNS CHARACTER
     ( INPUT vintIdUnidad AS INTEGER ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose: Obtener la Descripción de la Unidad de Medida por ID
+        Notes: 
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vcharUnidadMedida AS CHARACTER INITIAL "".
 

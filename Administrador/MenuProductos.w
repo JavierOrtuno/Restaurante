@@ -82,8 +82,8 @@ getUnidadMedida(PRODUCTO.ID_UNIDAD)
 
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Agregar 
-     LABEL "Agregar" 
-     SIZE 21 BY 2.38.
+     LABEL "Nuevo" 
+     SIZE 20 BY 2.5.
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -102,15 +102,15 @@ DEFINE BROWSE Bws_Productos
       getUnidadMedida(PRODUCTO.ID_UNIDAD) COLUMN-LABEL "UNIDAD DE MEDIDA" FORMAT "X(50)":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-BOX NO-ROW-MARKERS NO-COLUMN-SCROLLING SEPARATORS SIZE 126.4 BY 8.1 EXPANDABLE.
+    WITH NO-BOX NO-ROW-MARKERS NO-COLUMN-SCROLLING SEPARATORS SIZE 126.4 BY 13.33 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_MenuProd
-     Bws_Productos AT ROW 2.19 COL 18
-     Btn_Agregar AT ROW 11.29 COL 24.8
-     SPACE(117.19) SKIP(2.46)
+     Bws_Productos AT ROW 1.81 COL 5.4
+     Btn_Agregar AT ROW 3.86 COL 137.4
+     SPACE(5.59) SKIP(9.77)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Productos".
@@ -182,7 +182,7 @@ END.
 
 &Scoped-define SELF-NAME Btn_Agregar
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Agregar Dlg_MenuProd
-ON CHOOSE OF Btn_Agregar IN FRAME Dlg_MenuProd /* Agregar */
+ON CHOOSE OF Btn_Agregar IN FRAME Dlg_MenuProd /* Nuevo */
 DO:
     RUN ActualizarProductos.w(1).
 END.

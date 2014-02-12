@@ -64,11 +64,11 @@ List_Unidad
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Aceptar 
      LABEL "Aceptar" 
-     SIZE 20 BY 2.38.
+     SIZE 20 BY 2.5.
 
 DEFINE BUTTON Btn_Cancelar 
      LABEL "Cancelar" 
-     SIZE 20 BY 2.38.
+     SIZE 20 BY 2.5.
 
 DEFINE VARIABLE List_Unidad AS CHARACTER FORMAT "X(256)":U 
      LABEL "Unidad" 
@@ -102,7 +102,7 @@ DEFINE FRAME Dlg_UpdateProd
      List_Unidad AT ROW 9.95 COL 19 COLON-ALIGNED
      Btn_Aceptar AT ROW 12.43 COL 16.8
      Btn_Cancelar AT ROW 12.43 COL 46.8
-     SPACE(14.19) SKIP(1.28)
+     SPACE(14.19) SKIP(1.16)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Actualizar Productos".
@@ -249,9 +249,14 @@ PROCEDURE setInitial :
 
     vcharCatUnidad = getCatUnidad().        
     ASSIGN List_Unidad:LIST-ITEM-PAIRS IN FRAME Dlg_UpdateProd = vcharCatUnidad.
-    IF pinIntEvento = 1 THEN DO:
-        
-    END.
+    CASE pinIntEvento:
+        WHEN 1 THEN DO:
+            Fill_Codigo:SCREEN-VALUE = getCodProducto().
+        END.
+        WHEN 2 THEN DO:
+            
+        END.
+    END CASE.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

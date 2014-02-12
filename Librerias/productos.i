@@ -45,6 +45,17 @@ FUNCTION getCatUnidad RETURNS CHARACTER
 
 &ENDIF
 
+&IF DEFINED(EXCLUDE-getNextIdProducto) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getNextIdProducto Method-Library 
+FUNCTION getNextIdProducto RETURNS INTEGER
+    ( /* parameter-definitions */ )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 &IF DEFINED(EXCLUDE-getUnidadMedida) = 0 &THEN
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getUnidadMedida Method-Library 
@@ -121,6 +132,25 @@ FUNCTION getCatUnidad RETURNS CHARACTER
     END.
     
     RETURN TRIM(vcharCatalogo, ",").
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
+&IF DEFINED(EXCLUDE-getNextIdProducto) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getNextIdProducto Method-Library 
+FUNCTION getNextIdProducto RETURNS INTEGER
+    ( /* parameter-definitions */ ) :
+    /*------------------------------------------------------------------------------
+        Purpose:  
+        Notes:  
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vintId AS INTEGER.
+
+    RETURN 0.
 END FUNCTION.
 
 /* _UIB-CODE-BLOCK-END */

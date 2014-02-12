@@ -270,10 +270,8 @@ FUNCTION Insertar RETURNS CHARACTER
     THEN MESSAGE "Nombre, Domicilio y Correo son obligatorios" VIEW-AS ALERT-BOX.  
         
   /*Registra un nuevo cliente en la base de datos*/ 
-  ELSE DO:
-      
+  ELSE DO TRANSACTION:      
       CREATE Persona.
-
       ASSIGN
        Persona.Nombre = NAME:SCREEN-VALUE 
        Persona.A_Paterno = lastname1:SCREEN-VALUE  
@@ -283,19 +281,11 @@ FUNCTION Insertar RETURNS CHARACTER
        Persona.Correo = e-mail:SCREEN-VALUE.
   
        Persona.ID_Persona = NEXT-VALUE(SEC_PERSONA).
-
        CREATE Cliente.
-
        Cliente.ID_Cliente = NEXT-VALUE(SEC_CLIENTE).
-
        Cliente.ID_Persona = Persona.ID_Persona.
-
   END.
-
-
       Limpiar().
-
-
 END FUNCTION.
 
 /* _UIB-CODE-BLOCK-END */
@@ -308,9 +298,7 @@ FUNCTION Limpiar RETURNS CHARACTER
   Purpose:  
     Notes:  
 ------------------------------------------------------------------------------*/
-
        DO.
-
             ASSIGN
                 Name:SCREEN-VALUE IN FRAME Insertar-Frame = " "   
                 lastname1:SCREEN-VALUE = " "

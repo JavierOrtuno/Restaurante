@@ -217,7 +217,7 @@ DO:
     FIND CURRENT Persona.
 
     IF Cliente.ID_Persona = Persona.ID_Persona
-        THEN DO:
+        THEN DO TRANSACTION:
             DELETE Cliente.
             DELETE Persona.
         END. 

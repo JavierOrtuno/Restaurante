@@ -68,13 +68,6 @@ FUNCTION DescontarExistencia RETURNS LOGICAL
 /* END WINDOW DEFINITION */
                                                                         */
 &ANALYZE-RESUME
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _XFTR "MethodLibraryCues" Method-Library _INLINE
-/* Actions: adecomm/_so-cue.w ? adecomm/_so-cued.p ? adecomm/_so-cuew.p */
-/* Method Library,uib,70080
-Destroy on next read */
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _INCLUDED-LIB Method-Library 
 /* ************************* Included-Libraries *********************** */
@@ -113,14 +106,18 @@ DEF VAR vinttotal  AS INT.
 vdteactual = TODAY.
 CASE vintproducto:
     WHEN 1 THEN DO:
-        FOR EACH stock WHERE id_producto = vintproducto AND f_caducidad > vdteactual AND cantidad > 0 BY f_caducidad.
+        FOR EACH stock WHERE id_producto = vintproducto AND f_caducidad > vdteactual AND cantidad > 0 BY f_caducidad BY cantidad.
             IF cantidad >= vintcantidad THEN DO:
                 vinttotal = cantidad - vintcantidad.
                 ASSIGN stock.cantidad = vinttotal.
                 LEAVE.
             END.
             ELSE DO:
-
+                vintcantidad = vintcantidad - cantidad.
+                ASSIGN stock.cantidad = 0.
+                IF vintcantidad = 0 THEN DO:
+                    LEAVE.
+                END.
             END.
         END.
     END.

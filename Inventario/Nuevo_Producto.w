@@ -44,34 +44,27 @@
 
 /* Name of first Frame and/or Browse and/or first Query                 */
 &Scoped-define FRAME-NAME Dialog-Frame
-&Scoped-define BROWSE-NAME BROWSE-8
+&Scoped-define BROWSE-NAME BROWSE-9
 
 /* Internal Tables (found by Frame, Query & Browse Queries)             */
-&Scoped-define INTERNAL-TABLES PRODUCTO STOCK UNIDAD_MEDIDA
+&Scoped-define INTERNAL-TABLES PRODUCTO
 
-/* Definitions for BROWSE BROWSE-8                                      */
-&Scoped-define FIELDS-IN-QUERY-BROWSE-8 PRODUCTO.CODIGO ~
-PRODUCTO.DESCRIPCION STOCK.CANTIDAD UNIDAD_MEDIDA.DESCRIPCION ~
-STOCK.F_CADUCIDAD STOCK.F_INGRESO STOCK.LOTE 
-&Scoped-define ENABLED-FIELDS-IN-QUERY-BROWSE-8 
-&Scoped-define QUERY-STRING-BROWSE-8 FOR EACH PRODUCTO NO-LOCK, ~
-      EACH STOCK WHERE STOCK.ID_PRODUCTO = PRODUCTO.ID_PRODUCTO NO-LOCK, ~
-      EACH UNIDAD_MEDIDA WHERE UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD NO-LOCK INDEXED-REPOSITION
-&Scoped-define OPEN-QUERY-BROWSE-8 OPEN QUERY BROWSE-8 FOR EACH PRODUCTO NO-LOCK, ~
-      EACH STOCK WHERE STOCK.ID_PRODUCTO = PRODUCTO.ID_PRODUCTO NO-LOCK, ~
-      EACH UNIDAD_MEDIDA WHERE UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD NO-LOCK INDEXED-REPOSITION.
-&Scoped-define TABLES-IN-QUERY-BROWSE-8 PRODUCTO STOCK UNIDAD_MEDIDA
-&Scoped-define FIRST-TABLE-IN-QUERY-BROWSE-8 PRODUCTO
-&Scoped-define SECOND-TABLE-IN-QUERY-BROWSE-8 STOCK
-&Scoped-define THIRD-TABLE-IN-QUERY-BROWSE-8 UNIDAD_MEDIDA
+/* Definitions for BROWSE BROWSE-9                                      */
+&Scoped-define FIELDS-IN-QUERY-BROWSE-9 PRODUCTO.CODIGO ~
+PRODUCTO.DESCRIPCION PRODUCTO.CANT_MINIMA 
+&Scoped-define ENABLED-FIELDS-IN-QUERY-BROWSE-9 
+&Scoped-define QUERY-STRING-BROWSE-9 FOR EACH PRODUCTO NO-LOCK INDEXED-REPOSITION
+&Scoped-define OPEN-QUERY-BROWSE-9 OPEN QUERY BROWSE-9 FOR EACH PRODUCTO NO-LOCK INDEXED-REPOSITION.
+&Scoped-define TABLES-IN-QUERY-BROWSE-9 PRODUCTO
+&Scoped-define FIRST-TABLE-IN-QUERY-BROWSE-9 PRODUCTO
 
 
 /* Definitions for DIALOG-BOX Dialog-Frame                              */
 &Scoped-define OPEN-BROWSERS-IN-QUERY-Dialog-Frame ~
-    ~{&OPEN-QUERY-BROWSE-8}
+    ~{&OPEN-QUERY-BROWSE-9}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BROWSE-8 Btn_OK Btn_Cancel BUTTON-1 
+&Scoped-Define ENABLED-OBJECTS BROWSE-9 Btn_OK Btn_Cancel 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -88,50 +81,39 @@ STOCK.F_CADUCIDAD STOCK.F_INGRESO STOCK.LOTE
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Cancel AUTO-END-KEY 
      LABEL "Cancel" 
-     SIZE 20 BY 2.86
+     SIZE 15 BY 2.14
      BGCOLOR 8 .
 
 DEFINE BUTTON Btn_OK AUTO-GO 
      LABEL "OK" 
-     SIZE 20 BY 2.86
+     SIZE 15 BY 2.14
      BGCOLOR 8 .
-
-DEFINE BUTTON BUTTON-1 
-     LABEL "Agregar Producto" 
-     SIZE 20 BY 2.81.
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
-DEFINE QUERY BROWSE-8 FOR 
-      PRODUCTO, 
-      STOCK, 
-      UNIDAD_MEDIDA SCROLLING.
+DEFINE QUERY BROWSE-9 FOR 
+      PRODUCTO SCROLLING.
 &ANALYZE-RESUME
 
 /* Browse definitions                                                   */
-DEFINE BROWSE BROWSE-8
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-8 Dialog-Frame _STRUCTURED
-  QUERY BROWSE-8 NO-LOCK DISPLAY
+DEFINE BROWSE BROWSE-9
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-9 Dialog-Frame _STRUCTURED
+  QUERY BROWSE-9 NO-LOCK DISPLAY
       PRODUCTO.CODIGO FORMAT "X(10)":U
-      PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 71.4
-      STOCK.CANTIDAD FORMAT "->,>>>,>>9":U
-      UNIDAD_MEDIDA.DESCRIPCION FORMAT "X(50)":U WIDTH 33.4
-      STOCK.F_CADUCIDAD FORMAT "99/99/99":U
-      STOCK.F_INGRESO FORMAT "99/99/99":U
-      STOCK.LOTE FORMAT "X(10)":U
+      PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 38.2
+      PRODUCTO.CANT_MINIMA FORMAT "->,>>>,>>9":U WIDTH 35.6
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 190 BY 24.05 EXPANDABLE.
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 90 BY 18.1 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
-     BROWSE-8 AT ROW 1.95 COL 11
-     Btn_OK AT ROW 2.91 COL 211
-     Btn_Cancel AT ROW 6.71 COL 211
-     BUTTON-1 AT ROW 10.52 COL 211
-     SPACE(14.79) SKIP(13.28)
+     BROWSE-9 AT ROW 1.95 COL 11
+     Btn_OK AT ROW 1.95 COL 111
+     Btn_Cancel AT ROW 4.81 COL 111
+     SPACE(6.19) SKIP(13.99)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "<insert dialog title>"
@@ -155,7 +137,7 @@ DEFINE FRAME Dialog-Frame
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR DIALOG-BOX Dialog-Frame
                                                                         */
-/* BROWSE-TAB BROWSE-8 1 Dialog-Frame */
+/* BROWSE-TAB BROWSE-9 1 Dialog-Frame */
 ASSIGN 
        FRAME Dialog-Frame:SCROLLABLE       = FALSE
        FRAME Dialog-Frame:HIDDEN           = TRUE.
@@ -166,23 +148,17 @@ ASSIGN
 
 /* Setting information for Queries and Browse Widgets fields            */
 
-&ANALYZE-SUSPEND _QUERY-BLOCK BROWSE BROWSE-8
-/* Query rebuild information for BROWSE BROWSE-8
-     _TblList          = "Restaurante.PRODUCTO,Restaurante.STOCK WHERE Restaurante.PRODUCTO ...,Restaurante.UNIDAD_MEDIDA WHERE Restaurante.PRODUCTO ..."
+&ANALYZE-SUSPEND _QUERY-BLOCK BROWSE BROWSE-9
+/* Query rebuild information for BROWSE BROWSE-9
+     _TblList          = "Restaurante.PRODUCTO"
      _Options          = "NO-LOCK INDEXED-REPOSITION"
-     _JoinCode[2]      = "STOCK.ID_PRODUCTO = PRODUCTO.ID_PRODUCTO"
-     _JoinCode[3]      = "UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD"
      _FldNameList[1]   = Restaurante.PRODUCTO.CODIGO
      _FldNameList[2]   > Restaurante.PRODUCTO.DESCRIPCION
-"PRODUCTO.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "71.4" yes no no "U" "" ""
-     _FldNameList[3]   = Restaurante.STOCK.CANTIDAD
-     _FldNameList[4]   > Restaurante.UNIDAD_MEDIDA.DESCRIPCION
-"UNIDAD_MEDIDA.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "33.4" yes no no "U" "" ""
-     _FldNameList[5]   = Restaurante.STOCK.F_CADUCIDAD
-     _FldNameList[6]   = Restaurante.STOCK.F_INGRESO
-     _FldNameList[7]   = Restaurante.STOCK.LOTE
+"DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "38.2" yes no no "U" "" ""
+     _FldNameList[3]   > Restaurante.PRODUCTO.CANT_MINIMA
+"CANT_MINIMA" ? ? "integer" ? ? ? ? ? ? no ? no no "35.6" yes no no "U" "" ""
      _Query            is OPENED
-*/  /* BROWSE BROWSE-8 */
+*/  /* BROWSE BROWSE-9 */
 &ANALYZE-RESUME
 
  
@@ -202,19 +178,18 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME BUTTON-1
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-1 Dialog-Frame
-ON CHOOSE OF BUTTON-1 IN FRAME Dialog-Frame /* Agregar Producto */
+&Scoped-define SELF-NAME Btn_OK
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_OK Dialog-Frame
+ON CHOOSE OF Btn_OK IN FRAME Dialog-Frame /* OK */
 DO:
-    RUN Nuevo_Producto.w. /*(1,?).*/
-    {&OPEN-query-BROWSE-8}
+    RUN Insertar_Producto.w(ROWID(Producto)).
 END.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
 
-&Scoped-define BROWSE-NAME BROWSE-8
+&Scoped-define BROWSE-NAME BROWSE-9
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dialog-Frame 
@@ -271,7 +246,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE BROWSE-8 Btn_OK Btn_Cancel BUTTON-1 
+  ENABLE BROWSE-9 Btn_OK Btn_Cancel 
       WITH FRAME Dialog-Frame.
   VIEW FRAME Dialog-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}

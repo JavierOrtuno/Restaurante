@@ -31,7 +31,8 @@
 
 /* Local Variable Definitions ---                                       */
 
-DEF VAR vrowid AS ROWID.
+DEF VAR crowid AS ROWID.
+DEF VAR vlogOK AS LOG.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -49,20 +50,19 @@ DEF VAR vrowid AS ROWID.
 &Scoped-define BROWSE-NAME BROWSE-2
 
 /* Internal Tables (found by Frame, Query & Browse Queries)             */
-&Scoped-define INTERNAL-TABLES CLIENTE PERSONA
+&Scoped-define INTERNAL-TABLES PERSONA CLIENTE
 
 /* Definitions for BROWSE BROWSE-2                                      */
-&Scoped-define FIELDS-IN-QUERY-BROWSE-2 CLIENTE.ID_CLIENTE ~
-CLIENTE.ID_PERSONA PERSONA.A_PATERNO PERSONA.A_MATERNO PERSONA.NOMBRES ~
-PERSONA.DOMICILIO PERSONA.F_NACIMIENTO PERSONA.CORREO 
+&Scoped-define FIELDS-IN-QUERY-BROWSE-2 PERSONA.NOMBRES PERSONA.A_PATERNO ~
+PERSONA.A_MATERNO PERSONA.DOMICILIO PERSONA.F_NACIMIENTO PERSONA.CORREO 
 &Scoped-define ENABLED-FIELDS-IN-QUERY-BROWSE-2 
-&Scoped-define QUERY-STRING-BROWSE-2 FOR EACH CLIENTE NO-LOCK, ~
-      EACH PERSONA WHERE TRUE /* Join to CLIENTE incomplete */ NO-LOCK INDEXED-REPOSITION
-&Scoped-define OPEN-QUERY-BROWSE-2 OPEN QUERY BROWSE-2 FOR EACH CLIENTE NO-LOCK, ~
-      EACH PERSONA WHERE TRUE /* Join to CLIENTE incomplete */ NO-LOCK INDEXED-REPOSITION.
-&Scoped-define TABLES-IN-QUERY-BROWSE-2 CLIENTE PERSONA
-&Scoped-define FIRST-TABLE-IN-QUERY-BROWSE-2 CLIENTE
-&Scoped-define SECOND-TABLE-IN-QUERY-BROWSE-2 PERSONA
+&Scoped-define QUERY-STRING-BROWSE-2 FOR EACH PERSONA SHARE-LOCK, ~
+      EACH CLIENTE WHERE CLIENTE.ID_PERSONA = PERSONA.ID_PERSONA SHARE-LOCK INDEXED-REPOSITION
+&Scoped-define OPEN-QUERY-BROWSE-2 OPEN QUERY BROWSE-2 FOR EACH PERSONA SHARE-LOCK, ~
+      EACH CLIENTE WHERE CLIENTE.ID_PERSONA = PERSONA.ID_PERSONA SHARE-LOCK INDEXED-REPOSITION.
+&Scoped-define TABLES-IN-QUERY-BROWSE-2 PERSONA CLIENTE
+&Scoped-define FIRST-TABLE-IN-QUERY-BROWSE-2 PERSONA
+&Scoped-define SECOND-TABLE-IN-QUERY-BROWSE-2 CLIENTE
 
 
 /* Definitions for DIALOG-BOX Dialog-Frame                              */
@@ -104,36 +104,34 @@ DEFINE BUTTON BUTTON-4
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
 DEFINE QUERY BROWSE-2 FOR 
-      CLIENTE, 
-      PERSONA SCROLLING.
+      PERSONA, 
+      CLIENTE SCROLLING.
 &ANALYZE-RESUME
 
 /* Browse definitions                                                   */
 DEFINE BROWSE BROWSE-2
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-2 Dialog-Frame _STRUCTURED
-  QUERY BROWSE-2 NO-LOCK DISPLAY
-      CLIENTE.ID_CLIENTE FORMAT "->,>>>,>>9":U
-      CLIENTE.ID_PERSONA FORMAT "->,>>>,>>9":U
-      PERSONA.A_PATERNO FORMAT "X(25)":U
-      PERSONA.A_MATERNO FORMAT "X(25)":U
-      PERSONA.NOMBRES FORMAT "X(25)":U
-      PERSONA.DOMICILIO FORMAT "X(40)":U
+  QUERY BROWSE-2 SHARE-LOCK NO-WAIT DISPLAY
+      PERSONA.NOMBRES FORMAT "X(50)":U
+      PERSONA.A_PATERNO FORMAT "X(50)":U
+      PERSONA.A_MATERNO FORMAT "X(50)":U
+      PERSONA.DOMICILIO FORMAT "X(50)":U
       PERSONA.F_NACIMIENTO FORMAT "99/99/99":U
-      PERSONA.CORREO FORMAT "X(35)":U
+      PERSONA.CORREO FORMAT "X(50)":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 225 BY 4.52 EXPANDABLE.
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 202 BY 4.52 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
-     BROWSE-2 AT ROW 1.71 COL 6
+     BROWSE-2 AT ROW 2.43 COL 10
      BUTTON-1 AT ROW 8.62 COL 7
      BUTTON-2 AT ROW 8.62 COL 29
      BUTTON-3 AT ROW 8.62 COL 51
      BUTTON-4 AT ROW 8.62 COL 214
-     SPACE(7.19) SKIP(2.33)
+     SPACE(7.99) SKIP(2.33)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Menu Clientes Preferentes".
@@ -169,17 +167,15 @@ ASSIGN
 
 &ANALYZE-SUSPEND _QUERY-BLOCK BROWSE BROWSE-2
 /* Query rebuild information for BROWSE BROWSE-2
-     _TblList          = "Restaurante.CLIENTE,Restaurante.PERSONA WHERE Restaurante.CLIENTE ..."
-     _Options          = "NO-LOCK INDEXED-REPOSITION"
-     _FldNameList[1]   = Restaurante.CLIENTE.ID_CLIENTE
-     _FldNameList[2]   = Restaurante.CLIENTE.ID_PERSONA
-     _FldNameList[3]   = Restaurante.PERSONA.A_PATERNO
-     _FldNameList[4]   = Restaurante.PERSONA.A_MATERNO
-     _FldNameList[5]   = Restaurante.PERSONA.NOMBRES
-     _FldNameList[6]   = Restaurante.PERSONA.DOMICILIO
-     _FldNameList[7]   = Restaurante.PERSONA.F_NACIMIENTO
-     _FldNameList[8]   > Restaurante.PERSONA.CORREO
-"PERSONA.CORREO" ? ? "character" ? ? ? ? ? ? no ? no no "57.8" yes no no "U" "" ""
+     _TblList          = "Restaurante.PERSONA,Restaurante.CLIENTE WHERE Restaurante.PERSONA ..."
+     _Options          = "SHARE-LOCK INDEXED-REPOSITION"
+     _JoinCode[2]      = "CLIENTE.ID_PERSONA = PERSONA.ID_PERSONA"
+     _FldNameList[1]   = Restaurante.PERSONA.NOMBRES
+     _FldNameList[2]   = Restaurante.PERSONA.A_PATERNO
+     _FldNameList[3]   = Restaurante.PERSONA.A_MATERNO
+     _FldNameList[4]   = Restaurante.PERSONA.DOMICILIO
+     _FldNameList[5]   = Restaurante.PERSONA.F_NACIMIENTO
+     _FldNameList[6]   = Restaurante.PERSONA.CORREO
      _Query            is OPENED
 */  /* BROWSE BROWSE-2 */
 &ANALYZE-RESUME
@@ -205,8 +201,9 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-1 Dialog-Frame
 ON CHOOSE OF BUTTON-1 IN FRAME Dialog-Frame /* Insertar */
 DO:
-  HIDE ALL.
+
   RUN InsertarClientes.w.
+  /*FRAME Insertar-Frame:VISIBLE = TRUE.*/
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -217,10 +214,40 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-2 Dialog-Frame
 ON CHOOSE OF BUTTON-2 IN FRAME Dialog-Frame /* Eliminar */
 DO:
-    FIND Persona WHERE ROWID(Persona) = vrowid.
-    FIND Cliente WHERE ROWID(Cliente) = vrowid.
-    DELETE Persona. 
-    DELETE Cliente.
+    FIND CURRENT Persona.
+
+    IF Cliente.ID_Persona = Persona.ID_Persona
+        THEN DO:
+            DELETE Cliente.
+            DELETE Persona.
+        END. 
+
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME BUTTON-3
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-3 Dialog-Frame
+ON CHOOSE OF BUTTON-3 IN FRAME Dialog-Frame /* Actualizar */
+DO:
+  FIND CURRENT Persona.
+  crowid = ROWID(Persona).
+  RUN ActualizaCliente.w(crowid).
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME BUTTON-4
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-4 Dialog-Frame
+ON CHOOSE OF BUTTON-4 IN FRAME Dialog-Frame /* Salir */
+DO:
+  MESSAGE "¿Desea Salir?" VIEW-AS ALERT-BOX BUTTONS YES-NO
+  UPDATE vlogOK.
+  IF vlogOK THEN APPLY "window-close" TO CURRENT-WINDOW.
 END.
 
 /* _UIB-CODE-BLOCK-END */

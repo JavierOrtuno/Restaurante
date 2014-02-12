@@ -1,8 +1,8 @@
 &ANALYZE-SUSPEND _VERSION-NUMBER UIB_v9r12 GUI
 &ANALYZE-RESUME
 &Scoped-define WINDOW-NAME CURRENT-WINDOW
-&Scoped-define FRAME-NAME Insertar-Frame
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Insertar-Frame 
+&Scoped-define FRAME-NAME Actualiza-Frame
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Actualiza-Frame 
 /*------------------------------------------------------------------------
 
   File: 
@@ -26,9 +26,9 @@
 
 /* Parameters Definitions ---                                           */
 
-/* Local Variable Definitions ---                                       */
+DEF INPUT PARAMETER crowid AS ROWID.
 
-DEF VAR vID AS INT.
+/* Local Variable Definitions ---                                       */
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -42,13 +42,13 @@ DEF VAR vID AS INT.
 &Scoped-define DB-AWARE no
 
 /* Name of first Frame and/or Browse and/or first Query                 */
-&Scoped-define FRAME-NAME Insertar-Frame
+&Scoped-define FRAME-NAME Actualiza-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Name LastName1 LastName2 Address Birthdate ~
-e-mail BUTTON-28 Btn_Cancel 
-&Scoped-Define DISPLAYED-OBJECTS Name LastName1 LastName2 Address Birthdate ~
-e-mail 
+&Scoped-Define ENABLED-OBJECTS FILL-IN-21 FILL-IN-22 FILL-IN-23 FILL-IN-24 ~
+FILL-IN-25 FILL-IN-26 Btn_OK Btn_Cancel 
+&Scoped-Define DISPLAYED-OBJECTS FILL-IN-21 FILL-IN-22 FILL-IN-23 ~
+FILL-IN-24 FILL-IN-25 FILL-IN-26 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -59,15 +59,8 @@ e-mail
 
 /* ************************  Function Prototypes ********************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD Insertar Insertar-Frame 
-FUNCTION Insertar RETURNS CHARACTER
-  ( /* parameter-definitions */ )  FORWARD.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD Limpiar Insertar-Frame 
-FUNCTION Limpiar RETURNS CHARACTER
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD Actualizar Actualiza-Frame 
+FUNCTION Actualizar RETURNS CHARACTER
   ( /* parameter-definitions */ )  FORWARD.
 
 /* _UIB-CODE-BLOCK-END */
@@ -84,57 +77,58 @@ DEFINE BUTTON Btn_Cancel AUTO-END-KEY
      SIZE 15 BY 1.14
      BGCOLOR 8 .
 
-DEFINE BUTTON BUTTON-28 
-     LABEL "Insertar" 
-     SIZE 15 BY 1.14.
+DEFINE BUTTON Btn_OK AUTO-GO 
+     LABEL "OK" 
+     SIZE 15 BY 1.14
+     BGCOLOR 8 .
 
-DEFINE VARIABLE Address AS CHARACTER FORMAT "X(70)":U 
+DEFINE VARIABLE FILL-IN-21 AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Nombre" 
+     VIEW-AS FILL-IN 
+     SIZE 27 BY 1 NO-UNDO.
+
+DEFINE VARIABLE FILL-IN-22 AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Apellido Psterno" 
+     VIEW-AS FILL-IN 
+     SIZE 28 BY 1 NO-UNDO.
+
+DEFINE VARIABLE FILL-IN-23 AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Apellido Materno" 
+     VIEW-AS FILL-IN 
+     SIZE 28 BY 1 NO-UNDO.
+
+DEFINE VARIABLE FILL-IN-24 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Domicilio" 
      VIEW-AS FILL-IN 
-     SIZE 51 BY 1.19 NO-UNDO.
+     SIZE 40 BY 1 NO-UNDO.
 
-DEFINE VARIABLE Birthdate AS DATE FORMAT "99/99/99":U 
+DEFINE VARIABLE FILL-IN-25 AS DATE FORMAT "99/99/99":U 
      LABEL "Fecha Nacimiento" 
      VIEW-AS FILL-IN 
-     SIZE 15 BY 1 NO-UNDO.
+     SIZE 14 BY 1 NO-UNDO.
 
-DEFINE VARIABLE e-mail AS CHARACTER FORMAT "X(35)":U 
+DEFINE VARIABLE FILL-IN-26 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Correo Electrónico" 
      VIEW-AS FILL-IN 
      SIZE 40 BY 1 NO-UNDO.
 
-DEFINE VARIABLE LastName1 AS CHARACTER FORMAT "X(25)":U 
-     LABEL "Apellido Paterno" 
-     VIEW-AS FILL-IN 
-     SIZE 30 BY 1 NO-UNDO.
-
-DEFINE VARIABLE LastName2 AS CHARACTER FORMAT "X(25)":U 
-     LABEL "Apellido Materno" 
-     VIEW-AS FILL-IN 
-     SIZE 30 BY 1 NO-UNDO.
-
-DEFINE VARIABLE Name AS CHARACTER FORMAT "X(25)":U 
-     LABEL "Nombre" 
-     VIEW-AS FILL-IN 
-     SIZE 30 BY 1 NO-UNDO.
-
 
 /* ************************  Frame Definitions  *********************** */
 
-DEFINE FRAME Insertar-Frame
-     Name AT ROW 1.95 COL 19 COLON-ALIGNED
-     LastName1 AT ROW 3.38 COL 19 COLON-ALIGNED
-     LastName2 AT ROW 5.05 COL 19 COLON-ALIGNED
-     Address AT ROW 6.71 COL 19 COLON-ALIGNED
-     Birthdate AT ROW 8.62 COL 19 COLON-ALIGNED
-     e-mail AT ROW 10.29 COL 19 COLON-ALIGNED
-     BUTTON-28 AT ROW 12.43 COL 21
-     Btn_Cancel AT ROW 12.43 COL 39
-     SPACE(21.39) SKIP(1.37)
+DEFINE FRAME Actualiza-Frame
+     FILL-IN-21 AT ROW 1.95 COL 20 COLON-ALIGNED
+     FILL-IN-22 AT ROW 3.38 COL 20 COLON-ALIGNED
+     FILL-IN-23 AT ROW 4.81 COL 20 COLON-ALIGNED
+     FILL-IN-24 AT ROW 6.24 COL 20 COLON-ALIGNED
+     FILL-IN-25 AT ROW 7.67 COL 20 COLON-ALIGNED
+     FILL-IN-26 AT ROW 9.1 COL 20 COLON-ALIGNED
+     Btn_OK AT ROW 10.76 COL 22
+     Btn_Cancel AT ROW 10.76 COL 40
+     SPACE(15.59) SKIP(1.23)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "Insertar Clientes"
-         CANCEL-BUTTON Btn_Cancel.
+         TITLE "Actualiza Cliente"
+         DEFAULT-BUTTON Btn_OK CANCEL-BUTTON Btn_Cancel.
 
 
 /* *********************** Procedure Settings ************************ */
@@ -152,11 +146,11 @@ DEFINE FRAME Insertar-Frame
 /* ***********  Runtime Attributes and AppBuilder Settings  *********** */
 
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
-/* SETTINGS FOR DIALOG-BOX Insertar-Frame
+/* SETTINGS FOR DIALOG-BOX Actualiza-Frame
                                                                         */
 ASSIGN 
-       FRAME Insertar-Frame:SCROLLABLE       = FALSE
-       FRAME Insertar-Frame:HIDDEN           = TRUE.
+       FRAME Actualiza-Frame:SCROLLABLE       = FALSE
+       FRAME Actualiza-Frame:HIDDEN           = TRUE.
 
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
@@ -167,9 +161,9 @@ ASSIGN
 
 /* ************************  Control Triggers  ************************ */
 
-&Scoped-define SELF-NAME Insertar-Frame
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Insertar-Frame Insertar-Frame
-ON WINDOW-CLOSE OF FRAME Insertar-Frame /* Insertar Clientes */
+&Scoped-define SELF-NAME Actualiza-Frame
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Actualiza-Frame Actualiza-Frame
+ON WINDOW-CLOSE OF FRAME Actualiza-Frame /* Actualiza Cliente */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -178,11 +172,11 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME BUTTON-28
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-28 Insertar-Frame
-ON CHOOSE OF BUTTON-28 IN FRAME Insertar-Frame /* Insertar */
+&Scoped-define SELF-NAME Btn_OK
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_OK Actualiza-Frame
+ON CHOOSE OF Btn_OK IN FRAME Actualiza-Frame /* OK */
 DO:
-   Insertar().
+    Actualizar().
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -191,7 +185,7 @@ END.
 
 &UNDEFINE SELF-NAME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Insertar-Frame 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Actualiza-Frame 
 
 
 /* ***************************  Main Block  *************************** */
@@ -207,6 +201,7 @@ MAIN-BLOCK:
 DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
    ON END-KEY UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK:
   RUN enable_UI.
+  RUN Desplegar.
   WAIT-FOR GO OF FRAME {&FRAME-NAME}.
 END.
 RUN disable_UI.
@@ -217,7 +212,27 @@ RUN disable_UI.
 
 /* **********************  Internal Procedures  *********************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Insertar-Frame  _DEFAULT-DISABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE Desplegar Actualiza-Frame 
+PROCEDURE Desplegar :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+  FIND Persona WHERE ROWID(Persona) = crowid.
+  ASSIGN
+           FILL-IN-21:SCREEN-VALUE IN FRAME Actualiza-Frame = Persona.Nombres 
+           FILL-IN-22:SCREEN-VALUE  = Persona.A_Paterno   
+           FILL-IN-23:SCREEN-VALUE  = Persona.A_Materno
+           FILL-IN-24:SCREEN-VALUE  = Persona.Domicilio
+           FILL-IN-25:SCREEN-VALUE  = STRING(Persona.F_Nacimiento)   
+           FILL-IN-26:SCREEN-VALUE  = Persona.Correo.   
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Actualiza-Frame  _DEFAULT-DISABLE
 PROCEDURE disable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     DISABLE the User Interface
@@ -228,13 +243,13 @@ PROCEDURE disable_UI :
                we are ready to "clean-up" after running.
 ------------------------------------------------------------------------------*/
   /* Hide all frames. */
-  HIDE FRAME Insertar-Frame.
+  HIDE FRAME Actualiza-Frame.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Insertar-Frame  _DEFAULT-ENABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Actualiza-Frame  _DEFAULT-ENABLE
 PROCEDURE enable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     ENABLE the User Interface
@@ -245,12 +260,13 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  DISPLAY Name LastName1 LastName2 Address Birthdate e-mail 
-      WITH FRAME Insertar-Frame.
-  ENABLE Name LastName1 LastName2 Address Birthdate e-mail BUTTON-28 Btn_Cancel 
-      WITH FRAME Insertar-Frame.
-  VIEW FRAME Insertar-Frame.
-  {&OPEN-BROWSERS-IN-QUERY-Insertar-Frame}
+  DISPLAY FILL-IN-21 FILL-IN-22 FILL-IN-23 FILL-IN-24 FILL-IN-25 FILL-IN-26 
+      WITH FRAME Actualiza-Frame.
+  ENABLE FILL-IN-21 FILL-IN-22 FILL-IN-23 FILL-IN-24 FILL-IN-25 FILL-IN-26 
+         Btn_OK Btn_Cancel 
+      WITH FRAME Actualiza-Frame.
+  VIEW FRAME Actualiza-Frame.
+  {&OPEN-BROWSERS-IN-QUERY-Actualiza-Frame}
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
@@ -258,69 +274,21 @@ END PROCEDURE.
 
 /* ************************  Function Implementations ***************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION Insertar Insertar-Frame 
-FUNCTION Insertar RETURNS CHARACTER
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION Actualizar Actualiza-Frame 
+FUNCTION Actualizar RETURNS CHARACTER
   ( /* parameter-definitions */ ) :
 /*------------------------------------------------------------------------------
   Purpose:  
     Notes:  
 ------------------------------------------------------------------------------*/
-  /*Comprueba que los campos Nombre, Domicilio y Correo no esten vacios*/
-  IF NAME:SCREEN-VALUE IN FRAME Insertar-Frame = "" OR address:SCREEN-VALUE = "" OR e-mail:SCREEN-VALUE = ""
-    THEN MESSAGE "Nombre, Domicilio y Correo son obligatorios" VIEW-AS ALERT-BOX.  
-        
-  /*Registra un nuevo cliente en la base de datos*/ 
-  ELSE DO:
-      
-      CREATE Persona.
-
-      ASSIGN
-       Persona.Nombre = NAME:SCREEN-VALUE 
-       Persona.A_Paterno = lastname1:SCREEN-VALUE  
-       Persona.A_Materno = lastname2:SCREEN-VALUE
-       Persona.Domicilio = Address:SCREEN-VALUE
-       Persona.F_Nacimiento = DATE(birthdate:SCREEN-VALUE)  
-       Persona.Correo = e-mail:SCREEN-VALUE.
-  
-       Persona.ID_Persona = NEXT-VALUE(SEC_PERSONA).
-
-       CREATE Cliente.
-
-       Cliente.ID_Cliente = NEXT-VALUE(SEC_CLIENTE).
-
-       Cliente.ID_Persona = Persona.ID_Persona.
-
-  END.
-
-
-      Limpiar().
-
-
-END FUNCTION.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION Limpiar Insertar-Frame 
-FUNCTION Limpiar RETURNS CHARACTER
-  ( /* parameter-definitions */ ) :
-/*------------------------------------------------------------------------------
-  Purpose:  
-    Notes:  
-------------------------------------------------------------------------------*/
-
-       DO.
-
-            ASSIGN
-                Name:SCREEN-VALUE IN FRAME Insertar-Frame = " "   
-                lastname1:SCREEN-VALUE = " "
-                lastname2:screen-value = " "
-                address:screen-value =  " "
-                birthdate:SCREEN-VALUE = ?
-                e-mail:screen-value = " ".
-        END.
-
-  RETURN "".   /* Function return value. */
+    FIND Persona WHERE ROWID(Persona) = crowid.
+    ASSIGN 
+           Persona.Nombre = FILL-IN-21:SCREEN-VALUE IN FRAME Actualiza-Frame  
+           Persona.A_Paterno = FILL-IN-22:SCREEN-VALUE
+           Persona.A_Materno = FILL-IN-23:SCREEN-VALUE
+           Persona.Domicilio = FILL-IN-24:SCREEN-VALUE
+           Persona.F_Nacimiento = DATE(FILL-IN-25:SCREEN-VALUE)  
+           Persona.Correo = FILL-IN-26:SCREEN-VALUE.
 
 END FUNCTION.
 

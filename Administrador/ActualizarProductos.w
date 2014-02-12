@@ -26,6 +26,7 @@
 {productos.i}
 /* Parameters Definitions ---                                           */
 DEFINE INPUT PARAMETER pinIntEvento AS INTEGER.
+DEFINE INPUT PARAMETER pinRowId AS ROWID.
 
 /* Local Variable Definitions ---                                       */
 
@@ -46,8 +47,8 @@ DEFINE INPUT PARAMETER pinIntEvento AS INTEGER.
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Fill_Descripcion Fill_Cantidad List_Unidad ~
 Btn_Aceptar Btn_Cancelar 
-&Scoped-Define DISPLAYED-OBJECTS Fill_Codigo Fill_Descripcion Fill_Cantidad ~
-List_Unidad 
+&Scoped-Define DISPLAYED-OBJECTS Fill_Titulo Fill_Codigo Fill_Descripcion ~
+Fill_Cantidad List_Unidad 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -55,6 +56,15 @@ List_Unidad
 /* _UIB-PREPROCESSOR-BLOCK-END */
 &ANALYZE-RESUME
 
+
+/* ************************  Function Prototypes ********************** */
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD validarRegistroProd Dlg_UpdateProd 
+FUNCTION validarRegistroProd RETURNS LOGICAL
+    ( vcharDesc AS CHARACTER, vintCant AS CHARACTER, vintUnidad AS INTEGER )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
 
 
 /* ***********************  Control Definitions  ********************** */
@@ -92,10 +102,16 @@ DEFINE VARIABLE Fill_Descripcion AS CHARACTER FORMAT "X(100)":U
      VIEW-AS FILL-IN 
      SIZE 31 BY 1 NO-UNDO.
 
+DEFINE VARIABLE Fill_Titulo AS CHARACTER FORMAT "X(256)":U 
+     LABEL "" 
+     VIEW-AS FILL-IN 
+     SIZE 18.6 BY 1.43 NO-UNDO.
+
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_UpdateProd
+     Fill_Titulo AT ROW 1.71 COL 29.6 COLON-ALIGNED
      Fill_Codigo AT ROW 4.24 COL 19 COLON-ALIGNED
      Fill_Descripcion AT ROW 6.14 COL 19 COLON-ALIGNED
      Fill_Cantidad AT ROW 8.05 COL 19 COLON-ALIGNED
@@ -131,6 +147,8 @@ ASSIGN
 
 /* SETTINGS FOR FILL-IN Fill_Codigo IN FRAME Dlg_UpdateProd
    NO-ENABLE                                                            */
+/* SETTINGS FOR FILL-IN Fill_Titulo IN FRAME Dlg_UpdateProd
+   NO-ENABLE                                                            */
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
 
@@ -154,15 +172,39 @@ END.
 &Scoped-define SELF-NAME Btn_Aceptar
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Aceptar Dlg_UpdateProd
 ON CHOOSE OF Btn_Aceptar IN FRAME Dlg_UpdateProd /* Aceptar */
-DO:
+DO:    
+    DEFINE VARIABLE vintUnidad AS INTEGER.
+    DEFINE VARIABLE vcharDescripcion AS CHARACTER.
+    DEFINE VARIABLE vintCantidad AS CHARACTER.
+
+    vintCantidad = Fill_Cantidad:SCREEN-VALUE.
+    vintUnidad = INTEGER(List_Unidad:SCREEN-VALUE).
+    vcharDescripcion = Fill_Descripcion:SCREEN-VALUE.
+        
+    IF validarRegistroProd(vcharDescripcion, vintCantidad, vintUnidad) = FALSE THEN DO:
+        MESSAGE "Todos los Campos son Requeridos" VIEW-AS ALERT-BOX.
+    END.
     CASE pinIntEvento:
         WHEN 1 THEN DO:
             MESSAGE "NUEVO" VIEW-AS ALERT-BOX.
+
         END.
         WHEN 2 THEN DO:
             MESSAGE "ACTUALIZACION" VIEW-AS ALERT-BOX.
+
         END.
     END CASE.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Btn_Cancelar
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Cancelar Dlg_UpdateProd
+ON CHOOSE OF Btn_Cancelar IN FRAME Dlg_UpdateProd /* Cancelar */
+DO:
+    APPLY "WINDOW-CLOSE" TO CURRENT-WINDOW.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -198,6 +240,25 @@ RUN disable_UI.
 
 /* **********************  Internal Procedures  *********************** */
 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE asignarValores Dlg_UpdateProd 
+PROCEDURE asignarValores :
+/*------------------------------------------------------------------------------
+        Purpose:     
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    FIND FIRST PRODUCTO WHERE ROWID(PRODUCTO) = pinRowId.
+
+    Fill_Codigo:SCREEN-VALUE IN FRAME {&FRAME-NAME} = UPPER(PRODUCTO.CODIGO).
+    Fill_Descripcion:SCREEN-VALUE = UPPER(PRODUCTO.DESCRIPCION).
+    Fill_Cantidad:SCREEN-VALUE = STRING(INTEGER(PRODUCTO.CANT_MINIMA)).
+    List_Unidad:SCREEN-VALUE = STRING(INTEGER(PRODUCTO.ID_UNIDAD)).
+    
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Dlg_UpdateProd  _DEFAULT-DISABLE
 PROCEDURE disable_UI :
 /*------------------------------------------------------------------------------
@@ -226,7 +287,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  DISPLAY Fill_Codigo Fill_Descripcion Fill_Cantidad List_Unidad 
+  DISPLAY Fill_Titulo Fill_Codigo Fill_Descripcion Fill_Cantidad List_Unidad 
       WITH FRAME Dlg_UpdateProd.
   ENABLE Fill_Descripcion Fill_Cantidad List_Unidad Btn_Aceptar Btn_Cancelar 
       WITH FRAME Dlg_UpdateProd.
@@ -242,22 +303,40 @@ PROCEDURE setInitial :
 /*------------------------------------------------------------------------------
       Purpose: Inicialización del Dialogo de Registro de Productos    
       Parameters: <none>
-      Author:
-        I.S.C. Fco. Javier Ortuño Colchado
+      Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vcharCatUnidad AS CHARACTER.
 
     vcharCatUnidad = getCatUnidad().        
-    ASSIGN List_Unidad:LIST-ITEM-PAIRS IN FRAME Dlg_UpdateProd = vcharCatUnidad.
+    ASSIGN List_Unidad:LIST-ITEM-PAIRS IN FRAME {&FRAME-NAME} = vcharCatUnidad.
     CASE pinIntEvento:
         WHEN 1 THEN DO:
             Fill_Codigo:SCREEN-VALUE = getCodProducto().
         END.
         WHEN 2 THEN DO:
-            
+            RUN asignarValores.
         END.
     END CASE.
 END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+/* ************************  Function Implementations ***************** */
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION validarRegistroProd Dlg_UpdateProd 
+FUNCTION validarRegistroProd RETURNS LOGICAL
+    ( vcharDesc AS CHARACTER, vintCant AS CHARACTER, vintUnidad AS INTEGER ) :
+    /*------------------------------------------------------------------------------
+        Purpose: Validar Registro de Producto  
+        Notes: Retorna TRUE si la validación es correcta
+        Author: I.S.C. Fco. Javier Ortuño Colchado
+    ------------------------------------------------------------------------------*/
+    IF LENGTH(TRIM(vcharDesc)) = 0 OR vintCant = "0" OR vintUnidad = 0 THEN
+        RETURN FALSE.
+    
+    RETURN TRUE.
+END FUNCTION.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME

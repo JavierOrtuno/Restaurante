@@ -184,7 +184,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Agregar Dlg_MenuProd
 ON CHOOSE OF Btn_Agregar IN FRAME Dlg_MenuProd /* Nuevo */
 DO:
-    RUN ActualizarProductos.w(1).
+    RUN ActualizarProductos.w(1, ?).
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -192,6 +192,17 @@ END.
 
 
 &Scoped-define BROWSE-NAME Bws_Productos
+&Scoped-define SELF-NAME Bws_Productos
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bws_Productos Dlg_MenuProd
+ON MOUSE-SELECT-DBLCLICK OF Bws_Productos IN FRAME Dlg_MenuProd
+DO:    
+    RUN selectedItem.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dlg_MenuProd 
@@ -252,6 +263,23 @@ PROCEDURE enable_UI :
       WITH FRAME Dlg_MenuProd.
   VIEW FRAME Dlg_MenuProd.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_MenuProd}
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE selectedItem Dlg_MenuProd 
+PROCEDURE selectedItem :
+/*------------------------------------------------------------------------------
+        Purpose:     
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vrowID AS ROWID.
+
+    vrowID = ROWID(PRODUCTO).
+    RUN ActualizarProductos.w(2, vrowID).
+
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

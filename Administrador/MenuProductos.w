@@ -138,6 +138,9 @@ ASSIGN
        FRAME Dlg_MenuProd:SCROLLABLE       = FALSE
        FRAME Dlg_MenuProd:HIDDEN           = TRUE.
 
+ASSIGN 
+       Bws_Productos:ALLOW-COLUMN-SEARCHING IN FRAME Dlg_MenuProd = TRUE.
+
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
 

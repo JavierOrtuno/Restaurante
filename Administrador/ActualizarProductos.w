@@ -44,8 +44,8 @@ DEFINE INPUT PARAMETER pinIntEvento AS INTEGER.
 &Scoped-define FRAME-NAME Dlg_UpdateProd
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Fill_Codigo Fill_Descripcion Fill_Cantidad ~
-List_Unidad Btn_Aceptar Btn_Cancelar 
+&Scoped-Define ENABLED-OBJECTS Fill_Descripcion Fill_Cantidad List_Unidad ~
+Btn_Aceptar Btn_Cancelar 
 &Scoped-Define DISPLAYED-OBJECTS Fill_Codigo Fill_Descripcion Fill_Cantidad ~
 List_Unidad 
 
@@ -80,7 +80,7 @@ DEFINE VARIABLE List_Unidad AS CHARACTER FORMAT "X(256)":U
 DEFINE VARIABLE Fill_Cantidad AS INTEGER FORMAT "->,>>>,>>9":U INITIAL 0 
      LABEL "Cant. Mínima" 
      VIEW-AS FILL-IN 
-     SIZE 11 BY 1 NO-UNDO.
+     SIZE 14 BY 1 NO-UNDO.
 
 DEFINE VARIABLE Fill_Codigo AS CHARACTER FORMAT "X(10)":U 
      LABEL "Código" 
@@ -129,6 +129,8 @@ ASSIGN
        FRAME Dlg_UpdateProd:SCROLLABLE       = FALSE
        FRAME Dlg_UpdateProd:HIDDEN           = TRUE.
 
+/* SETTINGS FOR FILL-IN Fill_Codigo IN FRAME Dlg_UpdateProd
+   NO-ENABLE                                                            */
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
 
@@ -226,8 +228,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY Fill_Codigo Fill_Descripcion Fill_Cantidad List_Unidad 
       WITH FRAME Dlg_UpdateProd.
-  ENABLE Fill_Codigo Fill_Descripcion Fill_Cantidad List_Unidad Btn_Aceptar 
-         Btn_Cancelar 
+  ENABLE Fill_Descripcion Fill_Cantidad List_Unidad Btn_Aceptar Btn_Cancelar 
       WITH FRAME Dlg_UpdateProd.
   VIEW FRAME Dlg_UpdateProd.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_UpdateProd}
@@ -248,7 +249,9 @@ PROCEDURE setInitial :
 
     vcharCatUnidad = getCatUnidad().        
     ASSIGN List_Unidad:LIST-ITEM-PAIRS IN FRAME Dlg_UpdateProd = vcharCatUnidad.
-    
+    IF pinIntEvento = 1 THEN DO:
+        
+    END.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

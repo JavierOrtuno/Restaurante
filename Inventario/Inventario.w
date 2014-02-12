@@ -71,7 +71,8 @@ STOCK.F_CADUCIDAD STOCK.F_INGRESO STOCK.LOTE
     ~{&OPEN-QUERY-BROWSE-8}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BROWSE-8 Btn_OK Btn_Cancel BUTTON-1 
+&Scoped-Define ENABLED-OBJECTS BROWSE-8 Btn_OK Btn_Cancel BUTTON-1 ~
+BUTTON-20 RECT-1 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -100,6 +101,14 @@ DEFINE BUTTON BUTTON-1
      LABEL "Agregar Producto" 
      SIZE 20 BY 2.81.
 
+DEFINE BUTTON BUTTON-20 
+     LABEL "Borrar" 
+     SIZE 20 BY 2.86.
+
+DEFINE RECTANGLE RECT-1
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 30 BY 20.24.
+
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
 DEFINE QUERY BROWSE-8 FOR 
@@ -113,25 +122,27 @@ DEFINE BROWSE BROWSE-8
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-8 Dialog-Frame _STRUCTURED
   QUERY BROWSE-8 NO-LOCK DISPLAY
       PRODUCTO.CODIGO FORMAT "X(10)":U
-      PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 71.4
+      PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 55.4
       STOCK.CANTIDAD FORMAT "->,>>>,>>9":U
       UNIDAD_MEDIDA.DESCRIPCION FORMAT "X(50)":U WIDTH 33.4
       STOCK.F_CADUCIDAD FORMAT "99/99/99":U
       STOCK.F_INGRESO FORMAT "99/99/99":U
-      STOCK.LOTE FORMAT "X(10)":U
+      STOCK.LOTE FORMAT "X(12)":U WIDTH 49.6
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 190 BY 24.05 EXPANDABLE.
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 196 BY 24.05 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
      BROWSE-8 AT ROW 1.95 COL 11
-     Btn_OK AT ROW 2.91 COL 211
-     Btn_Cancel AT ROW 6.71 COL 211
-     BUTTON-1 AT ROW 10.52 COL 211
-     SPACE(14.79) SKIP(13.28)
+     Btn_OK AT ROW 2.91 COL 217
+     Btn_Cancel AT ROW 6.71 COL 217.4
+     BUTTON-1 AT ROW 10.52 COL 217.8
+     BUTTON-20 AT ROW 14.33 COL 218
+     RECT-1 AT ROW 1.95 COL 213
+     SPACE(2.79) SKIP(4.42)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "<insert dialog title>"
@@ -174,13 +185,14 @@ ASSIGN
      _JoinCode[3]      = "UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD"
      _FldNameList[1]   = Restaurante.PRODUCTO.CODIGO
      _FldNameList[2]   > Restaurante.PRODUCTO.DESCRIPCION
-"PRODUCTO.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "71.4" yes no no "U" "" ""
+"PRODUCTO.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "55.4" yes no no "U" "" ""
      _FldNameList[3]   = Restaurante.STOCK.CANTIDAD
      _FldNameList[4]   > Restaurante.UNIDAD_MEDIDA.DESCRIPCION
 "UNIDAD_MEDIDA.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "33.4" yes no no "U" "" ""
      _FldNameList[5]   = Restaurante.STOCK.F_CADUCIDAD
      _FldNameList[6]   = Restaurante.STOCK.F_INGRESO
-     _FldNameList[7]   = Restaurante.STOCK.LOTE
+     _FldNameList[7]   > Restaurante.STOCK.LOTE
+"STOCK.LOTE" ? "X(12)" "character" ? ? ? ? ? ? no ? no no "49.6" yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE BROWSE-8 */
 &ANALYZE-RESUME
@@ -208,6 +220,19 @@ ON CHOOSE OF BUTTON-1 IN FRAME Dialog-Frame /* Agregar Producto */
 DO:
     RUN Nuevo_Producto.w. /*(1,?).*/
     {&OPEN-query-BROWSE-8}
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME BUTTON-20
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-20 Dialog-Frame
+ON CHOOSE OF BUTTON-20 IN FRAME Dialog-Frame /* Borrar */
+DO:
+   ROWID(stock).
+   DELETE stock.
+   {&OPEN-query-BROWSE-8}
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -271,7 +296,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE BROWSE-8 Btn_OK Btn_Cancel BUTTON-1 
+  ENABLE BROWSE-8 Btn_OK Btn_Cancel BUTTON-1 BUTTON-20 RECT-1 
       WITH FRAME Dialog-Frame.
   VIEW FRAME Dialog-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}

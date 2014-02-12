@@ -170,9 +170,10 @@ END.
 ON CHOOSE OF Btn_OK IN FRAME Insert-Frame /* OK */
 DO:
     DEF VAR vdteactual AS DATE.
+    DEF VAR vchrlote AS CHAR.
 
     vdteactual = TODAY.
-    IF int(FILL-IN-29:SCREEN-VALUE) > 0 THEN DO:
+    IF int(FILL-IN-29:SCREEN-VALUE) <= 0 THEN DO:
          MESSAGE "Ingresar Cantidad minimo 1" VIEW-AS ALERT-BOX.
          RETURN NO-APPLY.
     END.
@@ -182,10 +183,16 @@ DO:
           RETURN NO-APPLY.
       END.
       ELSE DO:
+          vchrlote = "LT-" + STRING(MONTH(vdteactual)) + STRING(YEAR(vdteactual)) + "01".
+          FIND Producto WHERE ROWID(Producto) = inrowReg.
           CREATE Stock.
-                        ASSIGN stock.cantidad = INPUT FILL-in-29
-                        stock.f_caducidad = INPUT FILL-in-30.
-                        MESSAGE "Registro insertado correctamente" VIEW-AS ALERT-BOX.
+          ASSIGN stock.id_stock = NEXT-VALUE(sec_stock)
+                 stock.lote = vchrlote
+                 stock.cantidad = INPUT FILL-in-29
+                 stock.f_ingreso = vdteactual
+                 stock.f_caducidad = INPUT FILL-in-30
+                 stock.id_producto = producto.id_producto.
+          MESSAGE "Registro insertado correctamente" VIEW-AS ALERT-BOX.
       END.
     END.
 END.

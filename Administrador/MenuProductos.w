@@ -83,7 +83,7 @@ getUnidadMedida(PRODUCTO.ID_UNIDAD)
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Agregar 
      LABEL "Nuevo" 
-     SIZE 20 BY 2.5.
+     SIZE 20 BY 2.52.
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -110,7 +110,7 @@ DEFINE BROWSE Bws_Productos
 DEFINE FRAME Dlg_MenuProd
      Bws_Productos AT ROW 1.81 COL 5.4
      Btn_Agregar AT ROW 3.86 COL 137.4
-     SPACE(5.59) SKIP(9.77)
+     SPACE(5.59) SKIP(9.75)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Productos".
@@ -185,6 +185,7 @@ END.
 ON CHOOSE OF Btn_Agregar IN FRAME Dlg_MenuProd /* Nuevo */
 DO:
     RUN ActualizarProductos.w(1, ?).
+    {&OPEN-QUERY-Bws_Productos}
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -197,6 +198,18 @@ END.
 ON MOUSE-SELECT-DBLCLICK OF Bws_Productos IN FRAME Dlg_MenuProd
 DO:    
     RUN selectedItem.
+    Bws_Productos:REFRESH().
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bws_Productos Dlg_MenuProd
+ON RETURN OF Bws_Productos IN FRAME Dlg_MenuProd
+DO:
+    RUN selectedItem.
+    Bws_Productos:REFRESH().  
 END.
 
 /* _UIB-CODE-BLOCK-END */

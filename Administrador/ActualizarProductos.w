@@ -48,8 +48,8 @@ DEFINE VARIABLE vintIdProducto AS INTEGER.
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Fill_Descripcion Fill_Cantidad List_Unidad ~
 Btn_Aceptar Btn_Cancelar 
-&Scoped-Define DISPLAYED-OBJECTS Fill_Titulo Fill_Codigo Fill_Descripcion ~
-Fill_Cantidad List_Unidad 
+&Scoped-Define DISPLAYED-OBJECTS Fill_Codigo Fill_Descripcion Fill_Cantidad ~
+List_Unidad 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -75,11 +75,11 @@ FUNCTION validarRegistroProd RETURNS LOGICAL
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Aceptar 
      LABEL "Aceptar" 
-     SIZE 20 BY 2.5.
+     SIZE 20 BY 2.52.
 
 DEFINE BUTTON Btn_Cancelar 
      LABEL "Cancelar" 
-     SIZE 20 BY 2.5.
+     SIZE 20 BY 2.52.
 
 DEFINE VARIABLE List_Unidad AS CHARACTER FORMAT "X(256)":U 
      LABEL "Unidad" 
@@ -103,23 +103,17 @@ DEFINE VARIABLE Fill_Descripcion AS CHARACTER FORMAT "X(100)":U
      VIEW-AS FILL-IN 
      SIZE 31 BY 1 NO-UNDO.
 
-DEFINE VARIABLE Fill_Titulo AS CHARACTER FORMAT "X(256)":U 
-     LABEL "" 
-     VIEW-AS FILL-IN 
-     SIZE 18.6 BY 1.43 NO-UNDO.
-
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_UpdateProd
-     Fill_Titulo AT ROW 1.71 COL 29.6 COLON-ALIGNED
      Fill_Codigo AT ROW 4.24 COL 19 COLON-ALIGNED
      Fill_Descripcion AT ROW 6.14 COL 19 COLON-ALIGNED
      Fill_Cantidad AT ROW 8.05 COL 19 COLON-ALIGNED
      List_Unidad AT ROW 9.95 COL 19 COLON-ALIGNED
      Btn_Aceptar AT ROW 12.43 COL 16.8
      Btn_Cancelar AT ROW 12.43 COL 46.8
-     SPACE(14.19) SKIP(1.16)
+     SPACE(14.19) SKIP(1.14)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Actualizar Productos".
@@ -147,8 +141,6 @@ ASSIGN
        FRAME Dlg_UpdateProd:HIDDEN           = TRUE.
 
 /* SETTINGS FOR FILL-IN Fill_Codigo IN FRAME Dlg_UpdateProd
-   NO-ENABLE                                                            */
-/* SETTINGS FOR FILL-IN Fill_Titulo IN FRAME Dlg_UpdateProd
    NO-ENABLE                                                            */
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
@@ -184,15 +176,18 @@ DO:
         
     IF validarRegistroProd(vcharDescripcion, vintCantidad, vintUnidad) = FALSE THEN DO:
         MESSAGE "Todos los Campos son Requeridos" VIEW-AS ALERT-BOX.
+        LEAVE.
     END.
     ASSIGN 
         Fill_Codigo Fill_Descripcion Fill_Cantidad List_Unidad.
     CASE pinIntEvento:
         WHEN 1 THEN DO:
-            RUN addProducto(vintIdProducto, Fill_Codigo, Fill_Descripcion, INTEGER(Fill_Cantidad), List_Unidad).
+            RUN addProducto(vintIdProducto, Fill_Codigo, Fill_Descripcion, INTEGER(Fill_Cantidad), INTEGER(List_Unidad)).
+            APPLY "WINDOW-CLOSE" TO CURRENT-WINDOW.
         END.
         WHEN 2 THEN DO:
-            RUN updateProducto.
+            RUN updateProducto(pinRowId, Fill_Codigo, Fill_Descripcion, INTEGER(Fill_Cantidad), INTEGER(List_Unidad)).
+            APPLY "WINDOW-CLOSE" TO CURRENT-WINDOW.
         END.
     END CASE.
 END.
@@ -288,7 +283,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  DISPLAY Fill_Titulo Fill_Codigo Fill_Descripcion Fill_Cantidad List_Unidad 
+  DISPLAY Fill_Codigo Fill_Descripcion Fill_Cantidad List_Unidad 
       WITH FRAME Dlg_UpdateProd.
   ENABLE Fill_Descripcion Fill_Cantidad List_Unidad Btn_Aceptar Btn_Cancelar 
       WITH FRAME Dlg_UpdateProd.
@@ -302,9 +297,9 @@ END PROCEDURE.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE setInitial Dlg_UpdateProd 
 PROCEDURE setInitial :
 /*------------------------------------------------------------------------------
-      Purpose: Inicialización del Dialogo de Registro de Productos    
-      Parameters: <none>
-      Author: I.S.C. Fco. Javier Ortuño Colchado
+        Purpose: Inicialización del Dialogo de Registro de Productos    
+        Parameters: <none>
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vcharCatUnidad AS CHARACTER.
 

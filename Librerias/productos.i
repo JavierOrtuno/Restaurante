@@ -128,12 +128,12 @@ PROCEDURE addProducto :
     DEFINE INPUT PARAMETER pinIntUnidad AS INTEGER.
     
     CREATE PRODUCTO.
-        ASSIGN 
-            PRODUCTO.ID_PRODUCTO = pinIntIdProducto
-            PRODUCTO.CODIGO = pinCharCodigo
-            PRODUCTO.DESCRIPCION = pinCharDescripcion
-            PRODUCTO.CANT_MINIMA = pinIntCantidad
-            PRODUCTO.ID_UNIDAD = pinIntUnidad.
+    ASSIGN 
+        PRODUCTO.ID_PRODUCTO = pinIntIdProducto
+        PRODUCTO.CODIGO = TRIM(pinCharCodigo)
+        PRODUCTO.DESCRIPCION = TRIM(pinCharDescripcion)
+        PRODUCTO.CANT_MINIMA = pinIntCantidad
+        PRODUCTO.ID_UNIDAD = pinIntUnidad.
     
 END PROCEDURE.
 
@@ -147,11 +147,23 @@ END PROCEDURE.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE updateProducto Method-Library 
 PROCEDURE updateProducto :
 /*------------------------------------------------------------------------------
-        Purpose:     
+        Purpose:
         Parameters:  <none>
         Notes:       
     ------------------------------------------------------------------------------*/
+    DEFINE INPUT PARAMETER pinIntRowId AS ROWID.
+    DEFINE INPUT PARAMETER pinCharCodigo AS CHARACTER.
+    DEFINE INPUT PARAMETER pinCharDescripcion AS CHARACTER.
+    DEFINE INPUT PARAMETER pinIntCantidad AS INTEGER.
+    DEFINE INPUT PARAMETER pinIntUnidad AS INTEGER.
     
+    FIND PRODUCTO WHERE ROWID(PRODUCTO) = pinIntRowId.
+    ASSIGN 
+        PRODUCTO.CODIGO = TRIM(pinCharCodigo)
+        PRODUCTO.DESCRIPCION = TRIM(pinCharDescripcion)
+        PRODUCTO.CANT_MINIMA = pinIntCantidad
+        PRODUCTO.ID_UNIDAD = pinIntUnidad.
+
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

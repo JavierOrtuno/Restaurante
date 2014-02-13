@@ -66,7 +66,7 @@ getUnidadMedida(PRODUCTO.ID_UNIDAD)
     ~{&OPEN-QUERY-Bws_Productos}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Bws_Productos Btn_Agregar 
+&Scoped-Define ENABLED-OBJECTS Bws_Productos Btn_Agregar Btn_Salir 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -83,6 +83,10 @@ getUnidadMedida(PRODUCTO.ID_UNIDAD)
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Agregar 
      LABEL "Nuevo" 
+     SIZE 20 BY 2.52.
+
+DEFINE BUTTON Btn_Salir 
+     LABEL "Salir" 
      SIZE 20 BY 2.52.
 
 /* Query definitions                                                    */
@@ -110,7 +114,8 @@ DEFINE BROWSE Bws_Productos
 DEFINE FRAME Dlg_MenuProd
      Bws_Productos AT ROW 1.81 COL 5.4
      Btn_Agregar AT ROW 3.86 COL 137.4
-     SPACE(5.59) SKIP(9.75)
+     Btn_Salir AT ROW 7.67 COL 137.6
+     SPACE(5.39) SKIP(5.94)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Productos".
@@ -183,6 +188,18 @@ END.
 &Scoped-define SELF-NAME Btn_Agregar
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Agregar Dlg_MenuProd
 ON CHOOSE OF Btn_Agregar IN FRAME Dlg_MenuProd /* Nuevo */
+DO:
+    RUN ActualizarProductos.w(1, ?).
+    {&OPEN-QUERY-Bws_Productos}
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Btn_Salir
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Salir Dlg_MenuProd
+ON CHOOSE OF Btn_Salir IN FRAME Dlg_MenuProd /* Salir */
 DO:
     RUN ActualizarProductos.w(1, ?).
     {&OPEN-QUERY-Bws_Productos}
@@ -272,7 +289,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Bws_Productos Btn_Agregar 
+  ENABLE Bws_Productos Btn_Agregar Btn_Salir 
       WITH FRAME Dlg_MenuProd.
   VIEW FRAME Dlg_MenuProd.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_MenuProd}

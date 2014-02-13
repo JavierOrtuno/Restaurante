@@ -88,7 +88,7 @@ DEFINE RECTANGLE RECT-3
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
-     SPACE(101.00) SKIP(17.14)
+     SPACE(101.01) SKIP(17.15)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          FGCOLOR 8 
@@ -167,6 +167,7 @@ DO:
     DEF VAR vcharUsuario AS CHAR.
     DEF VAR vcharContrasena AS CHAR.
     DEF VAR vcharCadEncript AS CHAR.
+    DEF VAR vintIdRol AS INT.
 
     vcharUsuario = Fill-Usuario:SCREEN-VALUE.
     vcharContrasena = Fill-Contrasena:SCREEN-VALUE.
@@ -180,12 +181,15 @@ DO:
     /*verificacion de existencia en la base de datos*/
     ELSE DO:
       vcharCadEncript = getEncrypt(vcharContrasena).
-      FIND Usuario WHERE Usuario.contrasenia = vcharCadEncript AND Usuario.usuario = vcharUsuario NO-ERROR.
-
+      FIND Usuario WHERE Usuario.contrasenia = vcharCadEncript AND Usuario.usuario = vcharUsuario NO-LOCK NO-ERROR.
+        FIND Empleado WHERE Empleado.ID_USUARIO = Usuario.ID_USUARIO NO-LOCK NO-ERROR.
+            FIND ROL WHERE Rol.ID_ROL = Empleado.ID_ROL NO-LOCK NO-ERROR.
+            
+       vintIdRol = Rol.ID_ROL.
+      
       IF AVAILABLE Usuario THEN DO:
-
          HIDE ALL. 
-         RUN MENU.w.
+         RUN MENU.w(vintIdRol).
       END.
 
       ELSE DO:

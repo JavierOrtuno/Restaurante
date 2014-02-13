@@ -47,7 +47,7 @@ DEFINE VARIABLE vintIdProducto AS INTEGER.
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Fill_Descripcion Fill_Cantidad List_Unidad ~
-Btn_Aceptar Btn_Cancelar 
+Btn_Aceptar Btn_Cancelar RECT-1 
 &Scoped-Define DISPLAYED-OBJECTS Fill_Codigo Fill_Descripcion Fill_Cantidad ~
 List_Unidad 
 
@@ -103,6 +103,11 @@ DEFINE VARIABLE Fill_Descripcion AS CHARACTER FORMAT "X(100)":U
      VIEW-AS FILL-IN 
      SIZE 31 BY 1 NO-UNDO.
 
+DEFINE RECTANGLE RECT-1
+     EDGE-PIXELS 2 GRAPHIC-EDGE  
+     SIZE 78 BY 2.38
+     BGCOLOR 12 .
+
 
 /* ************************  Frame Definitions  *********************** */
 
@@ -113,7 +118,11 @@ DEFINE FRAME Dlg_UpdateProd
      List_Unidad AT ROW 9.95 COL 19 COLON-ALIGNED
      Btn_Aceptar AT ROW 12.43 COL 16.8
      Btn_Cancelar AT ROW 12.43 COL 46.8
-     SPACE(14.19) SKIP(1.14)
+     RECT-1 AT ROW 1.24 COL 2
+     "PRODUCTOS" VIEW-AS TEXT
+          SIZE 28 BY 1.19 AT ROW 1.95 COL 28
+          BGCOLOR 12 FONT 12
+     SPACE(24.99) SKIP(12.95)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Actualizar Productos".
@@ -286,6 +295,7 @@ PROCEDURE enable_UI :
   DISPLAY Fill_Codigo Fill_Descripcion Fill_Cantidad List_Unidad 
       WITH FRAME Dlg_UpdateProd.
   ENABLE Fill_Descripcion Fill_Cantidad List_Unidad Btn_Aceptar Btn_Cancelar 
+         RECT-1 
       WITH FRAME Dlg_UpdateProd.
   VIEW FRAME Dlg_UpdateProd.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_UpdateProd}

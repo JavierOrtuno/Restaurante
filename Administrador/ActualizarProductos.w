@@ -192,11 +192,11 @@ DO:
     CASE pinIntEvento:
         WHEN 1 THEN DO:
             RUN addProducto(vintIdProducto, Fill_Codigo, Fill_Descripcion, INTEGER(Fill_Cantidad), INTEGER(List_Unidad)).
-            APPLY "WINDOW-CLOSE" TO CURRENT-WINDOW.
+            APPLY "WINDOW-CLOSE" TO FRAME Dlg_UpdateProd.    
         END.
         WHEN 2 THEN DO:
             RUN updateProducto(pinRowId, Fill_Codigo, Fill_Descripcion, INTEGER(Fill_Cantidad), INTEGER(List_Unidad)).
-            APPLY "WINDOW-CLOSE" TO CURRENT-WINDOW.
+            APPLY "WINDOW-CLOSE" TO FRAME Dlg_UpdateProd.    
         END.
     END CASE.
 END.

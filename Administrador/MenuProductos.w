@@ -239,7 +239,7 @@ DO:
     DEFINE VARIABLE vhandQuery AS HANDLE.
     
     vhandQuery = (QUERY Bws_Productos:HANDLE).
-
+    
     IF STRING(Bws_Productos:CURRENT-COLUMN:NAME) <> ? THEN
         vcharOrden = "FOR EACH PRODUCTO BY " + STRING(Bws_Productos:CURRENT-COLUMN:NAME).
     ELSE

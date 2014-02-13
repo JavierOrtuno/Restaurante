@@ -34,6 +34,17 @@
 
 /* ************************  Function Prototypes ********************** */
 
+&IF DEFINED(EXCLUDE-getCatProducto) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getCatProducto Method-Library 
+FUNCTION getCatProducto RETURNS CHARACTER
+    ( /* parameter-definitions */ )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 &IF DEFINED(EXCLUDE-getCatUnidad) = 0 &THEN
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getCatUnidad Method-Library 
@@ -172,6 +183,32 @@ END PROCEDURE.
 &ENDIF
 
 /* ************************  Function Implementations ***************** */
+
+&IF DEFINED(EXCLUDE-getCatProducto) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getCatProducto Method-Library 
+FUNCTION getCatProducto RETURNS CHARACTER
+    ( /* parameter-definitions */ ) :
+    /*------------------------------------------------------------------------------
+        Purpose:  
+        Notes:  
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vcharCatalogo AS CHARACTER.
+
+    FOR EACH PRODUCTO NO-LOCK BY PRODUCTO.DESCRIPCION:
+        vcharCatalogo = vcharCatalogo + 
+            PRODUCTO.DESCRIPCION + "," +
+            STRING(PRODUCTO.ID_PRODUCTO) + ",".
+    END.
+    
+    RETURN TRIM(vcharCatalogo, ",").
+    
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
 
 &IF DEFINED(EXCLUDE-getCatUnidad) = 0 &THEN
 

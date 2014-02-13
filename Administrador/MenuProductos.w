@@ -232,6 +232,26 @@ END.
 &ANALYZE-RESUME
 
 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bws_Productos Dlg_MenuProd
+ON START-SEARCH OF Bws_Productos IN FRAME Dlg_MenuProd
+DO:
+    DEFINE VARIAblE vcharOrden AS CHARACTER.
+    DEFINE VARIABLE vhandQuery AS HANDLE.
+    
+    vhandQuery = (QUERY Bws_Productos:HANDLE).
+    IF STRING(Bws_Productos:CURRENT-COLUMN:NAME) <> ? THEN
+        vcharOrden = "FOR EACH PRODUCTO BY " + STRING(Bws_Productos:CURRENT-COLUMN:NAME).
+    ELSE
+        vcharOrden = "FOR EACH PRODUCTO BY " + "ID_UNIDAD".
+
+    vhandQuery:QUERY-PREPARE(vcharOrden).
+    vhandQuery:QUERY-OPEN().
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dlg_MenuProd 

@@ -65,7 +65,7 @@ DEFINE BUTTON BUTTON-26
      LABEL "Salir" 
      SIZE 15 BY 2.14.
 
-DEFINE BUTTON BUTTON-27 
+DEFINE BUTTON BUTTON-27 AUTO-GO 
      LABEL "OK" 
      SIZE 15 BY 2.14.
 
@@ -167,27 +167,10 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-27 Modificar-Frame
 ON CHOOSE OF BUTTON-27 IN FRAME Modificar-Frame /* OK */
 DO:
-   /* ROWID(stock).
-    ASSIGN stock.curp = INPUT fill-in-5
-                          CALL_click.NAME = INPUT FILL-in-6
-                          CALL_click.lastname1 = INPUT FILL-in-7
-                          CALL_click.lastname2 = INPUT FILL-in-8
-                          CALL_click.birthdate = INPUT FILL-in-9
-                          CALL_click.gender = INPUT FILL-in-10
-                          CALL_click.idmarital_status = INPUT FILL-in-11
-                          CALL_click.telephone = INPUT FILL-in-12
-                          CALL_click.tperson = INPUT FILL-in-13
-                          CALL_click.desstreet = INPUT FILL-in-14
-                          CALL_click.desext_num = INPUT FILL-in-15
-                          CALL_click.desint_num = INPUT FILL-in-16
-                          CALL_click.descolony = INPUT FILL-in-17
-                          CALL_click.zipcode = INPUT FILL-in-18
-                          CALL_click.iddelegation = INPUT FILL-in-19
-                          CALL_click.idstate = INPUT FILL-in-20
-                          CALL_click.idcity = INPUT FILL-in-22
-                          CALL_click.idcountry = INPUT FILL-in-23
-                          CALL_click.numpolicy = INPUT FILL-in-24
-                          CALL_click.cod_pol = INPUT FILL-in-25.*/
+    ROWID(stock).
+    ASSIGN stock.f_caducidad = INPUT fill-in-31
+              stock.cantidad = INPUT FILL-in-32.
+    MESSAGE "Actualizado Correctamente" VIEW-AS ALERT-BOX.
 
 END.
 

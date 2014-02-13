@@ -229,9 +229,13 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-20 Inventario-Frame
 ON CHOOSE OF BUTTON-20 IN FRAME Inventario-Frame /* Borrar */
 DO:
-   ROWID(stock).
-   DELETE stock.
-   {&OPEN-query-BROWSE-8}
+   DEF VAR vlogborrar AS LOG.
+   MESSAGE "Esta seguro de borrar este registro" VIEW-AS ALERT-BOX BUTTONS YES-NO SET vlogborrar.
+   IF vlogborrar = TRUE THEN DO:
+       ROWID(stock).
+       DELETE stock.
+       {&OPEN-query-BROWSE-8}
+   END.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -243,11 +247,16 @@ END.
 ON CHOOSE OF BUTTON-22 IN FRAME Inventario-Frame /* Modificar */
 DO:
     DEF VAR vdteactual AS DATE.
-
+ 
     vdteactual = TODAY.
-    MESSAGE browse-8:VALUE VIEW-AS ALERT-BOX.
-    RUN modificacion.w(ROWID(stock)).
-    {&OPEN-query-BROWSE-8}
+    ROWID(stock).
+    IF stock.f_ingreso = vdteactual THEN DO:
+        RUN modificacion.w(ROWID(stock)).
+        {&OPEN-query-BROWSE-8} 
+    END.
+        ELSE DO:
+            MESSAGE "No puedes modificar registros que no sean del dia actual" VIEW-AS ALERT-BOX.
+        END.
 END.
 
 /* _UIB-CODE-BLOCK-END */

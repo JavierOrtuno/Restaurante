@@ -209,8 +209,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Cancelar Dlg_UpdateProd
 ON CHOOSE OF Btn_Cancelar IN FRAME Dlg_UpdateProd /* Cancelar */
 DO:
-    APPLY "WINDOW-CLOSE" TO CURRENT-WINDOW.
-    RETURN NO-APPLY.
+    APPLY "WINDOW-CLOSE" TO FRAME Dlg_UpdateProd.    
 END.
 
 /* _UIB-CODE-BLOCK-END */

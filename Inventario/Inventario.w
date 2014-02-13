@@ -4,8 +4,8 @@
           restaurante      PROGRESS
 */
 &Scoped-define WINDOW-NAME CURRENT-WINDOW
-&Scoped-define FRAME-NAME Dialog-Frame
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Dialog-Frame 
+&Scoped-define FRAME-NAME Inventario-Frame
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Inventario-Frame 
 /*------------------------------------------------------------------------
 
   File: 
@@ -43,7 +43,7 @@
 &Scoped-define DB-AWARE no
 
 /* Name of first Frame and/or Browse and/or first Query                 */
-&Scoped-define FRAME-NAME Dialog-Frame
+&Scoped-define FRAME-NAME Inventario-Frame
 &Scoped-define BROWSE-NAME BROWSE-8
 
 /* Internal Tables (found by Frame, Query & Browse Queries)             */
@@ -66,13 +66,13 @@ STOCK.F_CADUCIDAD STOCK.F_INGRESO STOCK.LOTE
 &Scoped-define THIRD-TABLE-IN-QUERY-BROWSE-8 UNIDAD_MEDIDA
 
 
-/* Definitions for DIALOG-BOX Dialog-Frame                              */
-&Scoped-define OPEN-BROWSERS-IN-QUERY-Dialog-Frame ~
+/* Definitions for DIALOG-BOX Inventario-Frame                          */
+&Scoped-define OPEN-BROWSERS-IN-QUERY-Inventario-Frame ~
     ~{&OPEN-QUERY-BROWSE-8}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BROWSE-8 Btn_OK Btn_Cancel BUTTON-1 ~
-BUTTON-20 RECT-1 
+&Scoped-Define ENABLED-OBJECTS BROWSE-8 BUTTON-1 BUTTON-22 BUTTON-20 ~
+BUTTON-25 RECT-1 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -87,27 +87,25 @@ BUTTON-20 RECT-1
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
-DEFINE BUTTON Btn_Cancel AUTO-END-KEY 
-     LABEL "Salir" 
-     SIZE 20 BY 2.86
-     BGCOLOR 8 .
-
-DEFINE BUTTON Btn_OK AUTO-GO 
-     LABEL "OK" 
-     SIZE 20 BY 2.86
-     BGCOLOR 8 .
-
 DEFINE BUTTON BUTTON-1 
      LABEL "Agregar Producto" 
-     SIZE 20 BY 2.81.
+     SIZE 20 BY 2.86.
 
 DEFINE BUTTON BUTTON-20 
      LABEL "Borrar" 
      SIZE 20 BY 2.86.
 
+DEFINE BUTTON BUTTON-22 
+     LABEL "Modificar" 
+     SIZE 20 BY 2.86.
+
+DEFINE BUTTON BUTTON-25 
+     LABEL "Salir" 
+     SIZE 20 BY 2.86.
+
 DEFINE RECTANGLE RECT-1
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 30 BY 23.81.
+     SIZE 30 BY 16.43.
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -119,7 +117,7 @@ DEFINE QUERY BROWSE-8 FOR
 
 /* Browse definitions                                                   */
 DEFINE BROWSE BROWSE-8
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-8 Dialog-Frame _STRUCTURED
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-8 Inventario-Frame _STRUCTURED
   QUERY BROWSE-8 SHARE-LOCK NO-WAIT DISPLAY
       PRODUCTO.CODIGO FORMAT "X(10)":U
       PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 55.4
@@ -135,18 +133,17 @@ DEFINE BROWSE BROWSE-8
 
 /* ************************  Frame Definitions  *********************** */
 
-DEFINE FRAME Dialog-Frame
+DEFINE FRAME Inventario-Frame
      BROWSE-8 AT ROW 1.95 COL 11
-     Btn_OK AT ROW 2.91 COL 185.2
-     Btn_Cancel AT ROW 6.71 COL 185.6
-     BUTTON-1 AT ROW 10.52 COL 186
-     BUTTON-20 AT ROW 14.33 COL 186.2
-     RECT-1 AT ROW 1.95 COL 181.2
-     SPACE(9.99) SKIP(0.85)
+     BUTTON-1 AT ROW 6.71 COL 186.4
+     BUTTON-22 AT ROW 10.29 COL 186.4
+     BUTTON-20 AT ROW 14.33 COL 186.4
+     BUTTON-25 AT ROW 18.14 COL 186.4
+     RECT-1 AT ROW 5.76 COL 181.2
+     SPACE(9.99) SKIP(4.42)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "<insert dialog title>"
-         DEFAULT-BUTTON Btn_OK CANCEL-BUTTON Btn_Cancel.
+         TITLE "<insert dialog title>".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -164,12 +161,12 @@ DEFINE FRAME Dialog-Frame
 /* ***********  Runtime Attributes and AppBuilder Settings  *********** */
 
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
-/* SETTINGS FOR DIALOG-BOX Dialog-Frame
+/* SETTINGS FOR DIALOG-BOX Inventario-Frame
                                                                         */
-/* BROWSE-TAB BROWSE-8 1 Dialog-Frame */
+/* BROWSE-TAB BROWSE-8 1 Inventario-Frame */
 ASSIGN 
-       FRAME Dialog-Frame:SCROLLABLE       = FALSE
-       FRAME Dialog-Frame:HIDDEN           = TRUE.
+       FRAME Inventario-Frame:SCROLLABLE       = FALSE
+       FRAME Inventario-Frame:HIDDEN           = TRUE.
 
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
@@ -203,9 +200,9 @@ ASSIGN
 
 /* ************************  Control Triggers  ************************ */
 
-&Scoped-define SELF-NAME Dialog-Frame
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame Dialog-Frame
-ON WINDOW-CLOSE OF FRAME Dialog-Frame /* <insert dialog title> */
+&Scoped-define SELF-NAME Inventario-Frame
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Inventario-Frame Inventario-Frame
+ON WINDOW-CLOSE OF FRAME Inventario-Frame /* <insert dialog title> */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -215,8 +212,8 @@ END.
 
 
 &Scoped-define SELF-NAME BUTTON-1
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-1 Dialog-Frame
-ON CHOOSE OF BUTTON-1 IN FRAME Dialog-Frame /* Agregar Producto */
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-1 Inventario-Frame
+ON CHOOSE OF BUTTON-1 IN FRAME Inventario-Frame /* Agregar Producto */
 DO:
     RUN Nuevo_Producto.w. /*(1,?).*/
     {&OPEN-query-BROWSE-8}
@@ -227,8 +224,8 @@ END.
 
 
 &Scoped-define SELF-NAME BUTTON-20
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-20 Dialog-Frame
-ON CHOOSE OF BUTTON-20 IN FRAME Dialog-Frame /* Borrar */
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-20 Inventario-Frame
+ON CHOOSE OF BUTTON-20 IN FRAME Inventario-Frame /* Borrar */
 DO:
    ROWID(stock).
    DELETE stock.
@@ -239,10 +236,21 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME BUTTON-25
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-25 Inventario-Frame
+ON CHOOSE OF BUTTON-25 IN FRAME Inventario-Frame /* Salir */
+DO:
+  APPLY "window-close" TO FRAME Inventario-Frame.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &Scoped-define BROWSE-NAME BROWSE-8
 &UNDEFINE SELF-NAME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dialog-Frame 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Inventario-Frame 
 
 
 /* ***************************  Main Block  *************************** */
@@ -268,7 +276,7 @@ RUN disable_UI.
 
 /* **********************  Internal Procedures  *********************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Dialog-Frame  _DEFAULT-DISABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Inventario-Frame  _DEFAULT-DISABLE
 PROCEDURE disable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     DISABLE the User Interface
@@ -279,13 +287,13 @@ PROCEDURE disable_UI :
                we are ready to "clean-up" after running.
 ------------------------------------------------------------------------------*/
   /* Hide all frames. */
-  HIDE FRAME Dialog-Frame.
+  HIDE FRAME Inventario-Frame.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Dialog-Frame  _DEFAULT-ENABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Inventario-Frame  _DEFAULT-ENABLE
 PROCEDURE enable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     ENABLE the User Interface
@@ -296,10 +304,10 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE BROWSE-8 Btn_OK Btn_Cancel BUTTON-1 BUTTON-20 RECT-1 
-      WITH FRAME Dialog-Frame.
-  VIEW FRAME Dialog-Frame.
-  {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}
+  ENABLE BROWSE-8 BUTTON-1 BUTTON-22 BUTTON-20 BUTTON-25 RECT-1 
+      WITH FRAME Inventario-Frame.
+  VIEW FRAME Inventario-Frame.
+  {&OPEN-BROWSERS-IN-QUERY-Inventario-Frame}
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

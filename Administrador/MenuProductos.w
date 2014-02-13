@@ -201,8 +201,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Salir Dlg_MenuProd
 ON CHOOSE OF Btn_Salir IN FRAME Dlg_MenuProd /* Salir */
 DO:
-    RUN ActualizarProductos.w(1, ?).
-    {&OPEN-QUERY-Bws_Productos}
+    APPLY "WINDOW-CLOSE" TO CURRENT-WINDOW.
 END.
 
 /* _UIB-CODE-BLOCK-END */

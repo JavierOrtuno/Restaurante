@@ -322,7 +322,6 @@ DEF VAR vdteactual AS DATE.
 vdteactual = TODAY.
 FIND LAST stock WHERE f_ingreso = vdtefecha.
 vintnumlote = INT(SUBSTR (stock.lote,LENGTH(TRIM(stock.lote)) - 2)).
-MESSAGE vintnumlote VIEW-AS ALERT-BOX.
 vintnumlote = vintnumlote + 1.
 IF vintnumlote < 10 THEN DO:
     vchrlote = "00" + string(vintnumlote).
@@ -333,7 +332,6 @@ ELSE DO:
      END.
 END.
 vchrlote = "LT-" + STRING(MONTH(vdteactual)) + STRING(YEAR(vdteactual)) + vchrlote.
-MESSAGE vchrlote VIEW-AS ALERT-BOX.
 
   RETURN vchrlote.   /* Function return value. */
 

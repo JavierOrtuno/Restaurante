@@ -210,6 +210,7 @@ END.
 ON CHOOSE OF Btn_Cancelar IN FRAME Dlg_UpdateProd /* Cancelar */
 DO:
     APPLY "WINDOW-CLOSE" TO CURRENT-WINDOW.
+    RETURN NO-APPLY.
 END.
 
 /* _UIB-CODE-BLOCK-END */

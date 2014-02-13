@@ -34,6 +34,8 @@ CREATE WIDGET-POOL.
 
 /* Parameters Definitions ---                                           */
 
+DEF INPUT PARAM inintIdRol AS INT.
+
 /* Local Variable Definitions ---                                       */
 
 /* _UIB-CODE-BLOCK-END */
@@ -172,7 +174,7 @@ DEFINE FRAME MENU-FRAME
     WITH 1 DOWN KEEP-TAB-ORDER OVERLAY 
          SIDE-LABELS NO-UNDERLINE THREE-D 
          AT COL 1 ROW 1
-         SIZE 170.4 BY 32.48.
+         SIZE 172.6 BY 32.52.
 
 DEFINE FRAME Frame-General
      "Text 3" VIEW-AS TEXT
@@ -183,40 +185,28 @@ DEFINE FRAME Frame-General
          SIZE 170 BY 28.57
          BGCOLOR 16 .
 
-DEFINE FRAME Frame-Reportes
-     Bttn-Alta-4 AT ROW 4.33 COL 12.8
-     Bttn-Baja-4 AT ROW 6.29 COL 12.8
-     Bttn-Editar-4 AT ROW 8.19 COL 12.8
-     RECT-10 AT ROW 2.91 COL 11
-     RECT-5 AT ROW 1 COL 1
-     "       USUARIOS" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 2.91 COL 11.2
+DEFINE FRAME Frame-Admin
+     Bttn-Menu AT ROW 3.86 COL 6.4
+     Bttn-Alta AT ROW 3.86 COL 32.8
+     Bttn-Productos AT ROW 5.76 COL 6.4
+     Bttn-Baja AT ROW 5.81 COL 32.8
+     Bttn-Editar AT ROW 7.71 COL 32.8
+     RECT-2 AT ROW 1 COL 1
+     RECT-6 AT ROW 2.48 COL 4.6
+     RECT-7 AT ROW 2.43 COL 31
+     "      CATÁLOGO" VIEW-AS TEXT
+          SIZE 19 BY .81 AT ROW 2.57 COL 5
           BGCOLOR 15 FGCOLOR 1 
-     "                                                         REPORTES" VIEW-AS TEXT
+     "       USUARIOS" VIEW-AS TEXT
+          SIZE 19 BY .81 AT ROW 2.43 COL 31.2
+          BGCOLOR 15 FGCOLOR 1 
+     "                                                  ADMINISTRADOR" VIEW-AS TEXT
           SIZE 78.6 BY .81 AT ROW 1.1 COL 1.4
           BGCOLOR 15 FGCOLOR 1 
     WITH 1 DOWN KEEP-TAB-ORDER OVERLAY 
          SIDE-LABELS NO-UNDERLINE THREE-D 
-         AT COL 88.2 ROW 15.52
-         SIZE 79.8 BY 13.57
-         BGCOLOR 16 .
-
-DEFINE FRAME Frame-Inventario
-     Bttn-Alta-3 AT ROW 4.57 COL 12.8
-     Bttn-Baja-3 AT ROW 6.52 COL 12.8
-     Bttn-Editar-3 AT ROW 8.43 COL 12.8
-     RECT-4 AT ROW 1 COL 1
-     RECT-9 AT ROW 3.14 COL 11
-     "       USUARIOS" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 3.14 COL 11.2
-          BGCOLOR 15 FGCOLOR 1 
-     "                                                     INVENTARIO" VIEW-AS TEXT
-          SIZE 78.6 BY .81 AT ROW 1.1 COL 1.4
-          BGCOLOR 15 FGCOLOR 1 
-    WITH 1 DOWN KEEP-TAB-ORDER OVERLAY 
-         SIDE-LABELS NO-UNDERLINE THREE-D 
-         AT COL 4.4 ROW 15.52
-         SIZE 79.6 BY 13.48
+         AT COL 4.4 ROW 1.57
+         SIZE 79.6 BY 13.33
          BGCOLOR 16 .
 
 DEFINE FRAME Frame-Ventas
@@ -237,28 +227,40 @@ DEFINE FRAME Frame-Ventas
          SIZE 79.8 BY 13.33
          BGCOLOR 16 .
 
-DEFINE FRAME Frame-Admin
-     Bttn-Menu AT ROW 3.86 COL 6.4
-     Bttn-Alta AT ROW 3.86 COL 32.8
-     Bttn-Productos AT ROW 5.76 COL 6.4
-     Bttn-Baja AT ROW 5.81 COL 32.8
-     Bttn-Editar AT ROW 7.71 COL 32.8
-     RECT-2 AT ROW 1 COL 1
-     RECT-6 AT ROW 2.48 COL 4.6
-     RECT-7 AT ROW 2.43 COL 31
-     "                                                  ADMINISTRADOR" VIEW-AS TEXT
-          SIZE 78.6 BY .81 AT ROW 1.1 COL 1.4
-          BGCOLOR 15 FGCOLOR 1 
-     "      CATÁLOGO" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 2.57 COL 5
-          BGCOLOR 15 FGCOLOR 1 
+DEFINE FRAME Frame-Inventario
+     Bttn-Alta-3 AT ROW 4.57 COL 12.8
+     Bttn-Baja-3 AT ROW 6.52 COL 12.8
+     Bttn-Editar-3 AT ROW 8.43 COL 12.8
+     RECT-4 AT ROW 1 COL 1
+     RECT-9 AT ROW 3.14 COL 11
      "       USUARIOS" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 2.43 COL 31.2
+          SIZE 19 BY .81 AT ROW 3.14 COL 11.2
+          BGCOLOR 15 FGCOLOR 1 
+     "                                                     INVENTARIO" VIEW-AS TEXT
+          SIZE 78.6 BY .81 AT ROW 1.1 COL 1.4
           BGCOLOR 15 FGCOLOR 1 
     WITH 1 DOWN KEEP-TAB-ORDER OVERLAY 
          SIDE-LABELS NO-UNDERLINE THREE-D 
-         AT COL 4.4 ROW 1.57
-         SIZE 79.6 BY 13.33
+         AT COL 4.4 ROW 15.52
+         SIZE 79.6 BY 13.48
+         BGCOLOR 16 .
+
+DEFINE FRAME Frame-Reportes
+     Bttn-Alta-4 AT ROW 4.33 COL 12.8
+     Bttn-Baja-4 AT ROW 6.29 COL 12.8
+     Bttn-Editar-4 AT ROW 8.19 COL 12.8
+     RECT-10 AT ROW 2.91 COL 11
+     RECT-5 AT ROW 1 COL 1
+     "       USUARIOS" VIEW-AS TEXT
+          SIZE 19 BY .81 AT ROW 2.91 COL 11.2
+          BGCOLOR 15 FGCOLOR 1 
+     "                                                         REPORTES" VIEW-AS TEXT
+          SIZE 78.6 BY .81 AT ROW 1.1 COL 1.4
+          BGCOLOR 15 FGCOLOR 1 
+    WITH 1 DOWN KEEP-TAB-ORDER OVERLAY 
+         SIDE-LABELS NO-UNDERLINE THREE-D 
+         AT COL 88.2 ROW 15.52
+         SIZE 79.8 BY 13.57
          BGCOLOR 16 .
 
 
@@ -279,8 +281,8 @@ IF SESSION:DISPLAY-TYPE = "GUI":U THEN
   CREATE WINDOW C-Win ASSIGN
          HIDDEN             = YES
          TITLE              = "<insert window title>"
-         HEIGHT             = 32.48
-         WIDTH              = 170.4
+         HEIGHT             = 32.52
+         WIDTH              = 172.6
          MAX-HEIGHT         = 33.62
          MAX-WIDTH          = 273.2
          VIRTUAL-HEIGHT     = 33.62
@@ -371,6 +373,17 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Bttn-Productos
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bttn-Productos C-Win
+ON CHOOSE OF Bttn-Productos IN FRAME Frame-Admin /* Productos */
+DO:
+  RUN menuProductos.w.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK C-Win 
@@ -396,6 +409,25 @@ MAIN-BLOCK:
 DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
    ON END-KEY UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK:
   RUN enable_UI.
+
+  CASE inintIdRol:
+
+      WHEN 1 THEN DO:
+        MESSAGE "Bienvenido" VIEW-AS ALERT-BOX.
+      END.
+
+      WHEN 2 THEN DO:
+
+           Bttn-Menu:SENSITIVE = NO.
+           Bttn-Productos:SENSITIVE = NO.
+           Bttn-Alta:SENSITIVE = NO.
+           Bttn-Baja:SENSITIVE = NO.
+           Bttn-Editar:SENSITIVE = NO.
+
+      END.
+
+  END CASE.
+
   IF NOT THIS-PROCEDURE:PERSISTENT THEN
     WAIT-FOR CLOSE OF THIS-PROCEDURE.
 END.

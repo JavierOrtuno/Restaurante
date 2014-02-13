@@ -101,7 +101,7 @@ DEFINE BROWSE BROWSE-9
   QUERY BROWSE-9 NO-LOCK DISPLAY
       PRODUCTO.CODIGO FORMAT "X(10)":U
       PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 38.2
-      PRODUCTO.CANT_MINIMA FORMAT "->,>>>,>>9":U WIDTH 35.6
+      PRODUCTO.CANT_MINIMA FORMAT "->,>>>,>>9":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
     WITH NO-ROW-MARKERS SEPARATORS SIZE 90 BY 18.1 EXPANDABLE.
@@ -154,9 +154,8 @@ ASSIGN
      _Options          = "NO-LOCK INDEXED-REPOSITION"
      _FldNameList[1]   = Restaurante.PRODUCTO.CODIGO
      _FldNameList[2]   > Restaurante.PRODUCTO.DESCRIPCION
-"DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "38.2" yes no no "U" "" ""
-     _FldNameList[3]   > Restaurante.PRODUCTO.CANT_MINIMA
-"CANT_MINIMA" ? ? "integer" ? ? ? ? ? ? no ? no no "35.6" yes no no "U" "" ""
+"PRODUCTO.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "38.2" yes no no "U" "" ""
+     _FldNameList[3]   = Restaurante.PRODUCTO.CANT_MINIMA
      _Query            is OPENED
 */  /* BROWSE BROWSE-9 */
 &ANALYZE-RESUME

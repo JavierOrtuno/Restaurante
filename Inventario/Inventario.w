@@ -88,7 +88,7 @@ BUTTON-20 RECT-1
 
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Cancel AUTO-END-KEY 
-     LABEL "Cancel" 
+     LABEL "Salir" 
      SIZE 20 BY 2.86
      BGCOLOR 8 .
 
@@ -107,7 +107,7 @@ DEFINE BUTTON BUTTON-20
 
 DEFINE RECTANGLE RECT-1
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 30 BY 20.24.
+     SIZE 30 BY 23.81.
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -127,22 +127,22 @@ DEFINE BROWSE BROWSE-8
       UNIDAD_MEDIDA.DESCRIPCION FORMAT "X(50)":U WIDTH 33.4
       STOCK.F_CADUCIDAD FORMAT "99/99/99":U
       STOCK.F_INGRESO FORMAT "99/99/99":U
-      STOCK.LOTE FORMAT "X(12)":U WIDTH 49.6
+      STOCK.LOTE FORMAT "X(11)":U WIDTH 13.6
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 196 BY 24.05 EXPANDABLE.
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 160 BY 24.05 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
      BROWSE-8 AT ROW 1.95 COL 11
-     Btn_OK AT ROW 2.91 COL 217
-     Btn_Cancel AT ROW 6.71 COL 217.4
-     BUTTON-1 AT ROW 10.52 COL 217.8
-     BUTTON-20 AT ROW 14.33 COL 218
-     RECT-1 AT ROW 1.95 COL 213
-     SPACE(2.79) SKIP(4.42)
+     Btn_OK AT ROW 2.91 COL 185.2
+     Btn_Cancel AT ROW 6.71 COL 185.6
+     BUTTON-1 AT ROW 10.52 COL 186
+     BUTTON-20 AT ROW 14.33 COL 186.2
+     RECT-1 AT ROW 1.95 COL 181.2
+     SPACE(9.99) SKIP(0.85)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "<insert dialog title>"
@@ -192,7 +192,7 @@ ASSIGN
      _FldNameList[5]   = Restaurante.STOCK.F_CADUCIDAD
      _FldNameList[6]   = Restaurante.STOCK.F_INGRESO
      _FldNameList[7]   > Restaurante.STOCK.LOTE
-"STOCK.LOTE" ? "X(12)" "character" ? ? ? ? ? ? no ? no no "49.6" yes no no "U" "" ""
+"STOCK.LOTE" ? "X(11)" "character" ? ? ? ? ? ? no ? no no "13.6" yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE BROWSE-8 */
 &ANALYZE-RESUME

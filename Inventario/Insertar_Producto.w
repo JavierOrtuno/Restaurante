@@ -44,7 +44,7 @@
 &Scoped-define FRAME-NAME Insert-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Btn_OK FILL-IN-26 Btn_Cancel FILL-IN-27 ~
+&Scoped-Define ENABLED-OBJECTS Btn_OK FILL-IN-26 FILL-IN-27 BUTTON-21 ~
 FILL-IN-28 FILL-IN-29 FILL-IN-30 
 &Scoped-Define DISPLAYED-OBJECTS FILL-IN-26 FILL-IN-27 FILL-IN-28 ~
 FILL-IN-29 FILL-IN-30 
@@ -56,21 +56,29 @@ FILL-IN-29 FILL-IN-30
 &ANALYZE-RESUME
 
 
+/* ************************  Function Prototypes ********************** */
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD Genera_Lote Insert-Frame 
+FUNCTION Genera_Lote RETURNS CHAR
+  ( vdtefecha AS DATE )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
 
 /* ***********************  Control Definitions  ********************** */
 
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
-DEFINE BUTTON Btn_Cancel AUTO-END-KEY 
-     LABEL "Cancel" 
-     SIZE 15 BY 1.14
-     BGCOLOR 8 .
-
 DEFINE BUTTON Btn_OK AUTO-GO 
      LABEL "OK" 
      SIZE 15 BY 1.14
      BGCOLOR 8 .
+
+DEFINE BUTTON BUTTON-21 
+     LABEL "Salir" 
+     SIZE 15 BY 1.14.
 
 DEFINE VARIABLE FILL-IN-26 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Codigo" 
@@ -92,7 +100,7 @@ DEFINE VARIABLE FILL-IN-29 AS INTEGER FORMAT "->,>>>,>>9":U INITIAL 0
      VIEW-AS FILL-IN 
      SIZE 14 BY 1 NO-UNDO.
 
-DEFINE VARIABLE FILL-IN-30 AS DATE FORMAT "99/99/99":U INITIAL ? 
+DEFINE VARIABLE FILL-IN-30 AS DATE FORMAT "99/99/99":U 
      LABEL "Fecha de Caducidad" 
      VIEW-AS FILL-IN 
      SIZE 14 BY 1 NO-UNDO.
@@ -103,8 +111,8 @@ DEFINE VARIABLE FILL-IN-30 AS DATE FORMAT "99/99/99":U INITIAL ?
 DEFINE FRAME Insert-Frame
      Btn_OK AT ROW 1.71 COL 50.8
      FILL-IN-26 AT ROW 1.95 COL 18.6 COLON-ALIGNED
-     Btn_Cancel AT ROW 3.62 COL 51
      FILL-IN-27 AT ROW 3.86 COL 18.6 COLON-ALIGNED
+     BUTTON-21 AT ROW 3.86 COL 51
      FILL-IN-28 AT ROW 5.76 COL 18.6 COLON-ALIGNED
      FILL-IN-29 AT ROW 8.62 COL 10 COLON-ALIGNED
      FILL-IN-30 AT ROW 8.62 COL 49 COLON-ALIGNED
@@ -112,7 +120,7 @@ DEFINE FRAME Insert-Frame
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "<insert dialog title>"
-         DEFAULT-BUTTON Btn_OK CANCEL-BUTTON Btn_Cancel.
+         DEFAULT-BUTTON Btn_OK.
 
 
 /* *********************** Procedure Settings ************************ */
@@ -183,7 +191,7 @@ DO:
           RETURN NO-APPLY.
       END.
       ELSE DO:
-          vchrlote = "LT-" + STRING(MONTH(vdteactual)) + STRING(YEAR(vdteactual)) + "01".
+          vchrlote = Genera_Lote(vdteactual).
           FIND Producto WHERE ROWID(Producto) = inrowReg.
           CREATE Stock.
           ASSIGN stock.id_stock = NEXT-VALUE(sec_stock)
@@ -195,6 +203,17 @@ DO:
           MESSAGE "Registro insertado correctamente" VIEW-AS ALERT-BOX.
       END.
     END.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME BUTTON-21
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-21 Insert-Frame
+ON CHOOSE OF BUTTON-21 IN FRAME Insert-Frame /* Salir */
+DO:
+    APPLY "window-close" TO CURRENT-WINDOW.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -260,7 +279,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY FILL-IN-26 FILL-IN-27 FILL-IN-28 FILL-IN-29 FILL-IN-30 
       WITH FRAME Insert-Frame.
-  ENABLE Btn_OK FILL-IN-26 Btn_Cancel FILL-IN-27 FILL-IN-28 FILL-IN-29 
+  ENABLE Btn_OK FILL-IN-26 FILL-IN-27 BUTTON-21 FILL-IN-28 FILL-IN-29 
          FILL-IN-30 
       WITH FRAME Insert-Frame.
   VIEW FRAME Insert-Frame.
@@ -283,6 +302,42 @@ DEF INPUT PARAM inrowRec AS ROWID.
   FILL-in-27:SCREEN-VALUE = Producto.descripcion.
   FILL-in-28:SCREEN-VALUE = string(producto.cant_minima).
 END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+/* ************************  Function Implementations ***************** */
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION Genera_Lote Insert-Frame 
+FUNCTION Genera_Lote RETURNS CHAR
+  ( vdtefecha AS DATE ) :
+/*------------------------------------------------------------------------------
+  Purpose:  
+    Notes:  
+------------------------------------------------------------------------------*/
+DEF VAR vchrlote AS CHAR.
+DEF VAR vintnumlote AS INT.
+DEF VAR vdteactual AS DATE.
+
+vdteactual = TODAY.
+FIND LAST stock WHERE f_ingreso = vdtefecha.
+vintnumlote = INT(SUBSTR (stock.lote,LENGTH(TRIM(stock.lote)) - 2)).
+MESSAGE vintnumlote VIEW-AS ALERT-BOX.
+vintnumlote = vintnumlote + 1.
+IF vintnumlote < 10 THEN DO:
+    vchrlote = "00" + string(vintnumlote).
+END.
+ELSE DO:
+     IF vintnumlote < 100 THEN DO:
+         vchrlote = "0" + string(vintnumlote).
+     END.
+END.
+vchrlote = "LT-" + STRING(MONTH(vdteactual)) + STRING(YEAR(vdteactual)) + vchrlote.
+MESSAGE vchrlote VIEW-AS ALERT-BOX.
+
+  RETURN vchrlote.   /* Function return value. */
+
+END FUNCTION.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME

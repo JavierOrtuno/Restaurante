@@ -192,6 +192,7 @@ ON CHOOSE OF Btn_OK IN FRAME Dialog-Frame-Login /* Ingresar */
 DO:
     /*Variables Locales*/
     DEF VAR vintIdRol AS INT.
+    DEF VAR vintIdUsuario AS INT.
 
     DEF VAR vcharUsuario AS CHAR.
     DEF VAR vcharContrasena AS CHAR.
@@ -211,12 +212,14 @@ DO:
     ELSE DO:
       vcharCadEncript = getEncrypt(vcharContrasena).
       FIND Usuario WHERE Usuario.contrasenia = vcharCadEncript AND Usuario.usuario = vcharUsuario NO-LOCK NO-ERROR.
+         vintIdUsuario = Usuario.ID_USUARIO. 
          FIND Empleado WHERE Empleado.ID_USUARIO = Usuario.ID_USUARIO NO-LOCK NO-ERROR.
             FIND ROL WHERE Rol.ID_ROL = Empleado.ID_ROL NO-LOCK NO-ERROR.
            
       IF AVAILABLE Usuario THEN DO:
          vintIdRol = Rol.ID_ROL.
          HIDE ALL.
+         RUN pBitacora(vintIdUsuario).
          RUN MenuPpal.w(vintIdRol).
          APPLY "WINDOW-CLOSE" TO FRAME Dialog-Frame-Login.
       END.
@@ -323,6 +326,24 @@ PROCEDURE enable_UI :
       WITH FRAME Dialog-Frame-Login.
   VIEW FRAME Dialog-Frame-Login.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame-Login}
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pBitacora Dialog-Frame-Login 
+PROCEDURE pBitacora :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+DEF INPUT PARAM inintIdUsuario AS INT.
+
+    DO TRANSACTION:
+        ASSIGN BITACORA_ACCESO.ID_USUARIO = inintIdUsuario
+               BITACORA_ACCESO.ID_USUARIO = inintIdUsuario.
+    END.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

@@ -125,7 +125,7 @@ DEFINE BROWSE BROWSE-8
       UNIDAD_MEDIDA.DESCRIPCION FORMAT "X(50)":U WIDTH 33.4
       STOCK.F_CADUCIDAD FORMAT "99/99/99":U
       STOCK.F_INGRESO FORMAT "99/99/99":U
-      STOCK.LOTE FORMAT "X(11)":U WIDTH 17.6
+      STOCK.LOTE FORMAT "X(11)":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
     WITH NO-ROW-MARKERS SEPARATORS SIZE 164 BY 24.05 EXPANDABLE.
@@ -189,7 +189,7 @@ ASSIGN
      _FldNameList[5]   = Restaurante.STOCK.F_CADUCIDAD
      _FldNameList[6]   = Restaurante.STOCK.F_INGRESO
      _FldNameList[7]   > Restaurante.STOCK.LOTE
-"STOCK.LOTE" ? "X(11)" "character" ? ? ? ? ? ? no ? no no "17.6" yes no no "U" "" ""
+"STOCK.LOTE" ? "X(11)" "character" ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE BROWSE-8 */
 &ANALYZE-RESUME
@@ -211,8 +211,6 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define BROWSE-NAME BROWSE-8
-&Scoped-define SELF-NAME BROWSE-8
 &Scoped-define SELF-NAME BUTTON-1
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-1 Inventario-Frame
 ON CHOOSE OF BUTTON-1 IN FRAME Inventario-Frame /* Agregar Producto */
@@ -274,6 +272,7 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define BROWSE-NAME BROWSE-8
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Inventario-Frame 

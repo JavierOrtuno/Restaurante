@@ -320,18 +320,21 @@ DEF VAR vintnumlote AS INT.
 DEF VAR vdteactual AS DATE.
 
 vdteactual = TODAY.
-FIND LAST stock WHERE f_ingreso = vdtefecha.
-vintnumlote = INT(SUBSTR (stock.lote,LENGTH(TRIM(stock.lote)) - 2)).
-vintnumlote = vintnumlote + 1.
-IF vintnumlote < 10 THEN DO:
+FIND LAST stock WHERE f_ingreso = vdtefecha NO-LOCK NO-ERROR.
+IF AVAILABLE stock THEN DO:
+  vintnumlote = INT(SUBSTR (stock.lote,LENGTH(TRIM(stock.lote)) - 2)).
+  vintnumlote = vintnumlote + 1.
+  IF vintnumlote < 10 THEN
     vchrlote = "00" + string(vintnumlote).
-END.
-ELSE DO:
-     IF vintnumlote < 100 THEN DO:
+  ELSE DO:
+     IF vintnumlote < 100 THEN
          vchrlote = "0" + string(vintnumlote).
      END.
+  vchrlote = "LT-" + STRING(MONTH(vdteactual)) + STRING(YEAR(vdteactual)) + vchrlote.
 END.
-vchrlote = "LT-" + STRING(MONTH(vdteactual)) + STRING(YEAR(vdteactual)) + vchrlote.
+ELSE DO:
+    vchrlote = "LT-" + STRING(MONTH(vdteactual)) + STRING(YEAR(vdteactual)) + "001".
+END.
 
   RETURN vchrlote.   /* Function return value. */
 

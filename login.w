@@ -45,8 +45,8 @@
 &Scoped-define FRAME-NAME Dialog-Frame-Login
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Fill-Usuario Fill-Contrasena Btn_OK ~
-Bttn-Salir RECT-15 RECT-16 RECT-17 
+&Scoped-Define ENABLED-OBJECTS Fill-Usuario Fill-Contrasena Bttn-Salir ~
+Btn_OK RECT-16 RECT-17 
 &Scoped-Define DISPLAYED-OBJECTS Fill-Usuario Fill-Contrasena 
 
 /* Custom List Definitions                                              */
@@ -68,7 +68,7 @@ DEFINE BUTTON Btn_OK AUTO-GO
      BGCOLOR 8 .
 
 DEFINE BUTTON Bttn-Salir 
-     LABEL "Salir" 
+     LABEL "&Salir" 
      SIZE 15 BY 1.14.
 
 DEFINE VARIABLE Fill-Contrasena AS CHARACTER FORMAT "X(256)":U 
@@ -85,39 +85,36 @@ DEFINE VARIABLE Fill-Usuario AS CHARACTER FORMAT "X(256)":U
 
 DEFINE RECTANGLE RECT-14
      EDGE-PIXELS 8  
-     SIZE 100 BY 17.14.
-
-DEFINE RECTANGLE RECT-15
-     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 60 BY 8.1.
+     SIZE 172 BY 32.14
+     BGCOLOR 8 .
 
 DEFINE RECTANGLE RECT-16
-     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 60 BY 8.1.
+     EDGE-PIXELS 2 GRAPHIC-EDGE  
+     SIZE 83 BY 12.62.
 
 DEFINE RECTANGLE RECT-17
-     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 60 BY 2.14.
+     EDGE-PIXELS 8  
+     SIZE 75.6 BY 2.14
+     BGCOLOR 8 .
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame-Login
-     Fill-Usuario AT ROW 7.67 COL 35 COLON-ALIGNED
-     Fill-Contrasena AT ROW 9.62 COL 35 COLON-ALIGNED BLANK 
-     Btn_OK AT ROW 11.52 COL 62
-     Bttn-Salir AT ROW 16 COL 76
+     Fill-Usuario AT ROW 14 COL 71.8 COLON-ALIGNED
+     Fill-Contrasena AT ROW 15.95 COL 71.4 COLON-ALIGNED BLANK 
+     Bttn-Salir AT ROW 20.52 COL 53.8
+     Btn_OK AT ROW 20.52 COL 105.2
      RECT-14 AT ROW 1 COL 1
-     RECT-15 AT ROW 5.76 COL 22
-     RECT-16 AT ROW 5.76 COL 22
-     RECT-17 AT ROW 2.43 COL 22
-     "               Bienvenidos al Sistema le Seminaré" VIEW-AS TEXT
-          SIZE 52 BY .62 AT ROW 3.14 COL 25
-          BGCOLOR 15 
-     SPACE(23.99) SKIP(14.37)
+     RECT-16 AT ROW 10.29 COL 45.2
+     RECT-17 AT ROW 3.81 COL 49.8
+     "Bienvenido al Sistema le Seminaré" VIEW-AS TEXT
+          SIZE 70.2 BY 1.19 AT ROW 4.29 COL 53.2
+          BGCOLOR 8 FGCOLOR 15 FONT 70
+     SPACE(49.59) SKIP(27.65)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         FGCOLOR 0 
+         BGCOLOR 15 FGCOLOR 0 
          TITLE "<Inicio>".
 
 
@@ -155,6 +152,21 @@ ASSIGN
 
 &Scoped-define SELF-NAME Dialog-Frame-Login
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame-Login Dialog-Frame-Login
+ON 0 OF FRAME Dialog-Frame-Login /* <Inicio> */
+OR "s" OF FRAME {&FRAME-NAME} ANYWHERE DO:
+   
+    CASE CHR(LASTKEY):
+        
+        WHEN "s" THEN APPLY "CHOOSE" TO Bttn-Salir.
+
+    END CASE.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame-Login Dialog-Frame-Login
 ON RETURN OF FRAME Dialog-Frame-Login /* <Inicio> */
 ANYWHERE DO: 
   APPLY "CHOOSE" TO Btn_OK.
@@ -179,17 +191,19 @@ END.
 ON CHOOSE OF Btn_OK IN FRAME Dialog-Frame-Login /* Ingresar */
 DO:
     /*Variables Locales*/
+    DEF VAR vintIdRol AS INT.
+
     DEF VAR vcharUsuario AS CHAR.
     DEF VAR vcharContrasena AS CHAR.
     DEF VAR vcharCadEncript AS CHAR.
-    DEF VAR vintIdRol AS INT.
+    
 
     vcharUsuario = Fill-Usuario:SCREEN-VALUE.
     vcharContrasena = Fill-Contrasena:SCREEN-VALUE.
     
     /*Verificacion de campos no nulos*/
     IF vcharUsuario = "" OR vcharContrasena = "" THEN DO:
-      MESSAGE "Usuario o contraseña inválidos" VIEW-AS ALERT-BOX.
+      MESSAGE "No se pueden dejar campos vacíos" VIEW-AS ALERT-BOX.
       RETURN NO-APPLY.
     END.
     
@@ -200,11 +214,11 @@ DO:
          FIND Empleado WHERE Empleado.ID_USUARIO = Usuario.ID_USUARIO NO-LOCK NO-ERROR.
             FIND ROL WHERE Rol.ID_ROL = Empleado.ID_ROL NO-LOCK NO-ERROR.
            
-    
       IF AVAILABLE Usuario THEN DO:
          vintIdRol = Rol.ID_ROL.
          HIDE ALL.
-         RUN MenuPpal.w(vintIdRol). 
+         RUN MenuPpal.w(vintIdRol).
+         APPLY "WINDOW-CLOSE" TO FRAME Dialog-Frame-Login.
       END.
 
       ELSE DO:
@@ -305,7 +319,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY Fill-Usuario Fill-Contrasena 
       WITH FRAME Dialog-Frame-Login.
-  ENABLE Fill-Usuario Fill-Contrasena Btn_OK Bttn-Salir RECT-15 RECT-16 RECT-17 
+  ENABLE Fill-Usuario Fill-Contrasena Bttn-Salir Btn_OK RECT-16 RECT-17 
       WITH FRAME Dialog-Frame-Login.
   VIEW FRAME Dialog-Frame-Login.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame-Login}

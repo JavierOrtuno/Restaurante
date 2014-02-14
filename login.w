@@ -1,8 +1,8 @@
 &ANALYZE-SUSPEND _VERSION-NUMBER UIB_v9r12 GUI
 &ANALYZE-RESUME
 &Scoped-define WINDOW-NAME CURRENT-WINDOW
-&Scoped-define FRAME-NAME Dialog-Frame
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Dialog-Frame 
+&Scoped-define FRAME-NAME Dialog-Frame-Login
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Dialog-Frame-Login 
 /*------------------------------------------------------------------------
 
   File: 
@@ -42,7 +42,12 @@
 &Scoped-define DB-AWARE no
 
 /* Name of first Frame and/or Browse and/or first Query                 */
-&Scoped-define FRAME-NAME Dialog-Frame
+&Scoped-define FRAME-NAME Dialog-Frame-Login
+
+/* Standard List Definitions                                            */
+&Scoped-Define ENABLED-OBJECTS Fill-Usuario Fill-Contrasena Btn_OK ~
+Bttn-Salir RECT-15 RECT-16 RECT-17 
+&Scoped-Define DISPLAYED-OBJECTS Fill-Usuario Fill-Contrasena 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -58,56 +63,62 @@
 
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_OK AUTO-GO 
-     LABEL "&Ingresar" 
+     LABEL "Ingresar" 
      SIZE 15 BY 1.14
      BGCOLOR 8 .
+
+DEFINE BUTTON Bttn-Salir 
+     LABEL "Salir" 
+     SIZE 15 BY 1.14.
 
 DEFINE VARIABLE Fill-Contrasena AS CHARACTER FORMAT "X(256)":U 
      LABEL "Contraseña" 
      VIEW-AS FILL-IN 
      SIZE 40 BY 1
-     BGCOLOR 15  NO-UNDO.
+     BGCOLOR 15 FGCOLOR 0  NO-UNDO.
 
 DEFINE VARIABLE Fill-Usuario AS CHARACTER FORMAT "X(256)":U 
      LABEL "Usuario" 
      VIEW-AS FILL-IN 
      SIZE 40 BY 1
-     BGCOLOR 15  NO-UNDO.
+     BGCOLOR 15 FGCOLOR 0  NO-UNDO.
 
-DEFINE RECTANGLE RECT-1
-     EDGE-PIXELS 8  NO-FILL 
-     SIZE 61 BY 10.48
-     BGCOLOR 15 FGCOLOR 15 .
+DEFINE RECTANGLE RECT-14
+     EDGE-PIXELS 8  
+     SIZE 100 BY 17.14.
 
-DEFINE RECTANGLE RECT-3
-     EDGE-PIXELS 8  NO-FILL 
-     SIZE 100.6 BY 17.05
-     BGCOLOR 15 .
+DEFINE RECTANGLE RECT-15
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 60 BY 8.1.
+
+DEFINE RECTANGLE RECT-16
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 60 BY 8.1.
+
+DEFINE RECTANGLE RECT-17
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 60 BY 2.14.
 
 
 /* ************************  Frame Definitions  *********************** */
 
-DEFINE FRAME Dialog-Frame
-     SPACE(101.01) SKIP(17.15)
+DEFINE FRAME Dialog-Frame-Login
+     Fill-Usuario AT ROW 7.67 COL 35 COLON-ALIGNED
+     Fill-Contrasena AT ROW 9.62 COL 35 COLON-ALIGNED BLANK 
+     Btn_OK AT ROW 11.52 COL 62
+     Bttn-Salir AT ROW 16 COL 76
+     RECT-14 AT ROW 1 COL 1
+     RECT-15 AT ROW 5.76 COL 22
+     RECT-16 AT ROW 5.76 COL 22
+     RECT-17 AT ROW 2.43 COL 22
+     "               Bienvenidos al Sistema le Seminaré" VIEW-AS TEXT
+          SIZE 52 BY .62 AT ROW 3.14 COL 25
+          BGCOLOR 15 
+     SPACE(23.99) SKIP(14.37)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         FGCOLOR 8 
-         TITLE "<insert dialog title>".
-
-DEFINE FRAME Frame-Login
-     Fill-Usuario AT ROW 8.62 COL 35 COLON-ALIGNED
-     Fill-Contrasena AT ROW 10.52 COL 35 COLON-ALIGNED BLANK 
-     Btn_OK AT ROW 12.33 COL 62
-     RECT-3 AT ROW 1 COL 1
-     RECT-1 AT ROW 5.76 COL 21
-     "                Bienvenido al Sistema le Seminaré" VIEW-AS TEXT
-          SIZE 100 BY 2.91 AT ROW 1 COL 1.2
-          BGCOLOR 15 FGCOLOR 1 FONT 70
-    WITH 1 DOWN KEEP-TAB-ORDER OVERLAY 
-         SIDE-LABELS THREE-D 
-         AT COL 1 ROW 1
-         SIZE 101 BY 17.14
-         BGCOLOR 16 .
+         FGCOLOR 0 
+         TITLE "<Inicio>".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -125,18 +136,13 @@ DEFINE FRAME Frame-Login
 /* ***********  Runtime Attributes and AppBuilder Settings  *********** */
 
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
-/* REPARENT FRAME */
-ASSIGN FRAME Frame-Login:FRAME = FRAME Dialog-Frame:HANDLE.
-
-/* SETTINGS FOR DIALOG-BOX Dialog-Frame
+/* SETTINGS FOR DIALOG-BOX Dialog-Frame-Login
                                                                         */
 ASSIGN 
-       FRAME Dialog-Frame:SCROLLABLE       = FALSE
-       FRAME Dialog-Frame:HIDDEN           = TRUE.
+       FRAME Dialog-Frame-Login:SCROLLABLE       = FALSE
+       FRAME Dialog-Frame-Login:HIDDEN           = TRUE.
 
-/* SETTINGS FOR FRAME Frame-Login
-   UNDERLINE                                                            */
-/* SETTINGS FOR RECTANGLE RECT-3 IN FRAME Frame-Login
+/* SETTINGS FOR RECTANGLE RECT-14 IN FRAME Dialog-Frame-Login
    NO-ENABLE                                                            */
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
@@ -147,9 +153,19 @@ ASSIGN
 
 /* ************************  Control Triggers  ************************ */
 
-&Scoped-define SELF-NAME Dialog-Frame
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame Dialog-Frame
-ON WINDOW-CLOSE OF FRAME Dialog-Frame /* <insert dialog title> */
+&Scoped-define SELF-NAME Dialog-Frame-Login
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame-Login Dialog-Frame-Login
+ON RETURN OF FRAME Dialog-Frame-Login /* <Inicio> */
+ANYWHERE DO: 
+  APPLY "CHOOSE" TO Btn_OK.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame-Login Dialog-Frame-Login
+ON WINDOW-CLOSE OF FRAME Dialog-Frame-Login /* <Inicio> */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -158,10 +174,9 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define FRAME-NAME Frame-Login
 &Scoped-define SELF-NAME Btn_OK
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_OK Dialog-Frame
-ON CHOOSE OF Btn_OK IN FRAME Frame-Login /* Ingresar */
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_OK Dialog-Frame-Login
+ON CHOOSE OF Btn_OK IN FRAME Dialog-Frame-Login /* Ingresar */
 DO:
     /*Variables Locales*/
     DEF VAR vcharUsuario AS CHAR.
@@ -182,14 +197,14 @@ DO:
     ELSE DO:
       vcharCadEncript = getEncrypt(vcharContrasena).
       FIND Usuario WHERE Usuario.contrasenia = vcharCadEncript AND Usuario.usuario = vcharUsuario NO-LOCK NO-ERROR.
-        FIND Empleado WHERE Empleado.ID_USUARIO = Usuario.ID_USUARIO NO-LOCK NO-ERROR.
+         FIND Empleado WHERE Empleado.ID_USUARIO = Usuario.ID_USUARIO NO-LOCK NO-ERROR.
             FIND ROL WHERE Rol.ID_ROL = Empleado.ID_ROL NO-LOCK NO-ERROR.
-            
-       vintIdRol = Rol.ID_ROL.
-      
+           
+    
       IF AVAILABLE Usuario THEN DO:
-         HIDE ALL. 
-         RUN MENU.w(vintIdRol).
+         vintIdRol = Rol.ID_ROL.
+         HIDE ALL.
+         RUN MenuPpal.w(vintIdRol). 
       END.
 
       ELSE DO:
@@ -204,10 +219,37 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define FRAME-NAME Dialog-Frame
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_OK Dialog-Frame-Login
+ON RETURN OF Btn_OK IN FRAME Dialog-Frame-Login /* Ingresar */
+DO:
+  APPLY "CHOOSE" TO Btn_OK.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Bttn-Salir
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bttn-Salir Dialog-Frame-Login
+ON CHOOSE OF Bttn-Salir IN FRAME Dialog-Frame-Login /* Salir */
+DO:
+  DEF VAR vlogOK AS LOG.
+
+  MESSAGE "¿REALMENTE DESEA SALIR?" VIEW-AS ALERT-BOX BUTTONS YES-NO SET vlogOK.
+ 
+  IF vlogOK = YES THEN DO:
+    APPLY "WINDOW-CLOSE" TO FRAME Dialog-Frame-Login.
+  END.
+  
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &UNDEFINE SELF-NAME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dialog-Frame 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dialog-Frame-Login 
 
 
 /* ***************************  Main Block  *************************** */
@@ -233,7 +275,7 @@ RUN disable_UI.
 
 /* **********************  Internal Procedures  *********************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Dialog-Frame  _DEFAULT-DISABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Dialog-Frame-Login  _DEFAULT-DISABLE
 PROCEDURE disable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     DISABLE the User Interface
@@ -244,14 +286,13 @@ PROCEDURE disable_UI :
                we are ready to "clean-up" after running.
 ------------------------------------------------------------------------------*/
   /* Hide all frames. */
-  HIDE FRAME Dialog-Frame.
-  HIDE FRAME Frame-Login.
+  HIDE FRAME Dialog-Frame-Login.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Dialog-Frame  _DEFAULT-ENABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Dialog-Frame-Login  _DEFAULT-ENABLE
 PROCEDURE enable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     ENABLE the User Interface
@@ -262,13 +303,12 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  VIEW FRAME Dialog-Frame.
-  {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}
   DISPLAY Fill-Usuario Fill-Contrasena 
-      WITH FRAME Frame-Login.
-  ENABLE Fill-Usuario Fill-Contrasena Btn_OK RECT-1 
-      WITH FRAME Frame-Login.
-  {&OPEN-BROWSERS-IN-QUERY-Frame-Login}
+      WITH FRAME Dialog-Frame-Login.
+  ENABLE Fill-Usuario Fill-Contrasena Btn_OK Bttn-Salir RECT-15 RECT-16 RECT-17 
+      WITH FRAME Dialog-Frame-Login.
+  VIEW FRAME Dialog-Frame-Login.
+  {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame-Login}
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

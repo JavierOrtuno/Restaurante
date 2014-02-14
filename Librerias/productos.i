@@ -67,6 +67,17 @@ FUNCTION getCodProducto RETURNS CHARACTER
 
 &ENDIF
 
+&IF DEFINED(EXCLUDE-getDescProducto) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getDescProducto Method-Library 
+FUNCTION getDescProducto RETURNS CHARACTER
+    ( INPUT vintIdProducto AS INTEGER )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 &IF DEFINED(EXCLUDE-getUnidadMedida) = 0 &THEN
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getUnidadMedida Method-Library 
@@ -258,6 +269,25 @@ FUNCTION getCodProducto RETURNS CHARACTER
     vcharCodigo = vcharCodigo + vcharIdProd.
 
     RETURN vcharCodigo.
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
+&IF DEFINED(EXCLUDE-getDescProducto) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getDescProducto Method-Library 
+FUNCTION getDescProducto RETURNS CHARACTER
+    ( INPUT vintIdProducto AS INTEGER ) :
+    /*------------------------------------------------------------------------------
+        Purpose:  
+        Notes:  
+    ------------------------------------------------------------------------------*/
+    FIND FIRST PRODUCTO WHERE ID_PRODUCTO = vintIdProducto.
+
+    RETURN PRODUCTO.DESCRIPCION.
 END FUNCTION.
 
 /* _UIB-CODE-BLOCK-END */

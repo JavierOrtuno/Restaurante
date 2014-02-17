@@ -50,11 +50,10 @@ DEF INPUT PARAM inintIdRol AS INT.
 &Scoped-define DB-AWARE no
 
 /* Name of first Frame and/or Browse and/or first Query                 */
-&Scoped-define FRAME-NAME Frame-Admin
+&Scoped-define FRAME-NAME FRAME-A
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Bttn-Menu Bttn-Alta Bttn-Productos Bttn-Baja ~
-Bttn-Editar RECT-6 RECT-7 
+&Scoped-Define ENABLED-OBJECTS Bttn-MSalir 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -70,6 +69,10 @@ Bttn-Editar RECT-6 RECT-7
 DEFINE VAR C-Win AS WIDGET-HANDLE NO-UNDO.
 
 /* Definitions of the field level widgets                               */
+DEFINE BUTTON Bttn-MSalir 
+     LABEL "Salir" 
+     SIZE 15 BY 1.14.
+
 DEFINE BUTTON Bttn-Alta 
      LABEL "Alta" 
      SIZE 16 BY 1.14.
@@ -167,14 +170,11 @@ DEFINE RECTANGLE RECT-8
 
 /* ************************  Frame Definitions  *********************** */
 
-DEFINE FRAME MENU-FRAME
-     "                                                                 MENU PRINCIPAL" VIEW-AS TEXT
-          SIZE 170 BY 3.81 AT ROW 1 COL 170 RIGHT-ALIGNED
-          BGCOLOR 15 FGCOLOR 1 FONT 70
+DEFINE FRAME MENUPPAL-FRAME
     WITH 1 DOWN KEEP-TAB-ORDER OVERLAY 
          SIDE-LABELS NO-UNDERLINE THREE-D 
          AT COL 1 ROW 1
-         SIZE 172.6 BY 32.52.
+         SIZE 215.4 BY 33.62.
 
 DEFINE FRAME Frame-General
      "Text 3" VIEW-AS TEXT
@@ -263,6 +263,17 @@ DEFINE FRAME Frame-Reportes
          SIZE 79.8 BY 13.57
          BGCOLOR 16 .
 
+DEFINE FRAME FRAME-A
+     Bttn-MSalir AT ROW 2.38 COL 147
+     "MENU PRINCIPAL" VIEW-AS TEXT
+          SIZE 47 BY 1.43 AT ROW 1.95 COL 67
+          FGCOLOR 1 FONT 70
+    WITH 1 DOWN KEEP-TAB-ORDER OVERLAY 
+         SIDE-LABELS NO-UNDERLINE THREE-D 
+         AT COL 1 ROW 1
+         SIZE 170 BY 3.81
+         BGCOLOR 15 .
+
 
 /* *********************** Procedure Settings ************************ */
 
@@ -280,9 +291,9 @@ DEFINE FRAME Frame-Reportes
 IF SESSION:DISPLAY-TYPE = "GUI":U THEN
   CREATE WINDOW C-Win ASSIGN
          HIDDEN             = YES
-         TITLE              = "<insert window title>"
-         HEIGHT             = 32.52
-         WIDTH              = 172.6
+         TITLE              = "<Principal>"
+         HEIGHT             = 32.48
+         WIDTH              = 173.6
          MAX-HEIGHT         = 33.62
          MAX-WIDTH          = 273.2
          VIRTUAL-HEIGHT     = 33.62
@@ -308,11 +319,17 @@ ELSE {&WINDOW-NAME} = CURRENT-WINDOW.
 /* SETTINGS FOR WINDOW C-Win
   VISIBLE,,RUN-PERSISTENT                                               */
 /* REPARENT FRAME */
-ASSIGN FRAME Frame-Admin:FRAME = FRAME Frame-General:HANDLE
-       FRAME Frame-General:FRAME = FRAME MENU-FRAME:HANDLE
+ASSIGN FRAME FRAME-A:FRAME = FRAME MENUPPAL-FRAME:HANDLE
+       FRAME Frame-Admin:FRAME = FRAME Frame-General:HANDLE
+       FRAME Frame-General:FRAME = FRAME MENUPPAL-FRAME:HANDLE
        FRAME Frame-Inventario:FRAME = FRAME Frame-General:HANDLE
        FRAME Frame-Reportes:FRAME = FRAME Frame-General:HANDLE
        FRAME Frame-Ventas:FRAME = FRAME Frame-General:HANDLE.
+
+/* SETTINGS FOR FRAME FRAME-A
+                                                                        */
+ASSIGN 
+       Bttn-MSalir:HIDDEN IN FRAME FRAME-A           = TRUE.
 
 /* SETTINGS FOR FRAME Frame-Admin
                                                                         */
@@ -330,10 +347,13 @@ ASSIGN
 
 /* SETTINGS FOR FRAME Frame-Ventas
                                                                         */
-/* SETTINGS FOR FRAME MENU-FRAME
+/* SETTINGS FOR FRAME MENUPPAL-FRAME
                                                                         */
-/* SETTINGS FOR TEXT-LITERAL "                                                                 MENU PRINCIPAL"
-          SIZE 170 BY 3.81 AT ROW 1 COL 170 RIGHT-ALIGNED               */
+
+DEFINE VARIABLE XXTABVALXX AS LOGICAL NO-UNDO.
+
+ASSIGN XXTABVALXX = FRAME FRAME-A:MOVE-BEFORE-TAB-ITEM (FRAME Frame-General:HANDLE)
+/* END-ASSIGN-TABS */.
 
 IF SESSION:DISPLAY-TYPE = "GUI":U AND VALID-HANDLE(C-Win)
 THEN C-Win:HIDDEN = no.
@@ -349,7 +369,7 @@ THEN C-Win:HIDDEN = no.
 
 &Scoped-define SELF-NAME C-Win
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL C-Win C-Win
-ON END-ERROR OF C-Win /* <insert window title> */
+ON END-ERROR OF C-Win /* <Principal> */
 OR ENDKEY OF {&WINDOW-NAME} ANYWHERE DO:
   /* This case occurs when the user presses the "Esc" key.
      In a persistently run window, just ignore this.  If we did not, the
@@ -362,7 +382,7 @@ END.
 
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL C-Win C-Win
-ON WINDOW-CLOSE OF C-Win /* <insert window title> */
+ON WINDOW-CLOSE OF C-Win /* <Principal> */
 DO:
   /* This event will close the window and terminate the procedure.  */
   APPLY "CLOSE":U TO THIS-PROCEDURE.
@@ -373,6 +393,25 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Bttn-MSalir
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bttn-MSalir C-Win
+ON CHOOSE OF Bttn-MSalir IN FRAME FRAME-A /* Salir */
+DO:
+  DEF VAR vlogOK AS LOG.
+
+  MESSAGE "¿REALMENTE DESEA SALIR?" VIEW-AS ALERT-BOX BUTTONS YES-NO SET vlogOK.
+ 
+  IF vlogOK = YES THEN DO: 
+    HIDE ALL.
+    RUN login.w.
+  END.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define FRAME-NAME Frame-Admin
 &Scoped-define SELF-NAME Bttn-Productos
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bttn-Productos C-Win
 ON CHOOSE OF Bttn-Productos IN FRAME Frame-Admin /* Productos */
@@ -384,6 +423,7 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define FRAME-NAME FRAME-A
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK C-Win 
@@ -468,8 +508,11 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  VIEW FRAME MENU-FRAME IN WINDOW C-Win.
-  {&OPEN-BROWSERS-IN-QUERY-MENU-FRAME}
+  ENABLE Bttn-MSalir 
+      WITH FRAME FRAME-A IN WINDOW C-Win.
+  {&OPEN-BROWSERS-IN-QUERY-FRAME-A}
+  VIEW FRAME MENUPPAL-FRAME IN WINDOW C-Win.
+  {&OPEN-BROWSERS-IN-QUERY-MENUPPAL-FRAME}
   ENABLE Bttn-Menu Bttn-Alta Bttn-Productos Bttn-Baja Bttn-Editar RECT-6 RECT-7 
       WITH FRAME Frame-Admin IN WINDOW C-Win.
   {&OPEN-BROWSERS-IN-QUERY-Frame-Admin}

@@ -111,7 +111,7 @@ DEFINE FRAME Dialog-Frame-Login
      "Bienvenido al Sistema le Seminaré" VIEW-AS TEXT
           SIZE 70.2 BY 1.19 AT ROW 4.29 COL 53.2
           BGCOLOR 8 FGCOLOR 15 FONT 70
-     SPACE(49.59) SKIP(27.65)
+     SPACE(49.60) SKIP(27.66)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 15 FGCOLOR 0 
@@ -190,33 +190,26 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_OK Dialog-Frame-Login
 ON CHOOSE OF Btn_OK IN FRAME Dialog-Frame-Login /* Ingresar */
 DO:
-    /*Variables Locales*/
     DEF VAR vintIdRol AS INT.
     DEF VAR vintIdUsuario AS INT.
-
     DEF VAR vcharUsuario AS CHAR.
     DEF VAR vcharContrasena AS CHAR.
     DEF VAR vcharCadEncript AS CHAR.
     
-
     vcharUsuario = Fill-Usuario:SCREEN-VALUE.
     vcharContrasena = Fill-Contrasena:SCREEN-VALUE.
     
-    /*Verificacion de campos no nulos*/
     IF vcharUsuario = "" OR vcharContrasena = "" THEN DO:
       MESSAGE "No se pueden dejar campos vacíos" VIEW-AS ALERT-BOX.
       RETURN NO-APPLY.
     END.
     
-    /*verificacion de existencia en la base de datos*/
     ELSE DO:
       vcharCadEncript = getEncrypt(vcharContrasena).
-      FIND Usuario WHERE Usuario.contrasenia = vcharCadEncript AND Usuario.usuario = vcharUsuario NO-LOCK NO-ERROR.
-         vintIdUsuario = Usuario.ID_USUARIO. 
-         FIND Empleado WHERE Empleado.ID_USUARIO = Usuario.ID_USUARIO NO-LOCK NO-ERROR.
-            FIND ROL WHERE Rol.ID_ROL = Empleado.ID_ROL NO-LOCK NO-ERROR.
+      RUN pBuscaUsuario(vcharUsuario, vcharCadEncript).
            
       IF AVAILABLE Usuario THEN DO:
+         vintIdUsuario = Usuario.ID_USUARIO.
          vintIdRol = Rol.ID_ROL.
          HIDE ALL.
          RUN pBitacora(vintIdUsuario).
@@ -228,7 +221,6 @@ DO:
         MESSAGE "Usuario o contraseña inválidos" VIEW-AS ALERT-BOX.
         RETURN NO-APPLY.
       END.
-
     END.     
 END.
 
@@ -340,10 +332,31 @@ PROCEDURE pBitacora :
 ------------------------------------------------------------------------------*/
 DEF INPUT PARAM inintIdUsuario AS INT.
 
-    DO TRANSACTION:
-        ASSIGN BITACORA_ACCESO.ID_USUARIO = inintIdUsuario
-               BITACORA_ACCESO.ID_USUARIO = inintIdUsuario.
-    END.
+     CREATE BITACORA_ACCESO.
+     ASSIGN BITACORA_ACCESO.ID_BIT_ACCESO = NEXT-VALUE(SEC_BITACORA_ACCESO)
+            BITACORA_ACCESO.FECHA = TODAY
+            BITACORA_ACCESO.HORA = STRING(TIME,"HH:MM:SS")
+            BITACORA_ACCESO.ID_USUARIO = inintIdUsuario.
+
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE pBuscaUsuario Dialog-Frame-Login 
+PROCEDURE pBuscaUsuario :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+DEF INPUT PARAM incharUsuario AS CHAR.
+DEF INPUT PARAM incharCadEncript AS CHAR.
+
+FIND Usuario WHERE Usuario.contrasenia = incharCadEncript AND Usuario.usuario = incharUsuario NO-LOCK NO-ERROR.
+         FIND Empleado WHERE Empleado.ID_USUARIO = Usuario.ID_USUARIO NO-LOCK NO-ERROR.
+            FIND ROL WHERE Rol.ID_ROL = Empleado.ID_ROL NO-LOCK NO-ERROR.
+
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

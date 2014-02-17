@@ -25,6 +25,7 @@
 /* ***************************  Definitions  ************************** */
 {productos.i}
 {platillos.i}
+{string_library.i}
 /* Parameters Definitions ---                                           */
 DEFINE INPUT PARAMETER pinIntAction AS INTEGER.
 DEFINE INPUT PARAMETER pinRowId AS ROWID.
@@ -79,16 +80,15 @@ FUNCTION validatePlatillo RETURNS LOGICAL
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Agregar 
      LABEL "Agregar" 
-     SIZE 20 BY 2.5.
+     SIZE 20 BY 2.52.
 
 DEFINE BUTTON Btn_Salir 
      LABEL "Cancelar" 
-     SIZE 20 BY 2.5.
+     SIZE 20 BY 2.52.
 
 DEFINE VARIABLE List_Clasificacion AS CHARACTER FORMAT "X(256)":U 
      LABEL "Clasificación" 
      VIEW-AS COMBO-BOX INNER-LINES 5
-     LIST-ITEM-PAIRS "",""
      DROP-DOWN-LIST
      SIZE 35.4 BY 1 NO-UNDO.
 
@@ -97,7 +97,7 @@ DEFINE VARIABLE Fill_Descripcion AS CHARACTER FORMAT "X(256)":U
      VIEW-AS FILL-IN 
      SIZE 19 BY 1 NO-UNDO.
 
-DEFINE VARIABLE Fill_Precio AS INTEGER FORMAT "->,>>>,>>9":U INITIAL 0 
+DEFINE VARIABLE Fill_Precio AS DECIMAL FORMAT "->>,>>9.99":U INITIAL 0 
      LABEL "Precio" 
      VIEW-AS FILL-IN 
      SIZE 19.4 BY 1 NO-UNDO.
@@ -109,6 +109,7 @@ DEFINE VARIABLE Sel_Ingredientes AS CHARACTER
 
 DEFINE VARIABLE Sel_Productos AS CHARACTER 
      VIEW-AS SELECTION-LIST SINGLE SCROLLBAR-VERTICAL 
+     LIST-ITEM-PAIRS "","" 
      SIZE 42 BY 20.24 NO-UNDO.
 
 
@@ -176,18 +177,28 @@ END.
 &Scoped-define SELF-NAME Btn_Agregar
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Agregar Dlg_CreacionP
 ON CHOOSE OF Btn_Agregar IN FRAME Dlg_CreacionP /* Agregar */
-DO:
-    ASSIGN 
-        Fill_Descripcion
-        Fill_Precio
-        List_Clasificacion
-        Sel_Ingredientes.
+DO:    
+    DEFINE VARIABLE vcharIng AS CHARACTER.
+
+    ASSIGN Fill_Descripcion Fill_Precio List_Clasificacion Sel_Ingredientes.
     IF validatePlatillo(Fill_Descripcion, DECIMAL(Fill_Precio), INTEGER(List_Clasificacion), Sel_Ingredientes:NUM-ITEMS) THEN DO:
-            
+        RUN getIngredientes(OUTPUT vcharIng).
+        CASE pinIntAction:
+            WHEN 1 THEN DO:
+                RUN addPlatillo(
+                    STRING(Fill_Descripcion), 
+                    DECIMAL(Fill_Precio),
+                    INTEGER(List_Clasificacion),
+                    STRING(vcharIng)).
+            END.
+            WHEN 2 THEN DO:
+                RUN updatePlatillo.
+            END.
+        END CASE.
     END.
     ELSE DO:
         MESSAGE "REGISTRO INCOMPLETO" VIEW-AS ALERT-BOX.
-    end.
+    END.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -214,7 +225,13 @@ DO:
 
     vcharId = Sel_Productos:SCREEN-VALUE.
     vcharDesc = getDescProducto(INTEGER(vcharId)).
-    RUN addIngrediente(vcharId, vcharDesc).
+    
+    IF LOOKUP (vcharId, Sel_Ingredientes:LIST-ITEM-PAIRS) = 0 THEN DO:
+        RUN addIngredienteList(vcharId, vcharDesc).
+    END.
+    ELSE DO:
+        MESSAGE "YA HA AGREGADO ESE INGREDIENTE" VIEW-AS ALERT-BOX.
+    END.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -250,18 +267,18 @@ RUN disable_UI.
 
 /* **********************  Internal Procedures  *********************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE addIngrediente Dlg_CreacionP 
-PROCEDURE addIngrediente :
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE addIngredienteList Dlg_CreacionP 
+PROCEDURE addIngredienteList :
 /*------------------------------------------------------------------------------
         Purpose:     
         Parameters:  <none>
         Notes:       
     ------------------------------------------------------------------------------*/
-    DEFINE INPUT PARAMETER pinCharIdProducto AS CHARACTER.
-    DEFINE INPUT PARAMETER pinCharDesc AS CHARACTER.
-    
-    Sel_Ingredientes:ADD-LAST(pinCharDesc, pinCharIdProducto) IN FRAME Dlg_CreacionP.
-    
+    DEFINE INPUT PARAMETER pinCharId AS CHARACTER.    
+    DEFINE INPUT PARAMETER pinCharDesc AS CHARACTER.    
+        
+    Sel_Ingredientes:ADD-LAST(pinCharDesc, pinCharId) IN FRAME Dlg_CreacionP.
+
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
@@ -303,6 +320,31 @@ PROCEDURE enable_UI :
       WITH FRAME Dlg_CreacionP.
   VIEW FRAME Dlg_CreacionP.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_CreacionP}
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE getIngredientes Dlg_CreacionP 
+PROCEDURE getIngredientes :
+/*------------------------------------------------------------------------------
+        Purpose:     
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    DEFINE OUTPUT PARAMETER poutCharIngredientes AS CHARACTER.
+    DEFINE VARIABLE vintCount AS INTEGER.
+    DEFINE VARIABLE vcharLista AS CHARACTER.
+    
+    vcharLista = Sel_Ingredientes:LIST-ITEM-PAIRS IN FRAME Dlg_CreacionP.
+
+    DO vintCount = 1 TO NUM-ENTRIES(vcharLista):
+        IF isNumber(ENTRY(vintCount, vcharLista)) THEN DO:
+            poutCharIngredientes = poutCharIngredientes + ENTRY(vintCount, vcharLista) + ",".
+        END.
+    END.
+    poutCharIngredientes = TRIM(poutCharIngredientes, ",").
+    
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

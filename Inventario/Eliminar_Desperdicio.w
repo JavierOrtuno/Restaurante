@@ -1,11 +1,8 @@
 &ANALYZE-SUSPEND _VERSION-NUMBER UIB_v9r12 GUI
 &ANALYZE-RESUME
-/* Connected Databases 
-          restaurante      PROGRESS
-*/
 &Scoped-define WINDOW-NAME CURRENT-WINDOW
-&Scoped-define FRAME-NAME Perdida-Frame
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Perdida-Frame 
+&Scoped-define FRAME-NAME Delete-Frame
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Delete-Frame 
 /*------------------------------------------------------------------------
 
   File: 
@@ -31,6 +28,9 @@
 
 /* Local Variable Definitions ---                                       */
 
+DEF INPUT PARAM inrowReg  AS ROWID.
+DEF INPUT PARAM inrowReg2 AS ROWID.
+
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
@@ -43,35 +43,13 @@
 &Scoped-define DB-AWARE no
 
 /* Name of first Frame and/or Browse and/or first Query                 */
-&Scoped-define FRAME-NAME Perdida-Frame
-&Scoped-define BROWSE-NAME BROWSE-15
-
-/* Internal Tables (found by Frame, Query & Browse Queries)             */
-&Scoped-define INTERNAL-TABLES STOCK PRODUCTO
-
-/* Definitions for BROWSE BROWSE-15                                     */
-&Scoped-define FIELDS-IN-QUERY-BROWSE-15 PRODUCTO.DESCRIPCION ~
-STOCK.CANTIDAD STOCK.F_CADUCIDAD 
-&Scoped-define ENABLED-FIELDS-IN-QUERY-BROWSE-15 
-&Scoped-define QUERY-STRING-BROWSE-15 FOR EACH STOCK ~
-      WHERE STOCK.F_CADUCIDAD > TODAY ~
- AND STOCK.CANTIDAD > 0 NO-LOCK, ~
-      EACH PRODUCTO WHERE PRODUCTO.ID_PRODUCTO = STOCK.ID_PRODUCTO NO-LOCK INDEXED-REPOSITION
-&Scoped-define OPEN-QUERY-BROWSE-15 OPEN QUERY BROWSE-15 FOR EACH STOCK ~
-      WHERE STOCK.F_CADUCIDAD > TODAY ~
- AND STOCK.CANTIDAD > 0 NO-LOCK, ~
-      EACH PRODUCTO WHERE PRODUCTO.ID_PRODUCTO = STOCK.ID_PRODUCTO NO-LOCK INDEXED-REPOSITION.
-&Scoped-define TABLES-IN-QUERY-BROWSE-15 STOCK PRODUCTO
-&Scoped-define FIRST-TABLE-IN-QUERY-BROWSE-15 STOCK
-&Scoped-define SECOND-TABLE-IN-QUERY-BROWSE-15 PRODUCTO
-
-
-/* Definitions for DIALOG-BOX Perdida-Frame                             */
-&Scoped-define OPEN-BROWSERS-IN-QUERY-Perdida-Frame ~
-    ~{&OPEN-QUERY-BROWSE-15}
+&Scoped-define FRAME-NAME Delete-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BROWSE-15 BUTTON-29 BUTTON-30 
+&Scoped-Define ENABLED-OBJECTS FILL-IN-31 BUTTON-31 FILL-IN-32 FILL-IN-33 ~
+BUTTON-32 FILL-IN-34 
+&Scoped-Define DISPLAYED-OBJECTS FILL-IN-31 FILL-IN-32 FILL-IN-33 ~
+FILL-IN-34 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -86,40 +64,45 @@ STOCK.CANTIDAD STOCK.F_CADUCIDAD
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
-DEFINE BUTTON BUTTON-29 
+DEFINE BUTTON BUTTON-31 
      LABEL "OK" 
-     SIZE 15 BY 1.91.
+     SIZE 15 BY 1.14.
 
-DEFINE BUTTON BUTTON-30 
+DEFINE BUTTON BUTTON-32 
      LABEL "Salir" 
-     SIZE 15 BY 1.91.
+     SIZE 15 BY 1.14.
 
-/* Query definitions                                                    */
-&ANALYZE-SUSPEND
-DEFINE QUERY BROWSE-15 FOR 
-      STOCK, 
-      PRODUCTO SCROLLING.
-&ANALYZE-RESUME
+DEFINE VARIABLE FILL-IN-31 AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Descripción" 
+     VIEW-AS FILL-IN 
+     SIZE 23.8 BY 1 NO-UNDO.
 
-/* Browse definitions                                                   */
-DEFINE BROWSE BROWSE-15
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-15 Perdida-Frame _STRUCTURED
-  QUERY BROWSE-15 NO-LOCK DISPLAY
-      PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 31.2
-      STOCK.CANTIDAD FORMAT "->,>>>,>>9":U
-      STOCK.F_CADUCIDAD FORMAT "99/99/99":U WIDTH 44.6
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 93 BY 8.57 EXPANDABLE.
+DEFINE VARIABLE FILL-IN-32 AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Cantidad" 
+     VIEW-AS FILL-IN 
+     SIZE 14 BY 1 NO-UNDO.
+
+DEFINE VARIABLE FILL-IN-33 AS DATE FORMAT "99/99/99":U INITIAL ? 
+     LABEL "Caducidad" 
+     VIEW-AS FILL-IN 
+     SIZE 14 BY 1 NO-UNDO.
+
+DEFINE VARIABLE FILL-IN-34 AS INTEGER FORMAT "->,>>>,>>9":U INITIAL 0 
+     LABEL "Cantidad a Eliminar" 
+     VIEW-AS FILL-IN 
+     SIZE 14 BY 1 NO-UNDO.
 
 
 /* ************************  Frame Definitions  *********************** */
 
-DEFINE FRAME Perdida-Frame
-     BROWSE-15 AT ROW 2.91 COL 11
-     BUTTON-29 AT ROW 2.91 COL 121
-     BUTTON-30 AT ROW 6.71 COL 121
-     SPACE(14.99) SKIP(4.94)
+DEFINE FRAME Delete-Frame
+     FILL-IN-31 AT ROW 1.95 COL 15.2 COLON-ALIGNED
+     BUTTON-31 AT ROW 2.91 COL 51
+     FILL-IN-32 AT ROW 3.86 COL 15.2 COLON-ALIGNED
+     FILL-IN-33 AT ROW 5.76 COL 15.2 COLON-ALIGNED
+     BUTTON-32 AT ROW 5.76 COL 51
+     FILL-IN-34 AT ROW 8.62 COL 25 COLON-ALIGNED
+     SPACE(32.99) SKIP(1.94)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "<insert dialog title>".
@@ -140,33 +123,22 @@ DEFINE FRAME Perdida-Frame
 /* ***********  Runtime Attributes and AppBuilder Settings  *********** */
 
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
-/* SETTINGS FOR DIALOG-BOX Perdida-Frame
+/* SETTINGS FOR DIALOG-BOX Delete-Frame
                                                                         */
-/* BROWSE-TAB BROWSE-15 1 Perdida-Frame */
 ASSIGN 
-       FRAME Perdida-Frame:SCROLLABLE       = FALSE
-       FRAME Perdida-Frame:HIDDEN           = TRUE.
+       FRAME Delete-Frame:SCROLLABLE       = FALSE
+       FRAME Delete-Frame:HIDDEN           = TRUE.
+
+ASSIGN 
+       FILL-IN-31:READ-ONLY IN FRAME Delete-Frame        = TRUE.
+
+ASSIGN 
+       FILL-IN-32:READ-ONLY IN FRAME Delete-Frame        = TRUE.
+
+ASSIGN 
+       FILL-IN-33:READ-ONLY IN FRAME Delete-Frame        = TRUE.
 
 /* _RUN-TIME-ATTRIBUTES-END */
-&ANALYZE-RESUME
-
-
-/* Setting information for Queries and Browse Widgets fields            */
-
-&ANALYZE-SUSPEND _QUERY-BLOCK BROWSE BROWSE-15
-/* Query rebuild information for BROWSE BROWSE-15
-     _TblList          = "Restaurante.STOCK,Restaurante.PRODUCTO WHERE Restaurante.STOCK ..."
-     _Options          = "NO-LOCK INDEXED-REPOSITION"
-     _Where[1]         = "STOCK.F_CADUCIDAD > TODAY
- AND STOCK.CANTIDAD > 0"
-     _JoinCode[2]      = "PRODUCTO.ID_PRODUCTO = STOCK.ID_PRODUCTO"
-     _FldNameList[1]   > Restaurante.PRODUCTO.DESCRIPCION
-"PRODUCTO.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "31.2" yes no no "U" "" ""
-     _FldNameList[2]   = Restaurante.STOCK.CANTIDAD
-     _FldNameList[3]   > Restaurante.STOCK.F_CADUCIDAD
-"STOCK.F_CADUCIDAD" ? ? "date" ? ? ? ? ? ? no ? no no "44.6" yes no no "U" "" ""
-     _Query            is OPENED
-*/  /* BROWSE BROWSE-15 */
 &ANALYZE-RESUME
 
  
@@ -175,9 +147,9 @@ ASSIGN
 
 /* ************************  Control Triggers  ************************ */
 
-&Scoped-define SELF-NAME Perdida-Frame
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Perdida-Frame Perdida-Frame
-ON WINDOW-CLOSE OF FRAME Perdida-Frame /* <insert dialog title> */
+&Scoped-define SELF-NAME Delete-Frame
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Delete-Frame Delete-Frame
+ON WINDOW-CLOSE OF FRAME Delete-Frame /* <insert dialog title> */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -186,33 +158,46 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME BUTTON-29
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-29 Perdida-Frame
-ON CHOOSE OF BUTTON-29 IN FRAME Perdida-Frame /* OK */
+&Scoped-define SELF-NAME BUTTON-31
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-31 Delete-Frame
+ON CHOOSE OF BUTTON-31 IN FRAME Delete-Frame /* OK */
 DO:
-  RUN Eliminar_Desperdicio.w(ROWID(producto),ROWID(stock)).
-  {&OPEN-query-BROWSE-15}
+DEF VAR vintCantidadActual AS INT.
+DEF VAR vintCantidadElimin AS INT.
+DEF VAR vintCantidad       AS INT.
+
+vintCantidadActual = INT(fill-in-32:SCREEN-VALUE).
+vintCantidadElimin = INT(fill-in-34:SCREEN-VALUE).
+  IF vintCantidadActual < vintCantidadElimin THEN DO:
+      MESSAGE "La cantidad eliminada es mayor a la del stock" VIEW-AS ALERT-BOX.
+      RETURN NO-APPLY.
+  END.
+  ELSE DO:
+   vintCantidad = vintCantidadActual - vintCantidadElimin.
+   ROWID(stock).
+   ASSIGN stock.cantidad = vintCantidad.
+   MESSAGE "Eliminado Correctamente" VIEW-AS ALERT-BOX.
+  END.
 END.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME BUTTON-30
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-30 Perdida-Frame
-ON CHOOSE OF BUTTON-30 IN FRAME Perdida-Frame /* Salir */
+&Scoped-define SELF-NAME BUTTON-32
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-32 Delete-Frame
+ON CHOOSE OF BUTTON-32 IN FRAME Delete-Frame /* Salir */
 DO:
-  APPLY "window-close" TO FRAME Perdida-Frame.
+  APPLY "window-close" TO FRAME Delete-Frame.
 END.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
 
-&Scoped-define BROWSE-NAME BROWSE-15
 &UNDEFINE SELF-NAME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Perdida-Frame 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Delete-Frame 
 
 
 /* ***************************  Main Block  *************************** */
@@ -228,6 +213,7 @@ MAIN-BLOCK:
 DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
    ON END-KEY UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK:
   RUN enable_UI.
+  RUN Eliminar_Desperdicio(inrowReg,inrowReg2).
   WAIT-FOR GO OF FRAME {&FRAME-NAME}.
 END.
 RUN disable_UI.
@@ -238,7 +224,7 @@ RUN disable_UI.
 
 /* **********************  Internal Procedures  *********************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Perdida-Frame  _DEFAULT-DISABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Delete-Frame  _DEFAULT-DISABLE
 PROCEDURE disable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     DISABLE the User Interface
@@ -249,13 +235,33 @@ PROCEDURE disable_UI :
                we are ready to "clean-up" after running.
 ------------------------------------------------------------------------------*/
   /* Hide all frames. */
-  HIDE FRAME Perdida-Frame.
+  HIDE FRAME Delete-Frame.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Perdida-Frame  _DEFAULT-ENABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE Eliminar_Desperdicio Delete-Frame 
+PROCEDURE Eliminar_Desperdicio :
+/*------------------------------------------------------------------------------
+  Purpose: Eliminar el sobrante del dia   
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+DEF INPUT PARAM inrowRec  AS ROWID.
+DEF INPUT PARAM inrowRec2 AS ROWID.
+
+ FIND Producto WHERE ROWID(producto) = inrowRec.
+  FILL-in-31:SCREEN-VALUE IN FRAME Delete-Frame = Producto.descripcion.
+ FIND stock WHERE ROWID(stock) = inrowRec2.
+  fill-in-32:SCREEN-VALUE = string(stock.cantidad).
+  fill-in-33:SCREEN-VALUE = string(stock.f_caducidad).
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Delete-Frame  _DEFAULT-ENABLE
 PROCEDURE enable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     ENABLE the User Interface
@@ -266,10 +272,12 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE BROWSE-15 BUTTON-29 BUTTON-30 
-      WITH FRAME Perdida-Frame.
-  VIEW FRAME Perdida-Frame.
-  {&OPEN-BROWSERS-IN-QUERY-Perdida-Frame}
+  DISPLAY FILL-IN-31 FILL-IN-32 FILL-IN-33 FILL-IN-34 
+      WITH FRAME Delete-Frame.
+  ENABLE FILL-IN-31 BUTTON-31 FILL-IN-32 FILL-IN-33 BUTTON-32 FILL-IN-34 
+      WITH FRAME Delete-Frame.
+  VIEW FRAME Delete-Frame.
+  {&OPEN-BROWSERS-IN-QUERY-Delete-Frame}
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

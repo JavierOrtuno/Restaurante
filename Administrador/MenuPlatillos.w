@@ -27,6 +27,7 @@
 
 /* ***************************  Definitions  ************************** */
 {Productos.i}
+{Platillos.i}
 /* Parameters Definitions ---                                           */
 
 /* Local Variable Definitions ---                                       */
@@ -51,7 +52,7 @@
 
 /* Definitions for BROWSE Bws_Platillos                                 */
 &Scoped-define FIELDS-IN-QUERY-Bws_Platillos MENU.CODIGO MENU.DESCRIPCION ~
-MENU.PRECIO STRING(MENU.ID_CLASIFICACION) 
+MENU.PRECIO getClasificacion(MENU.ID_CLASIFICACION) 
 &Scoped-define ENABLED-FIELDS-IN-QUERY-Bws_Platillos 
 &Scoped-define QUERY-STRING-Bws_Platillos FOR EACH MENU NO-LOCK INDEXED-REPOSITION
 &Scoped-define OPEN-QUERY-Bws_Platillos OPEN QUERY Bws_Platillos FOR EACH MENU NO-LOCK INDEXED-REPOSITION.
@@ -100,7 +101,7 @@ DEFINE BROWSE Bws_Platillos
       MENU.CODIGO FORMAT "X(10)":U WIDTH 11.2
       MENU.DESCRIPCION FORMAT "X(100)":U WIDTH 42.4
       MENU.PRECIO FORMAT "->>,>>9.99":U WIDTH 17.2
-      STRING(MENU.ID_CLASIFICACION) COLUMN-LABEL "CLASIFICACIÓN" FORMAT "X(20)":U
+      getClasificacion(MENU.ID_CLASIFICACION) COLUMN-LABEL "CLASIFICACIÓN" FORMAT "X(20)":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
     WITH NO-ROW-MARKERS SEPARATORS SIZE 104 BY 16.43 EXPANDABLE.
@@ -151,13 +152,13 @@ ASSIGN
      _TblList          = "Restaurante.MENU"
      _Options          = "NO-LOCK INDEXED-REPOSITION"
      _FldNameList[1]   > Restaurante.MENU.CODIGO
-"MENU.CODIGO" ? ? "character" ? ? ? ? ? ? no ? no no "11.2" yes no no "U" "" ""
+"CODIGO" ? ? "character" ? ? ? ? ? ? no ? no no "11.2" yes no no "U" "" ""
      _FldNameList[2]   > Restaurante.MENU.DESCRIPCION
-"MENU.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "42.4" yes no no "U" "" ""
+"DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "42.4" yes no no "U" "" ""
      _FldNameList[3]   > Restaurante.MENU.PRECIO
-"MENU.PRECIO" ? ? "decimal" ? ? ? ? ? ? no ? no no "17.2" yes no no "U" "" ""
+"PRECIO" ? ? "decimal" ? ? ? ? ? ? no ? no no "17.2" yes no no "U" "" ""
      _FldNameList[4]   > "_<CALC>"
-"STRING(MENU.ID_CLASIFICACION)" "CLASIFICACIÓN" "X(20)" ? ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
+"getClasificacion(MENU.ID_CLASIFICACION)" "CLASIFICACIÓN" "X(20)" ? ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE Bws_Platillos */
 &ANALYZE-RESUME

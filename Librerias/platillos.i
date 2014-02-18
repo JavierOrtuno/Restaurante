@@ -45,6 +45,17 @@ FUNCTION getCatClasificacion RETURNS CHARACTER
 
 &ENDIF
 
+&IF DEFINED(EXCLUDE-getClasificacion) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getClasificacion Method-Library 
+FUNCTION getClasificacion RETURNS CHARACTER
+    ( INPUT vintIdClasificacion AS INTEGER )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 &IF DEFINED(EXCLUDE-getCodigoPlatillo) = 0 &THEN
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getCodigoPlatillo Method-Library 
@@ -205,6 +216,25 @@ FUNCTION getCatClasificacion RETURNS CHARACTER
     END.    
 
     RETURN TRIM(vcharCatalogo, ",").
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
+&IF DEFINED(EXCLUDE-getClasificacion) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getClasificacion Method-Library 
+FUNCTION getClasificacion RETURNS CHARACTER
+    ( INPUT vintIdClasificacion AS INTEGER ) :
+    /*------------------------------------------------------------------------------
+        Purpose:  
+        Notes:  
+    ------------------------------------------------------------------------------*/
+    FIND FIRST CLASIFICACION WHERE CLASIFICACION.ID_CLASIFICACION = vintIdClasificacion.
+
+    RETURN CLASIFICACION.DESCRIPCION.
 END FUNCTION.
 
 /* _UIB-CODE-BLOCK-END */

@@ -56,15 +56,6 @@ FILL-IN-29 FILL-IN-30
 &ANALYZE-RESUME
 
 
-/* ************************  Function Prototypes ********************** */
-
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD Genera_Lote Insert-Frame 
-FUNCTION Genera_Lote RETURNS CHAR
-  ( vdtefecha AS DATE )  FORWARD.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
 
 /* ***********************  Control Definitions  ********************** */
 
@@ -132,6 +123,15 @@ DEFINE FRAME Insert-Frame
    Other Settings: COMPILE
  */
 &ANALYZE-RESUME _END-PROCEDURE-SETTINGS
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _INCLUDED-LIB Insert-Frame 
+/* ************************* Included-Libraries *********************** */
+
+{inventario.i}
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
 
 
 
@@ -302,43 +302,6 @@ DEF INPUT PARAM inrowRec AS ROWID.
   FILL-in-27:SCREEN-VALUE = Producto.descripcion.
   FILL-in-28:SCREEN-VALUE = string(producto.cant_minima).
 END PROCEDURE.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-/* ************************  Function Implementations ***************** */
-
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION Genera_Lote Insert-Frame 
-FUNCTION Genera_Lote RETURNS CHAR
-  ( vdtefecha AS DATE ) :
-/*------------------------------------------------------------------------------
-  Purpose:  
-    Notes:  
-------------------------------------------------------------------------------*/
-DEF VAR vchrlote AS CHAR.
-DEF VAR vintnumlote AS INT.
-DEF VAR vdteactual AS DATE.
-
-vdteactual = TODAY.
-FIND LAST stock WHERE f_ingreso = vdtefecha NO-LOCK NO-ERROR.
-IF AVAILABLE stock THEN DO:
-  vintnumlote = INT(SUBSTR (stock.lote,LENGTH(TRIM(stock.lote)) - 2)).
-  vintnumlote = vintnumlote + 1.
-  IF vintnumlote < 10 THEN
-    vchrlote = "00" + string(vintnumlote).
-  ELSE DO:
-     IF vintnumlote < 100 THEN
-         vchrlote = "0" + string(vintnumlote).
-     END.
-  vchrlote = "LT-" + STRING(MONTH(vdteactual)) + STRING(YEAR(vdteactual)) + vchrlote.
-END.
-ELSE DO:
-    vchrlote = "LT-" + STRING(MONTH(vdteactual)) + STRING(YEAR(vdteactual)) + "001".
-END.
-
-  RETURN vchrlote.   /* Function return value. */
-
-END FUNCTION.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME

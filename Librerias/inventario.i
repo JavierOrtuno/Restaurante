@@ -133,7 +133,20 @@ CASE vinttipo:
         END.
     END.
     WHEN 2 THEN DO:
-
+        FOR EACH stock WHERE id_producto = vintproducto AND f_caducidad < vdteactual AND cantidad > 0 BY f_caducidad BY cantidad.
+            IF cantidad >= vintcantidad THEN DO:
+                vinttotal = cantidad - vintcantidad.
+                ASSIGN stock.cantidad = vinttotal.
+                LEAVE.
+            END.
+            ELSE DO:
+                vintcantidad = vintcantidad - cantidad.
+                ASSIGN stock.cantidad = 0.
+                IF vintcantidad = 0 THEN DO:
+                    LEAVE.
+                END.
+            END.
+        END.
     END.
 END CASE.
   RETURN FALSE.   /* Function return value. */

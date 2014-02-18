@@ -56,6 +56,13 @@ FUNCTION CalcularTotal RETURNS DECIMAL
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD Sumatoria Include 
+FUNCTION Sumatoria RETURNS INTEGER
+  ( /* parameter-definitions */ )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
 
 /* *********************** Procedure Settings ************************ */
 
@@ -109,15 +116,23 @@ DEF INPUT PARAMETER inintCantidad AS INT.
 DEF OUTPUT PARAMETER outintProducto AS INT. 
 DEF OUTPUT PARAMETER outintCantidad AS INT.
 DEF OUTPUT PARAMETER outintUno AS INT.
+DEF VAR vintStock AS INT.
 
 FIND CURRENT MENU.
 
 FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = MENU.ID_Menu.
-        outintProducto = Ingrediente.ID_Producto.
-        outintCantidad = inintCantidad * Ingrediente.Cantidad.
-        outintUno = 1.
-        LEAVE.
+    FIND Stock WHERE Stock.ID_Producto = Ingrediente.ID_Producto AND Stock.F_Caducidad > TODAY.
+    IF (inintCantidad * Ingrediente.Cantidad) <= Sumatoria() 
+        THEN DO:
+            outintProducto = Stock.ID_Producto.
+            outintCantidad = inintCantidad.
+            outintUno = 1.
+             END.
+    ELSE
+        MESSAGE "No hay stock para competar venta" VIEW-AS ALERT-BOX.
 END.
+
+
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
@@ -239,7 +254,6 @@ FUNCTION CalcularSubtotal RETURNS DECIMAL
   Purpose:  
     Notes:  
 ------------------------------------------------------------------------------*/
-  DEF VAR vdecCuenta AS DEC.
 
   FIND CURRENT MENU.
   vdecCuenta = vdecCuenta + (vintCantidad * Menu.Precio).
@@ -264,6 +278,24 @@ FUNCTION CalcularTotal RETURNS DECIMAL
   vdecTotal = vdecSubtotal + vdecIVA.
 
   RETURN vdecTotal.   /* Function return value. */
+
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION Sumatoria Include 
+FUNCTION Sumatoria RETURNS INTEGER
+  ( /* parameter-definitions */ ) :
+/*------------------------------------------------------------------------------
+  Purpose:  
+    Notes:  
+------------------------------------------------------------------------------*/
+  DEF VAR vintStock AS INT.
+
+  vintStock = vintStock + Stock.Cantidad.
+
+  RETURN vintStock.   /* Function return value. */
 
 END FUNCTION.
 

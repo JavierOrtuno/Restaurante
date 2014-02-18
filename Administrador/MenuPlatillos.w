@@ -221,7 +221,7 @@ DO:
             DELETE INGREDIENTE. 
         END.       
         DELETE MENU.
-        
+        Bws_Platillos:DELETE-SELECTED-ROW(1).
     END.
 END.
 

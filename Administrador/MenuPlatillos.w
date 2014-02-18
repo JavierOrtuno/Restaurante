@@ -152,11 +152,11 @@ ASSIGN
      _TblList          = "Restaurante.MENU"
      _Options          = "NO-LOCK INDEXED-REPOSITION"
      _FldNameList[1]   > Restaurante.MENU.CODIGO
-"CODIGO" ? ? "character" ? ? ? ? ? ? no ? no no "11.2" yes no no "U" "" ""
+"MENU.CODIGO" ? ? "character" ? ? ? ? ? ? no ? no no "11.2" yes no no "U" "" ""
      _FldNameList[2]   > Restaurante.MENU.DESCRIPCION
-"DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "42.4" yes no no "U" "" ""
+"MENU.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "42.4" yes no no "U" "" ""
      _FldNameList[3]   > Restaurante.MENU.PRECIO
-"PRECIO" ? ? "decimal" ? ? ? ? ? ? no ? no no "17.2" yes no no "U" "" ""
+"MENU.PRECIO" ? ? "decimal" ? ? ? ? ? ? no ? no no "17.2" yes no no "U" "" ""
      _FldNameList[4]   > "_<CALC>"
 "getClasificacion(MENU.ID_CLASIFICACION)" "CLASIFICACIÓN" "X(20)" ? ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
      _Query            is OPENED

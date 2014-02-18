@@ -218,7 +218,6 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME Sel_Ingredientes
 &Scoped-define SELF-NAME Sel_Productos
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Sel_Productos Dlg_CreacionP
 ON MOUSE-SELECT-DBLCLICK OF Sel_Productos IN FRAME Dlg_CreacionP

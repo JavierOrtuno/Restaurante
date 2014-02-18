@@ -127,13 +127,27 @@ PROCEDURE addIngredientes :
     DEFINE INPUT PARAMETER pinCharIngredientes AS CHARACTER.
     DEFINE VARIABLE vintCount AS INTEGER.
     
-    DO vintCount = 1 TO NUM-ENTRIES(pinCharIngredientes, "|"):
+    IF NUM-ENTRIES(pinCharIngredientes, "|") > 1 THEN DO:
+    
+        DO vintCount = 1 TO NUM-ENTRIES(pinCharIngredientes, "|"):
+            CREATE INGREDIENTE.
+            ASSIGN 
+                INGREDIENTE.ID_INGREDIENTE = NEXT-VALUE(SEC_INGREDIENTE)
+                INGREDIENTE.CANTIDAD = INTEGER(ENTRY(1, ENTRY(vintCount, pinCharIngredientes, "|")))
+                INGREDIENTE.ID_MENU = pinIntMenu
+                INGREDIENTE.ID_PRODUCTO = INTEGER(ENTRY(2, ENTRY(vintCount, pinCharIngredientes, "|"))).
+        END.
+
+    END.
+    ELSE DO:
+        
         CREATE INGREDIENTE.
         ASSIGN 
             INGREDIENTE.ID_INGREDIENTE = NEXT-VALUE(SEC_INGREDIENTE)
-            INGREDIENTE.CANTIDAD = INTEGER(ENTRY(1, ENTRY(vintCount, pinCharIngredientes, "|")))
+            INGREDIENTE.CANTIDAD = INTEGER(ENTRY(1, pinCharIngredientes))
             INGREDIENTE.ID_MENU = pinIntMenu
-            INGREDIENTE.ID_PRODUCTO = INTEGER(ENTRY(2, ENTRY(vintCount, pinCharIngredientes, "|"))).
+            INGREDIENTE.ID_PRODUCTO = INTEGER(ENTRY(2, pinCharIngredientes)).
+
     END.
 
 END PROCEDURE.

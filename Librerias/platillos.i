@@ -183,7 +183,7 @@ PROCEDURE addPlatillo :
         MENU.DESCRIPCION = pinCharPlatillo
         MENU.PRECIO = pinDecPrecio
         MENU.ID_CLASIFICACION = pinIntClasificacion.   
-
+        
     RUN addIngredientes(vintIdMenu, pinCharIngredientes).
 
 END PROCEDURE.

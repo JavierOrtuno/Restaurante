@@ -178,7 +178,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Agregar Dlg_CreacionP
 ON CHOOSE OF Btn_Agregar IN FRAME Dlg_CreacionP /* Agregar */
 DO:    
-    DEFINE VARIABLE vcharIng AS CHARACTER.
+    DEFINE VARIABLE vcharIng AS CHARACTER INITIAL "".
 
     ASSIGN Fill_Descripcion Fill_Precio List_Clasificacion Sel_Ingredientes.
     IF validatePlatillo(Fill_Descripcion, DECIMAL(Fill_Precio), INTEGER(List_Clasificacion), Sel_Ingredientes:NUM-ITEMS) THEN DO:
@@ -190,7 +190,7 @@ DO:
                     STRING(Fill_Descripcion), 
                     DECIMAL(Fill_Precio),
                     INTEGER(List_Clasificacion),
-                    STRING(vcharIng)).
+                    STRING(TRIM(vcharIng))).
                 APPLY "WINDOW-CLOSE" TO FRAME Dlg_CreacionP.
             END.
             WHEN 2 THEN DO:
@@ -233,7 +233,7 @@ DO:
     IF LOOKUP (vcharId, Sel_Ingredientes:LIST-ITEM-PAIRS) = 0 THEN DO:
         RUN agregarCantidad(INTEGER(vcharId), OUTPUT vintCantidad, OUTPUT vcharUnidad).
         IF vintCantidad <> 0 THEN
-            RUN addIngredienteList(vcharId, vcharDesc + "/" + STRING(vintCantidad) + " " + vcharUnidad).
+            RUN addIngredienteList(vcharId, vcharDesc + "/" + STRING(vintCantidad) + "-" + vcharUnidad).
         ELSE
             MESSAGE "LA CANTIDAD DEBE SER MAYOR A CERO" VIEW-AS ALERT-BOX.
     END.
@@ -345,16 +345,16 @@ PROCEDURE getIngredientes :
     DEFINE VARIABLE vcharLista AS CHARACTER.
     
     vcharLista = Sel_Ingredientes:LIST-ITEM-PAIRS IN FRAME Dlg_CreacionP.    
-    
+    vcharLista = TRIM(vcharLista, ",").
     DO vintCount = 1 TO NUM-ENTRIES(vcharLista):        
-        IF isNumber(ENTRY(vintCount, vcharLista)) = TRUE THEN DO:
+        IF isNumber(TRIM(ENTRY(vintCount, vcharLista))) = TRUE THEN DO:
             poutCharIngredientes = poutCharIngredientes + 
-                ENTRY(vintCount, vcharLista) + "|".
+                TRIM(ENTRY(vintCount, vcharLista)) + "|".
         END.
         ELSE DO:
             IF LENGTH(TRIM(ENTRY(vintCount, vcharLista))) > 1 THEN DO:
                 poutCharIngredientes = poutCharIngredientes +
-                    TRIM(ENTRY(2, ENTRY(1, TRIM(ENTRY(vintCount, vcharLista)), " "), "~/")) + ",".
+                    TRIM(ENTRY(2, ENTRY(1, TRIM(ENTRY(vintCount, vcharLista)), "-"), "~/")) + ",".
             END.
         END.
     END.
@@ -379,7 +379,7 @@ PROCEDURE setInitial :
 
     vcharCatProductos = getCatProducto().
     ASSIGN Sel_Productos:LIST-ITEM-PAIRS IN FRAME {&FRAME-NAME} = vcharCatProductos.   
-
+    
     ASSIGN Sel_Ingredientes:LIST-ITEM-PAIRS = ",".   
     
     vcharCatClasif = getCatClasificacion().

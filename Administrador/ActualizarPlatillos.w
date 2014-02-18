@@ -104,12 +104,12 @@ DEFINE VARIABLE Fill_Precio AS DECIMAL FORMAT "->>,>>9.99":U INITIAL 0
 
 DEFINE VARIABLE Sel_Ingredientes AS CHARACTER 
      VIEW-AS SELECTION-LIST SINGLE SCROLLBAR-VERTICAL 
-     LIST-ITEM-PAIRS "","" 
+     LIST-ITEM-PAIRS "0","0" 
      SIZE 38 BY 4.76 NO-UNDO.
 
 DEFINE VARIABLE Sel_Productos AS CHARACTER 
      VIEW-AS SELECTION-LIST SINGLE SCROLLBAR-VERTICAL 
-     LIST-ITEM-PAIRS "","" 
+     LIST-ITEM-PAIRS "0","0" 
      SIZE 42 BY 20.24 NO-UNDO.
 
 
@@ -182,7 +182,8 @@ DO:
 
     ASSIGN Fill_Descripcion Fill_Precio List_Clasificacion Sel_Ingredientes.
     IF validatePlatillo(Fill_Descripcion, DECIMAL(Fill_Precio), INTEGER(List_Clasificacion), Sel_Ingredientes:NUM-ITEMS) THEN DO:
-        RUN getIngredientes(OUTPUT vcharIng).
+        RUN getIngredientes(OUTPUT vcharIng).     
+        
         CASE pinIntAction:
             WHEN 1 THEN DO:
                 RUN addPlatillo(
@@ -190,6 +191,7 @@ DO:
                     DECIMAL(Fill_Precio),
                     INTEGER(List_Clasificacion),
                     STRING(vcharIng)).
+                APPLY "WINDOW-CLOSE" TO FRAME Dlg_CreacionP.
             END.
             WHEN 2 THEN DO:
                 RUN updatePlatillo.
@@ -216,18 +218,25 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Sel_Ingredientes
 &Scoped-define SELF-NAME Sel_Productos
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Sel_Productos Dlg_CreacionP
 ON MOUSE-SELECT-DBLCLICK OF Sel_Productos IN FRAME Dlg_CreacionP
 DO:
     DEFINE VARIABLE vcharId AS CHARACTER.
+    DEFINE VARIABLE vintCantidad AS INTEGER.
     DEFINE VARIABLE vcharDesc AS CHARACTER.
+    DEFINE VARIABLE vcharUnidad AS CHARACTER.
 
     vcharId = Sel_Productos:SCREEN-VALUE.
     vcharDesc = getDescProducto(INTEGER(vcharId)).
     
     IF LOOKUP (vcharId, Sel_Ingredientes:LIST-ITEM-PAIRS) = 0 THEN DO:
-        RUN addIngredienteList(vcharId, vcharDesc).
+        RUN agregarCantidad(INTEGER(vcharId), OUTPUT vintCantidad, OUTPUT vcharUnidad).
+        IF vintCantidad <> 0 THEN
+            RUN addIngredienteList(vcharId, vcharDesc + "/" + STRING(vintCantidad) + " " + vcharUnidad).
+        ELSE
+            MESSAGE "LA CANTIDAD DEBE SER MAYOR A CERO" VIEW-AS ALERT-BOX.
     END.
     ELSE DO:
         MESSAGE "YA HA AGREGADO ESE INGREDIENTE" VIEW-AS ALERT-BOX.
@@ -336,14 +345,23 @@ PROCEDURE getIngredientes :
     DEFINE VARIABLE vintCount AS INTEGER.
     DEFINE VARIABLE vcharLista AS CHARACTER.
     
-    vcharLista = Sel_Ingredientes:LIST-ITEM-PAIRS IN FRAME Dlg_CreacionP.
-
-    DO vintCount = 1 TO NUM-ENTRIES(vcharLista):
-        IF isNumber(ENTRY(vintCount, vcharLista)) THEN DO:
-            poutCharIngredientes = poutCharIngredientes + ENTRY(vintCount, vcharLista) + ",".
+    vcharLista = Sel_Ingredientes:LIST-ITEM-PAIRS IN FRAME Dlg_CreacionP.    
+    
+    DO vintCount = 1 TO NUM-ENTRIES(vcharLista):        
+        IF isNumber(ENTRY(vintCount, vcharLista)) = TRUE THEN DO:
+            poutCharIngredientes = poutCharIngredientes + 
+                ENTRY(vintCount, vcharLista) + "|".
+        END.
+        ELSE DO:
+            IF LENGTH(TRIM(ENTRY(vintCount, vcharLista))) > 1 THEN DO:
+                poutCharIngredientes = poutCharIngredientes +
+                    TRIM(ENTRY(2, ENTRY(1, TRIM(ENTRY(vintCount, vcharLista)), " "), "~/")) + ",".
+            END.
         END.
     END.
+    
     poutCharIngredientes = TRIM(poutCharIngredientes, ",").
+    poutCharIngredientes = TRIM(poutCharIngredientes, "|").
     
 END PROCEDURE.
 
@@ -361,7 +379,9 @@ PROCEDURE setInitial :
     DEFINE VARIABLE vcharCatClasif AS CHARACTER.
 
     vcharCatProductos = getCatProducto().
-    ASSIGN Sel_Productos:LIST-ITEM-PAIRS IN FRAME {&FRAME-NAME} = vcharCatProductos.
+    ASSIGN Sel_Productos:LIST-ITEM-PAIRS IN FRAME {&FRAME-NAME} = vcharCatProductos.   
+
+    ASSIGN Sel_Ingredientes:LIST-ITEM-PAIRS = ",".   
     
     vcharCatClasif = getCatClasificacion().
     ASSIGN List_Clasificacion:LIST-ITEM-PAIRS = vcharCatClasif.

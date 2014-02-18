@@ -1,11 +1,8 @@
 &ANALYZE-SUSPEND _VERSION-NUMBER UIB_v9r12 GUI
 &ANALYZE-RESUME
-/* Connected Databases 
-          restaurante      PROGRESS
-*/
 &Scoped-define WINDOW-NAME CURRENT-WINDOW
-&Scoped-define FRAME-NAME Dlg_Platillos
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Dlg_Platillos 
+&Scoped-define FRAME-NAME Dlg_Cantidad
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Dlg_Cantidad 
 /*------------------------------------------------------------------------
 
   File: 
@@ -26,9 +23,11 @@
 /*----------------------------------------------------------------------*/
 
 /* ***************************  Definitions  ************************** */
-{Productos.i}
-/* Parameters Definitions ---                                           */
 
+/* Parameters Definitions ---                                           */
+DEFINE INPUT PARAMETER pinIntId AS INTEGER.
+DEFINE OUTPUT PARAMETER poutIntCantidad AS INTEGER.
+DEFINE OUTPUT PARAMETER poutCharUnidad AS CHARACTER.
 /* Local Variable Definitions ---                                       */
 
 /* _UIB-CODE-BLOCK-END */
@@ -43,28 +42,11 @@
 &Scoped-define DB-AWARE no
 
 /* Name of first Frame and/or Browse and/or first Query                 */
-&Scoped-define FRAME-NAME Dlg_Platillos
-&Scoped-define BROWSE-NAME Bws_Platillos
-
-/* Internal Tables (found by Frame, Query & Browse Queries)             */
-&Scoped-define INTERNAL-TABLES MENU
-
-/* Definitions for BROWSE Bws_Platillos                                 */
-&Scoped-define FIELDS-IN-QUERY-Bws_Platillos MENU.CODIGO MENU.DESCRIPCION ~
-MENU.PRECIO STRING(MENU.ID_CLASIFICACION) 
-&Scoped-define ENABLED-FIELDS-IN-QUERY-Bws_Platillos 
-&Scoped-define QUERY-STRING-Bws_Platillos FOR EACH MENU NO-LOCK INDEXED-REPOSITION
-&Scoped-define OPEN-QUERY-Bws_Platillos OPEN QUERY Bws_Platillos FOR EACH MENU NO-LOCK INDEXED-REPOSITION.
-&Scoped-define TABLES-IN-QUERY-Bws_Platillos MENU
-&Scoped-define FIRST-TABLE-IN-QUERY-Bws_Platillos MENU
-
-
-/* Definitions for DIALOG-BOX Dlg_Platillos                             */
-&Scoped-define OPEN-BROWSERS-IN-QUERY-Dlg_Platillos ~
-    ~{&OPEN-QUERY-Bws_Platillos}
+&Scoped-define FRAME-NAME Dlg_Cantidad
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Bws_Platillos Btn_Agregar Btn_Salir 
+&Scoped-Define ENABLED-OBJECTS Fill_Cantidad Btn_Agregar 
+&Scoped-Define DISPLAYED-OBJECTS Fill_Cantidad Fill_Unidad 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -83,39 +65,26 @@ DEFINE BUTTON Btn_Agregar
      LABEL "Agregar" 
      SIZE 20 BY 2.52.
 
-DEFINE BUTTON Btn_Salir 
-     LABEL "Salir" 
-     SIZE 20 BY 2.52.
+DEFINE VARIABLE Fill_Cantidad AS INTEGER FORMAT "->,>>>,>>9":U INITIAL 0 
+     LABEL "Cantidad" 
+     VIEW-AS FILL-IN 
+     SIZE 14 BY 1 NO-UNDO.
 
-/* Query definitions                                                    */
-&ANALYZE-SUSPEND
-DEFINE QUERY Bws_Platillos FOR 
-      MENU SCROLLING.
-&ANALYZE-RESUME
-
-/* Browse definitions                                                   */
-DEFINE BROWSE Bws_Platillos
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS Bws_Platillos Dlg_Platillos _STRUCTURED
-  QUERY Bws_Platillos NO-LOCK DISPLAY
-      MENU.CODIGO FORMAT "X(10)":U WIDTH 11.2
-      MENU.DESCRIPCION FORMAT "X(100)":U WIDTH 42.4
-      MENU.PRECIO FORMAT "->>,>>9.99":U WIDTH 17.2
-      STRING(MENU.ID_CLASIFICACION) COLUMN-LABEL "CLASIFICACIÓN" FORMAT "X(20)":U
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 104 BY 16.43 EXPANDABLE.
+DEFINE VARIABLE Fill_Unidad AS CHARACTER FORMAT "X(256)":U 
+     VIEW-AS FILL-IN 
+     SIZE 12.8 BY 1 NO-UNDO.
 
 
 /* ************************  Frame Definitions  *********************** */
 
-DEFINE FRAME Dlg_Platillos
-     Bws_Platillos AT ROW 2.52 COL 7
-     Btn_Agregar AT ROW 4.81 COL 117
-     Btn_Salir AT ROW 8.62 COL 117
-     SPACE(5.59) SKIP(9.71)
+DEFINE FRAME Dlg_Cantidad
+     Fill_Cantidad AT ROW 2.81 COL 10 COLON-ALIGNED
+     Fill_Unidad AT ROW 2.81 COL 24.2 COLON-ALIGNED NO-LABEL
+     Btn_Agregar AT ROW 5.43 COL 11
+     SPACE(8.99) SKIP(0.52)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "Platillos".
+         TITLE "Cantidad".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -133,33 +102,15 @@ DEFINE FRAME Dlg_Platillos
 /* ***********  Runtime Attributes and AppBuilder Settings  *********** */
 
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
-/* SETTINGS FOR DIALOG-BOX Dlg_Platillos
+/* SETTINGS FOR DIALOG-BOX Dlg_Cantidad
                                                                         */
-/* BROWSE-TAB Bws_Platillos 1 Dlg_Platillos */
 ASSIGN 
-       FRAME Dlg_Platillos:SCROLLABLE       = FALSE
-       FRAME Dlg_Platillos:HIDDEN           = TRUE.
+       FRAME Dlg_Cantidad:SCROLLABLE       = FALSE
+       FRAME Dlg_Cantidad:HIDDEN           = TRUE.
 
+/* SETTINGS FOR FILL-IN Fill_Unidad IN FRAME Dlg_Cantidad
+   NO-ENABLE                                                            */
 /* _RUN-TIME-ATTRIBUTES-END */
-&ANALYZE-RESUME
-
-
-/* Setting information for Queries and Browse Widgets fields            */
-
-&ANALYZE-SUSPEND _QUERY-BLOCK BROWSE Bws_Platillos
-/* Query rebuild information for BROWSE Bws_Platillos
-     _TblList          = "Restaurante.MENU"
-     _Options          = "NO-LOCK INDEXED-REPOSITION"
-     _FldNameList[1]   > Restaurante.MENU.CODIGO
-"MENU.CODIGO" ? ? "character" ? ? ? ? ? ? no ? no no "11.2" yes no no "U" "" ""
-     _FldNameList[2]   > Restaurante.MENU.DESCRIPCION
-"MENU.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "42.4" yes no no "U" "" ""
-     _FldNameList[3]   > Restaurante.MENU.PRECIO
-"MENU.PRECIO" ? ? "decimal" ? ? ? ? ? ? no ? no no "17.2" yes no no "U" "" ""
-     _FldNameList[4]   > "_<CALC>"
-"STRING(MENU.ID_CLASIFICACION)" "CLASIFICACIÓN" "X(20)" ? ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
-     _Query            is OPENED
-*/  /* BROWSE Bws_Platillos */
 &ANALYZE-RESUME
 
  
@@ -168,9 +119,9 @@ ASSIGN
 
 /* ************************  Control Triggers  ************************ */
 
-&Scoped-define SELF-NAME Dlg_Platillos
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dlg_Platillos Dlg_Platillos
-ON WINDOW-CLOSE OF FRAME Dlg_Platillos /* Platillos */
+&Scoped-define SELF-NAME Dlg_Cantidad
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dlg_Cantidad Dlg_Cantidad
+ON WINDOW-CLOSE OF FRAME Dlg_Cantidad /* Cantidad */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -180,32 +131,20 @@ END.
 
 
 &Scoped-define SELF-NAME Btn_Agregar
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Agregar Dlg_Platillos
-ON CHOOSE OF Btn_Agregar IN FRAME Dlg_Platillos /* Agregar */
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Agregar Dlg_Cantidad
+ON CHOOSE OF Btn_Agregar IN FRAME Dlg_Cantidad /* Agregar */
 DO:
-    RUN ActualizarPlatillos.w(1, ?).
-    {&OPEN-QUERY-Bws_Platillos}
+    poutIntCantidad  = INTEGER(Fill_Cantidad:SCREEN-VALUE).
+    APPLY "WINDOW-CLOSE" TO FRAME Dlg_Cantidad.
 END.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME Btn_Salir
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Salir Dlg_Platillos
-ON CHOOSE OF Btn_Salir IN FRAME Dlg_Platillos /* Salir */
-DO:
-    APPLY "WINDOW-CLOSE" TO FRAME Dlg_Platillos.
-END.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-
-&Scoped-define BROWSE-NAME Bws_Platillos
 &UNDEFINE SELF-NAME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dlg_Platillos 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dlg_Cantidad 
 
 
 /* ***************************  Main Block  *************************** */
@@ -221,6 +160,7 @@ MAIN-BLOCK:
 DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
    ON END-KEY UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK:
   RUN enable_UI.
+  RUN setUnidad.
   WAIT-FOR GO OF FRAME {&FRAME-NAME}.
 END.
 RUN disable_UI.
@@ -231,7 +171,7 @@ RUN disable_UI.
 
 /* **********************  Internal Procedures  *********************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Dlg_Platillos  _DEFAULT-DISABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Dlg_Cantidad  _DEFAULT-DISABLE
 PROCEDURE disable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     DISABLE the User Interface
@@ -242,13 +182,13 @@ PROCEDURE disable_UI :
                we are ready to "clean-up" after running.
 ------------------------------------------------------------------------------*/
   /* Hide all frames. */
-  HIDE FRAME Dlg_Platillos.
+  HIDE FRAME Dlg_Cantidad.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Dlg_Platillos  _DEFAULT-ENABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Dlg_Cantidad  _DEFAULT-ENABLE
 PROCEDURE enable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     ENABLE the User Interface
@@ -259,10 +199,29 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Bws_Platillos Btn_Agregar Btn_Salir 
-      WITH FRAME Dlg_Platillos.
-  VIEW FRAME Dlg_Platillos.
-  {&OPEN-BROWSERS-IN-QUERY-Dlg_Platillos}
+  DISPLAY Fill_Cantidad Fill_Unidad 
+      WITH FRAME Dlg_Cantidad.
+  ENABLE Fill_Cantidad Btn_Agregar 
+      WITH FRAME Dlg_Cantidad.
+  VIEW FRAME Dlg_Cantidad.
+  {&OPEN-BROWSERS-IN-QUERY-Dlg_Cantidad}
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE setUnidad Dlg_Cantidad 
+PROCEDURE setUnidad :
+/*------------------------------------------------------------------------------
+        Purpose:     
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    FIND FIRST PRODUCTO WHERE PRODUCTO.ID_PRODUCTO = pinIntId.
+    FIND FIRST UNIDAD_MEDIDA WHERE UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD.
+    Fill_Unidad:SCREEN-VALUE IN FRAME {&FRAME-NAME} = UNIDAD_MEDIDA.DESCRIPCION.
+    poutCharUnidad = UNIDAD_MEDIDA.DESCRIPCION.
+
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

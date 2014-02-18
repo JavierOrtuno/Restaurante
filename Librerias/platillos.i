@@ -115,15 +115,14 @@ PROCEDURE addIngredientes :
     DEFINE INPUT PARAMETER pinIntMenu AS INTEGER.
     DEFINE INPUT PARAMETER pinCharIngredientes AS CHARACTER.
     DEFINE VARIABLE vintCount AS INTEGER.
-    MESSAGE pinCharIngredientes VIEW-AS ALERT-BOX.
-    DO vintCount = 1 TO NUM-ENTRIES(pinCharIngredientes):
+    
+    DO vintCount = 1 TO NUM-ENTRIES(pinCharIngredientes, "|"):
         CREATE INGREDIENTE.
         ASSIGN 
             INGREDIENTE.ID_INGREDIENTE = NEXT-VALUE(SEC_INGREDIENTE)
-            INGREDIENTE.CANTIDAD = 0
+            INGREDIENTE.CANTIDAD = INTEGER(ENTRY(1, ENTRY(vintCount, pinCharIngredientes, "|")))
             INGREDIENTE.ID_MENU = pinIntMenu
-            INGREDIENTE.ID_PRODUCTO = INTEGER(ENTRY(vintCount, pinCharIngredientes)). 
-        MESSAGE ENTRY(vintCount, pinCharIngredientes) VIEW-AS ALERT-BOX.
+            INGREDIENTE.ID_PRODUCTO = INTEGER(ENTRY(2, ENTRY(vintCount, pinCharIngredientes, "|"))).
     END.
 
 END PROCEDURE.

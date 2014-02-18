@@ -231,7 +231,7 @@ DO:
     vcharDesc = getDescProducto(INTEGER(vcharId)).
     
     IF LOOKUP (vcharId, Sel_Ingredientes:LIST-ITEM-PAIRS) = 0 THEN DO:
-        RUN agregarCantidad(INTEGER(vcharId), OUTPUT vintCantidad, OUTPUT vcharUnidad).
+        RUN agregarCantidad.w(INTEGER(vcharId), OUTPUT vintCantidad, OUTPUT vcharUnidad).
         IF vintCantidad <> 0 THEN
             RUN addIngredienteList(vcharId, vcharDesc + "/" + STRING(vintCantidad) + "-" + vcharUnidad).
         ELSE

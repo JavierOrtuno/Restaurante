@@ -100,3 +100,8 @@
 09:25:59 Inicio de la Fase de Physical Redo en 0 . (5326)
 09:25:59 Fase Física del "Redo" Terminada en blq 38 off 6392 act 0. (7161)
 12:36:00 Fin de sesión Single-user. (334)
+
+                Tue Feb 18 12:37:17 2014
+12:37:17 Single-user comienza sesión userpc en CON:. (451)
+12:37:17 Inicio de la Fase de Physical Redo en 0 . (5326)
+12:37:17 Fase Física del "Redo" Terminada en blq 39 off 4027 act 0. (7161)

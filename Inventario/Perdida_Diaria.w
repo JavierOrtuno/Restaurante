@@ -1,5 +1,8 @@
 &ANALYZE-SUSPEND _VERSION-NUMBER UIB_v9r12 GUI
 &ANALYZE-RESUME
+/* Connected Databases 
+          restaurante      PROGRESS
+*/
 &Scoped-define WINDOW-NAME CURRENT-WINDOW
 &Scoped-define FRAME-NAME Dialog-Frame
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Dialog-Frame 
@@ -41,9 +44,30 @@
 
 /* Name of first Frame and/or Browse and/or first Query                 */
 &Scoped-define FRAME-NAME Dialog-Frame
+&Scoped-define BROWSE-NAME BROWSE-15
+
+/* Internal Tables (found by Frame, Query & Browse Queries)             */
+&Scoped-define INTERNAL-TABLES STOCK PRODUCTO
+
+/* Definitions for BROWSE BROWSE-15                                     */
+&Scoped-define FIELDS-IN-QUERY-BROWSE-15 PRODUCTO.DESCRIPCION ~
+STOCK.CANTIDAD STOCK.F_CADUCIDAD 
+&Scoped-define ENABLED-FIELDS-IN-QUERY-BROWSE-15 
+&Scoped-define QUERY-STRING-BROWSE-15 FOR EACH STOCK NO-LOCK, ~
+      EACH PRODUCTO WHERE PRODUCTO.ID_PRODUCTO = STOCK.ID_PRODUCTO NO-LOCK INDEXED-REPOSITION
+&Scoped-define OPEN-QUERY-BROWSE-15 OPEN QUERY BROWSE-15 FOR EACH STOCK NO-LOCK, ~
+      EACH PRODUCTO WHERE PRODUCTO.ID_PRODUCTO = STOCK.ID_PRODUCTO NO-LOCK INDEXED-REPOSITION.
+&Scoped-define TABLES-IN-QUERY-BROWSE-15 STOCK PRODUCTO
+&Scoped-define FIRST-TABLE-IN-QUERY-BROWSE-15 STOCK
+&Scoped-define SECOND-TABLE-IN-QUERY-BROWSE-15 PRODUCTO
+
+
+/* Definitions for DIALOG-BOX Dialog-Frame                              */
+&Scoped-define OPEN-BROWSERS-IN-QUERY-Dialog-Frame ~
+    ~{&OPEN-QUERY-BROWSE-15}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BUTTON-27 BUTTON-28 
+&Scoped-Define ENABLED-OBJECTS BROWSE-15 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -58,21 +82,30 @@
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
-DEFINE BUTTON BUTTON-27 
-     LABEL "Diario" 
-     SIZE 31 BY 5.71.
+/* Query definitions                                                    */
+&ANALYZE-SUSPEND
+DEFINE QUERY BROWSE-15 FOR 
+      STOCK, 
+      PRODUCTO SCROLLING.
+&ANALYZE-RESUME
 
-DEFINE BUTTON BUTTON-28 
-     LABEL "Caducado" 
-     SIZE 31 BY 5.71.
+/* Browse definitions                                                   */
+DEFINE BROWSE BROWSE-15
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-15 Dialog-Frame _STRUCTURED
+  QUERY BROWSE-15 NO-LOCK DISPLAY
+      PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 31.2
+      STOCK.CANTIDAD FORMAT "->,>>>,>>9":U
+      STOCK.F_CADUCIDAD FORMAT "99/99/99":U WIDTH 44.6
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 93 BY 8.57 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
-     BUTTON-27 AT ROW 3.86 COL 11
-     BUTTON-28 AT ROW 3.86 COL 71
-     SPACE(9.19) SKIP(2.99)
+     BROWSE-15 AT ROW 2.91 COL 11
+     SPACE(99.19) SKIP(2.08)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "<insert dialog title>".
@@ -95,11 +128,29 @@ DEFINE FRAME Dialog-Frame
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR DIALOG-BOX Dialog-Frame
                                                                         */
+/* BROWSE-TAB BROWSE-15 1 Dialog-Frame */
 ASSIGN 
        FRAME Dialog-Frame:SCROLLABLE       = FALSE
        FRAME Dialog-Frame:HIDDEN           = TRUE.
 
 /* _RUN-TIME-ATTRIBUTES-END */
+&ANALYZE-RESUME
+
+
+/* Setting information for Queries and Browse Widgets fields            */
+
+&ANALYZE-SUSPEND _QUERY-BLOCK BROWSE BROWSE-15
+/* Query rebuild information for BROWSE BROWSE-15
+     _TblList          = "Restaurante.STOCK,Restaurante.PRODUCTO WHERE Restaurante.STOCK ..."
+     _Options          = "NO-LOCK INDEXED-REPOSITION"
+     _JoinCode[2]      = "PRODUCTO.ID_PRODUCTO = STOCK.ID_PRODUCTO"
+     _FldNameList[1]   > Restaurante.PRODUCTO.DESCRIPCION
+"PRODUCTO.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "31.2" yes no no "U" "" ""
+     _FldNameList[2]   = Restaurante.STOCK.CANTIDAD
+     _FldNameList[3]   > Restaurante.STOCK.F_CADUCIDAD
+"STOCK.F_CADUCIDAD" ? ? "date" ? ? ? ? ? ? no ? no no "44.6" yes no no "U" "" ""
+     _Query            is OPENED
+*/  /* BROWSE BROWSE-15 */
 &ANALYZE-RESUME
 
  
@@ -119,6 +170,7 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define BROWSE-NAME BROWSE-15
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dialog-Frame 
@@ -175,7 +227,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE BUTTON-27 BUTTON-28 
+  ENABLE BROWSE-15 
       WITH FRAME Dialog-Frame.
   VIEW FRAME Dialog-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}

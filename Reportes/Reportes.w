@@ -23,7 +23,7 @@
 /*----------------------------------------------------------------------*/
 
 /* ***************************  Definitions  ************************** */
-
+{reportes.i}
 /* Parameters Definitions ---                                           */
 
 /* Local Variable Definitions ---                                       */
@@ -43,7 +43,8 @@
 &Scoped-define FRAME-NAME Dialog-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Btn_OK Btn_Cancel Btn_Help 
+&Scoped-Define ENABLED-OBJECTS Edit_File Btn_Menu 
+&Scoped-Define DISPLAYED-OBJECTS Edit_File 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -58,33 +59,24 @@
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
-DEFINE BUTTON Btn_Cancel AUTO-END-KEY 
-     LABEL "Cancel" 
-     SIZE 15 BY 1.14
-     BGCOLOR 8 .
+DEFINE BUTTON Btn_Menu 
+     LABEL "Generar Menú" 
+     SIZE 20 BY 2.5.
 
-DEFINE BUTTON Btn_Help 
-     LABEL "&Help" 
-     SIZE 15 BY 1.14
-     BGCOLOR 8 .
-
-DEFINE BUTTON Btn_OK AUTO-GO 
-     LABEL "OK" 
-     SIZE 15 BY 1.14
-     BGCOLOR 8 .
+DEFINE VARIABLE Edit_File AS CHARACTER 
+     VIEW-AS EDITOR NO-WORD-WRAP SCROLLBAR-HORIZONTAL SCROLLBAR-VERTICAL
+     SIZE 62 BY 20.95 NO-UNDO.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
-     Btn_OK AT ROW 1.52 COL 49
-     Btn_Cancel AT ROW 2.76 COL 49
-     Btn_Help AT ROW 4.76 COL 49
-     SPACE(1.13) SKIP(6.38)
+     Edit_File AT ROW 2.19 COL 5 NO-LABEL
+     Btn_Menu AT ROW 3.62 COL 82
+     SPACE(84.79) SKIP(20.20)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "<insert dialog title>"
-         DEFAULT-BUTTON Btn_OK CANCEL-BUTTON Btn_Cancel.
+         TITLE "<insert dialog title>".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -128,12 +120,11 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME Btn_Help
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Help Dialog-Frame
-ON CHOOSE OF Btn_Help IN FRAME Dialog-Frame /* Help */
-OR HELP OF FRAME {&FRAME-NAME}
-DO: /* Call Help Function (or a simple message). */
-  MESSAGE "Help for File: {&FILE-NAME}" VIEW-AS ALERT-BOX INFORMATION.
+&Scoped-define SELF-NAME Btn_Menu
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Menu Dialog-Frame
+ON CHOOSE OF Btn_Menu IN FRAME Dialog-Frame /* Generar Menú */
+DO:
+    RUN generarMenu.  
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -196,10 +187,43 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Btn_OK Btn_Cancel Btn_Help 
+  DISPLAY Edit_File 
+      WITH FRAME Dialog-Frame.
+  ENABLE Edit_File Btn_Menu 
       WITH FRAME Dialog-Frame.
   VIEW FRAME Dialog-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE generarMenu Dialog-Frame 
+PROCEDURE generarMenu :
+/*------------------------------------------------------------------------------
+        Purpose:     
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vintCursor AS INTEGER.
+    DEFINE VARIABLE vcharFile AS CHARACTER.
+    DEFINE VARIABLE vcharTexto AS CHARACTER.    
+    DEFINE VARIABLE vcharOut AS CHARACTER.
+
+    vcharFile = "C:\Users\Javier Orduño\Documents\GitHub\Restaurante\Reportes\menu.html".
+    Edit_File:INSERT-FILE(vcharFile) IN FRAME Dialog-Frame.
+    vcharTexto = Edit_File:SCREEN-VALUE.
+        
+    DO vintCursor = 1 TO NUM-ENTRIES(vcharTexto, "~n"):        
+        IF LENGTH(TRIM(ENTRY(vintCursor, vcharTexto, "~n"))) > 0 THEN DO:
+            vcharOut = vcharOut + ENTRY(vintCursor, vcharTexto, "~n") + "~n".
+        END.
+        ELSE DO:
+            vcharOut = vcharOut + getReporteMenu() + "~n".
+        END.
+    END.
+    ASSIGN Edit_File:SCREEN-VALUE = vcharOut.
+
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

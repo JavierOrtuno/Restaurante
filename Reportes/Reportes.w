@@ -27,6 +27,7 @@
 /* Parameters Definitions ---                                           */
 
 /* Local Variable Definitions ---                                       */
+DEFINE STREAM outFile.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -43,7 +44,7 @@
 &Scoped-define FRAME-NAME Dialog-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Edit_File Btn_Menu 
+&Scoped-Define ENABLED-OBJECTS Btn_Menu 
 &Scoped-Define DISPLAYED-OBJECTS Edit_File 
 
 /* Custom List Definitions                                              */
@@ -100,6 +101,11 @@ ASSIGN
        FRAME Dialog-Frame:SCROLLABLE       = FALSE
        FRAME Dialog-Frame:HIDDEN           = TRUE.
 
+/* SETTINGS FOR EDITOR Edit_File IN FRAME Dialog-Frame
+   NO-ENABLE                                                            */
+ASSIGN 
+       Edit_File:HIDDEN IN FRAME Dialog-Frame           = TRUE.
+
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
 
@@ -124,7 +130,18 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Menu Dialog-Frame
 ON CHOOSE OF Btn_Menu IN FRAME Dialog-Frame /* Generar Menú */
 DO:
-    RUN generarMenu.  
+    DEFINE VARIABLE vcharFileName AS CHARACTER.
+
+    SYSTEM-DIALOG 
+        GET-FILE vcharFileName 
+        TITLE "Guardar Archivo ..." 
+        FILTERS "Archivos (*.html)"   "*.html" 
+        SAVE-AS.
+
+    RUN generarMenu.
+
+    OUTPUT STREAM outFile TO VALUE(vcharFileName + ".html") APPEND.
+    PUT STREAM outFile UNFORMATTED Edit_File:SCREEN-VALUE.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -189,7 +206,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY Edit_File 
       WITH FRAME Dialog-Frame.
-  ENABLE Edit_File Btn_Menu 
+  ENABLE Btn_Menu 
       WITH FRAME Dialog-Frame.
   VIEW FRAME Dialog-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}
@@ -204,11 +221,11 @@ PROCEDURE generarMenu :
         Purpose:     
         Parameters:  <none>
         Notes:       
-    ------------------------------------------------------------------------------*/
-    DEFINE VARIABLE vintCursor AS INTEGER.
+    ------------------------------------------------------------------------------*/    
+    DEFINE VARIABLE vintCursor AS INTEGER.    
     DEFINE VARIABLE vcharFile AS CHARACTER.
     DEFINE VARIABLE vcharTexto AS CHARACTER.    
-    DEFINE VARIABLE vcharOut AS CHARACTER.
+    DEFINE VARIABLE vcharOut AS CHARACTER.       
 
     vcharFile = "C:\Users\Javier Orduño\Documents\GitHub\Restaurante\Reportes\menu.html".
     Edit_File:INSERT-FILE(vcharFile) IN FRAME Dialog-Frame.
@@ -223,7 +240,6 @@ PROCEDURE generarMenu :
         END.
     END.
     ASSIGN Edit_File:SCREEN-VALUE = vcharOut.
-
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

@@ -48,8 +48,8 @@ DEFINE VARIABLE vintIdUsuario AS INTEGER.
 &Scoped-define FRAME-NAME Dlg_UpdateUsua
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Fill_Usuario Fill_Contrasena Btn_Aceptar ~
-Btn_Cancelar RECT-1 RECT-20 
+&Scoped-Define ENABLED-OBJECTS Btn_Cancelar Fill_Usuario Fill_Contrasena ~
+Btn_Aceptar RECT-1 RECT-20 
 &Scoped-Define DISPLAYED-OBJECTS Fill_IdUser Fill_Usuario Fill_Contrasena 
 
 /* Custom List Definitions                                              */
@@ -79,8 +79,8 @@ DEFINE BUTTON Btn_Aceptar
      SIZE 20 BY 2.52.
 
 DEFINE BUTTON Btn_Cancelar 
-     LABEL "Cancelar" 
-     SIZE 20 BY 2.52.
+     LABEL "Salir" 
+     SIZE 15 BY 1.14.
 
 DEFINE VARIABLE Fill_Contrasena AS CHARACTER FORMAT "X(100)":U 
      LABEL "Contraseña" 
@@ -113,21 +113,23 @@ DEFINE RECTANGLE RECT-20
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_UpdateUsua
-     Fill_IdUser AT ROW 5.19 COL 33.2 COLON-ALIGNED
-     Fill_Usuario AT ROW 7.24 COL 33.2 COLON-ALIGNED
-     Fill_Contrasena AT ROW 9.52 COL 33.2 COLON-ALIGNED
-     Btn_Aceptar AT ROW 13.67 COL 21
-     Btn_Cancelar AT ROW 13.67 COL 51
+     Btn_Cancelar AT ROW 1.67 COL 73.6
+     Fill_IdUser AT ROW 6.14 COL 33.2 COLON-ALIGNED
+     Fill_Usuario AT ROW 8.19 COL 33.2 COLON-ALIGNED
+     Fill_Contrasena AT ROW 10.48 COL 33.2 COLON-ALIGNED
+     Btn_Aceptar AT ROW 14 COL 36.2
      RECT-1 AT ROW 1 COL 1
-     RECT-20 AT ROW 3.86 COL 17
-     "ACTUALIZAR" VIEW-AS TEXT
-          SIZE 15 BY 1.19 AT ROW 1.62 COL 38.2
+     RECT-20 AT ROW 4.81 COL 17
+     "ACTUALIZAR USUARIOS" VIEW-AS TEXT
+          SIZE 26.8 BY 1.19 AT ROW 1.62 COL 34.8
           BGCOLOR 8 FGCOLOR 15 FONT 12
-     SPACE(37.79) SKIP(15.32)
+     "Campos Requeridos:" VIEW-AS TEXT
+          SIZE 30 BY .62 AT ROW 4.05 COL 17.4
+     SPACE(43.60) SKIP(13.46)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
-         TITLE "Actualizar Usuarios".
+         TITLE "Actualizar".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -164,7 +166,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Dlg_UpdateUsua
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dlg_UpdateUsua Dlg_UpdateUsua
-ON WINDOW-CLOSE OF FRAME Dlg_UpdateUsua /* Actualizar Usuarios */
+ON WINDOW-CLOSE OF FRAME Dlg_UpdateUsua /* Actualizar */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -211,7 +213,7 @@ END.
 
 &Scoped-define SELF-NAME Btn_Cancelar
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Cancelar Dlg_UpdateUsua
-ON CHOOSE OF Btn_Cancelar IN FRAME Dlg_UpdateUsua /* Cancelar */
+ON CHOOSE OF Btn_Cancelar IN FRAME Dlg_UpdateUsua /* Salir */
 DO:
     APPLY "WINDOW-CLOSE" TO FRAME Dlg_UpdateUsua.    
 END.
@@ -312,7 +314,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY Fill_IdUser Fill_Usuario Fill_Contrasena 
       WITH FRAME Dlg_UpdateUsua.
-  ENABLE Fill_Usuario Fill_Contrasena Btn_Aceptar Btn_Cancelar RECT-1 RECT-20 
+  ENABLE Btn_Cancelar Fill_Usuario Fill_Contrasena Btn_Aceptar RECT-1 RECT-20 
       WITH FRAME Dlg_UpdateUsua.
   VIEW FRAME Dlg_UpdateUsua.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_UpdateUsua}

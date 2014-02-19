@@ -46,8 +46,8 @@ DEFINE VARIABLE vintIdProducto AS INTEGER.
 &Scoped-define FRAME-NAME Dlg_UpdateProd
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Fill_Descripcion Fill_Cantidad List_Unidad ~
-Btn_Aceptar Btn_Cancelar RECT-1 RECT-22 
+&Scoped-Define ENABLED-OBJECTS Btn_Cancelar Fill_Descripcion Fill_Cantidad ~
+List_Unidad Btn_Aceptar RECT-1 RECT-22 
 &Scoped-Define DISPLAYED-OBJECTS Fill_Codigo Fill_Descripcion Fill_Cantidad ~
 List_Unidad 
 
@@ -78,8 +78,8 @@ DEFINE BUTTON Btn_Aceptar
      SIZE 20 BY 2.52.
 
 DEFINE BUTTON Btn_Cancelar 
-     LABEL "Cancelar" 
-     SIZE 20 BY 2.52.
+     LABEL "Salir" 
+     SIZE 14 BY 1.19.
 
 DEFINE VARIABLE List_Unidad AS CHARACTER FORMAT "X(256)":U 
      LABEL "Unidad" 
@@ -120,22 +120,24 @@ DEFINE RECTANGLE RECT-22
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_UpdateProd
-     Fill_Codigo AT ROW 5.81 COL 35 COLON-ALIGNED
-     Fill_Descripcion AT ROW 8.1 COL 35 COLON-ALIGNED
-     Fill_Cantidad AT ROW 10.52 COL 35 COLON-ALIGNED
-     List_Unidad AT ROW 12.76 COL 35 COLON-ALIGNED
-     Btn_Aceptar AT ROW 16.71 COL 21
-     Btn_Cancelar AT ROW 16.71 COL 51
+     Btn_Cancelar AT ROW 1.62 COL 74.6
+     Fill_Codigo AT ROW 6.52 COL 35 COLON-ALIGNED
+     Fill_Descripcion AT ROW 8.81 COL 35 COLON-ALIGNED
+     Fill_Cantidad AT ROW 11.24 COL 35 COLON-ALIGNED
+     List_Unidad AT ROW 13.48 COL 35 COLON-ALIGNED
+     Btn_Aceptar AT ROW 16.71 COL 36
      RECT-1 AT ROW 1 COL 1
-     RECT-22 AT ROW 5.05 COL 20.6
-     "ACTUALIZAR" VIEW-AS TEXT
-          SIZE 28 BY 1.19 AT ROW 1.62 COL 39
+     RECT-22 AT ROW 5.76 COL 20.6
+     "ACTUALIZAR PRODUCTOS" VIEW-AS TEXT
+          SIZE 28 BY 1.19 AT ROW 1.62 COL 32
           BGCOLOR 8 FGCOLOR 15 FONT 12
-     SPACE(24.19) SKIP(17.80)
+     "Campos Requeridos:" VIEW-AS TEXT
+          SIZE 40 BY .62 AT ROW 5 COL 20.8
+     SPACE(30.39) SKIP(14.99)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
-         TITLE "Actualizar Productos".
+         TITLE "Actualizar".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -172,7 +174,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Dlg_UpdateProd
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dlg_UpdateProd Dlg_UpdateProd
-ON WINDOW-CLOSE OF FRAME Dlg_UpdateProd /* Actualizar Productos */
+ON WINDOW-CLOSE OF FRAME Dlg_UpdateProd /* Actualizar */
 DO:
     APPLY "END-ERROR":U TO SELF.
 END.
@@ -217,7 +219,7 @@ END.
 
 &Scoped-define SELF-NAME Btn_Cancelar
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Cancelar Dlg_UpdateProd
-ON CHOOSE OF Btn_Cancelar IN FRAME Dlg_UpdateProd /* Cancelar */
+ON CHOOSE OF Btn_Cancelar IN FRAME Dlg_UpdateProd /* Salir */
 DO:
     APPLY "WINDOW-CLOSE" TO FRAME Dlg_UpdateProd.    
 END.
@@ -304,7 +306,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY Fill_Codigo Fill_Descripcion Fill_Cantidad List_Unidad 
       WITH FRAME Dlg_UpdateProd.
-  ENABLE Fill_Descripcion Fill_Cantidad List_Unidad Btn_Aceptar Btn_Cancelar 
+  ENABLE Btn_Cancelar Fill_Descripcion Fill_Cantidad List_Unidad Btn_Aceptar 
          RECT-1 RECT-22 
       WITH FRAME Dlg_UpdateProd.
   VIEW FRAME Dlg_UpdateProd.

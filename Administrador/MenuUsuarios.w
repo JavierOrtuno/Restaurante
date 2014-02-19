@@ -113,7 +113,7 @@ DEFINE QUERY Bws_Usuarios FOR
 DEFINE BROWSE Bws_Usuarios
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS Bws_Usuarios Dlg_MenuUsuarios _STRUCTURED
   QUERY Bws_Usuarios NO-LOCK DISPLAY
-      USUARIO.USUARIO FORMAT "X(50)":U WIDTH 35.4
+      USUARIO.USUARIO FORMAT "X(50)":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
     WITH NO-ROW-MARKERS SEPARATORS SIZE 40 BY 12.38
@@ -129,14 +129,14 @@ DEFINE FRAME Dlg_MenuUsuarios
      Btn_Delete AT ROW 12.14 COL 62.4
      RECT-18 AT ROW 1 COL 1
      RECT-19 AT ROW 7.19 COL 61
-     "USUARIOS" VIEW-AS TEXT
-          SIZE 13 BY 1.19 AT ROW 1.52 COL 36.2
+     "MENU USUARIOS" VIEW-AS TEXT
+          SIZE 19.8 BY 1.19 AT ROW 1.52 COL 34.4
           BGCOLOR 8 FGCOLOR 15 FONT 68
-     SPACE(41.99) SKIP(15.52)
+     SPACE(37.00) SKIP(15.52)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
-         TITLE "Usuarios".
+         TITLE "Menu".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -171,8 +171,7 @@ ASSIGN
 /* Query rebuild information for BROWSE Bws_Usuarios
      _TblList          = "Restaurante.USUARIO"
      _Options          = "NO-LOCK INDEXED-REPOSITION"
-     _FldNameList[1]   > Restaurante.USUARIO.USUARIO
-"USUARIO" ? ? "character" ? ? ? ? ? ? no ? no no "35.4" yes no no "U" "" ""
+     _FldNameList[1]   = Restaurante.USUARIO.USUARIO
      _Query            is OPENED
 */  /* BROWSE Bws_Usuarios */
 &ANALYZE-RESUME
@@ -185,7 +184,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Dlg_MenuUsuarios
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dlg_MenuUsuarios Dlg_MenuUsuarios
-ON WINDOW-CLOSE OF FRAME Dlg_MenuUsuarios /* Usuarios */
+ON WINDOW-CLOSE OF FRAME Dlg_MenuUsuarios /* Menu */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.

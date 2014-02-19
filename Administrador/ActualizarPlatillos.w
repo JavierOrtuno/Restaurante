@@ -48,8 +48,8 @@ DEFINE VARIABLE vcharIngredientes AS CHARACTER INITIAL "".
 &Scoped-define FRAME-NAME Dlg_CreacionP
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Sel_Productos Fill_Descripcion Fill_Precio ~
-List_Clasificacion Sel_Ingredientes Btn_Agregar Btn_Salir RECT-18 RECT-24 
+&Scoped-Define ENABLED-OBJECTS Btn_Salir Sel_Productos Fill_Descripcion ~
+Fill_Precio List_Clasificacion Sel_Ingredientes Btn_Agregar RECT-18 RECT-24 
 &Scoped-Define DISPLAYED-OBJECTS Sel_Productos Fill_Descripcion Fill_Precio ~
 List_Clasificacion Sel_Ingredientes 
 
@@ -83,8 +83,8 @@ DEFINE BUTTON Btn_Agregar
      SIZE 20 BY 2.52.
 
 DEFINE BUTTON Btn_Salir 
-     LABEL "Cancelar" 
-     SIZE 20 BY 2.52.
+     LABEL "Salir" 
+     SIZE 15.2 BY 1.14.
 
 DEFINE VARIABLE List_Clasificacion AS CHARACTER FORMAT "X(256)":U 
      LABEL "Clasificación" 
@@ -107,7 +107,7 @@ DEFINE VARIABLE Fill_Precio AS DECIMAL FORMAT "->>,>>9.99":U INITIAL 0
 
 DEFINE RECTANGLE RECT-18
      EDGE-PIXELS 8  
-     SIZE 140.6 BY 2.38
+     SIZE 134 BY 2.38
      BGCOLOR 8 .
 
 DEFINE RECTANGLE RECT-24
@@ -130,27 +130,29 @@ DEFINE VARIABLE Sel_Productos AS CHARACTER
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_CreacionP
-     Sel_Productos AT ROW 4.71 COL 18.2 NO-LABEL
-     Fill_Descripcion AT ROW 5.71 COL 89.6 COLON-ALIGNED
-     Fill_Precio AT ROW 7 COL 89.6 COLON-ALIGNED
-     List_Clasificacion AT ROW 8.29 COL 89.6 COLON-ALIGNED
-     Sel_Ingredientes AT ROW 9.62 COL 91.6 NO-LABEL
-     Btn_Agregar AT ROW 17.24 COL 96.2
-     Btn_Salir AT ROW 20.33 COL 96.2
+     Btn_Salir AT ROW 1.67 COL 117.2
+     Sel_Productos AT ROW 4.71 COL 11.2 NO-LABEL
+     Fill_Descripcion AT ROW 7.81 COL 80.2 COLON-ALIGNED
+     Fill_Precio AT ROW 9.1 COL 80.2 COLON-ALIGNED
+     List_Clasificacion AT ROW 10.38 COL 80.2 COLON-ALIGNED
+     Sel_Ingredientes AT ROW 11.71 COL 82.2 NO-LABEL
+     Btn_Agregar AT ROW 19.33 COL 86.8
      RECT-18 AT ROW 1 COL 1
-     RECT-24 AT ROW 4.67 COL 74.8
+     RECT-24 AT ROW 6.76 COL 65.4
      "Ingredientes:" VIEW-AS TEXT
-          SIZE 12.4 BY .62 AT ROW 11.62 COL 79
-     "AGREGAR" VIEW-AS TEXT
-          SIZE 14 BY .62 AT ROW 1.91 COL 64.4
+          SIZE 12.4 BY .62 AT ROW 13.71 COL 69.6
+     "AGREGAR PLATILLOS" VIEW-AS TEXT
+          SIZE 23.6 BY .62 AT ROW 1.91 COL 63.8
           FGCOLOR 15 
+     "Campos Requeridos:" VIEW-AS TEXT
+          SIZE 40 BY .62 AT ROW 6.1 COL 65.6
      "Seleccionar Ingrediente:" VIEW-AS TEXT
-          SIZE 40 BY .62 AT ROW 3.91 COL 18.8
-     SPACE(82.79) SKIP(19.89)
+          SIZE 40 BY .62 AT ROW 3.91 COL 11.8
+     SPACE(83.19) SKIP(19.89)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
-         TITLE "Agregar Platillos".
+         TITLE "Agregar".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -185,7 +187,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Dlg_CreacionP
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dlg_CreacionP Dlg_CreacionP
-ON WINDOW-CLOSE OF FRAME Dlg_CreacionP /* Agregar Platillos */
+ON WINDOW-CLOSE OF FRAME Dlg_CreacionP /* Agregar */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -229,7 +231,7 @@ END.
 
 &Scoped-define SELF-NAME Btn_Salir
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Salir Dlg_CreacionP
-ON CHOOSE OF Btn_Salir IN FRAME Dlg_CreacionP /* Cancelar */
+ON CHOOSE OF Btn_Salir IN FRAME Dlg_CreacionP /* Salir */
 DO:
     APPLY "WINDOW-CLOSE" TO FRAME Dlg_CreacionP.  
 END.
@@ -343,8 +345,8 @@ PROCEDURE enable_UI :
   DISPLAY Sel_Productos Fill_Descripcion Fill_Precio List_Clasificacion 
           Sel_Ingredientes 
       WITH FRAME Dlg_CreacionP.
-  ENABLE Sel_Productos Fill_Descripcion Fill_Precio List_Clasificacion 
-         Sel_Ingredientes Btn_Agregar Btn_Salir RECT-18 RECT-24 
+  ENABLE Btn_Salir Sel_Productos Fill_Descripcion Fill_Precio 
+         List_Clasificacion Sel_Ingredientes Btn_Agregar RECT-18 RECT-24 
       WITH FRAME Dlg_CreacionP.
   VIEW FRAME Dlg_CreacionP.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_CreacionP}

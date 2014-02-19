@@ -126,14 +126,14 @@ DEFINE FRAME Dlg_Platillos
      Btn_Agregar AT ROW 9.91 COL 121.8
      RECT-18 AT ROW 1 COL 1
      RECT-23 AT ROW 9.52 COL 120.6
-     "PLATILLOS" VIEW-AS TEXT
+     "MENU PLATILLOS" VIEW-AS TEXT
           SIZE 19 BY .95 AT ROW 1.71 COL 57.6
           FGCOLOR 15 
-     SPACE(65.99) SKIP(21.71)
+     SPACE(66.00) SKIP(21.71)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
-         TITLE "Platillos".
+         TITLE "Menu".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -188,7 +188,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Dlg_Platillos
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dlg_Platillos Dlg_Platillos
-ON WINDOW-CLOSE OF FRAME Dlg_Platillos /* Platillos */
+ON WINDOW-CLOSE OF FRAME Dlg_Platillos /* Menu */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.

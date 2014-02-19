@@ -46,9 +46,9 @@ DEF INPUT PARAM inintIdRol AS INT.
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Bttn-MSalir Bttn-Alta-2 Btn-Menu Btn-Usuario ~
-Bttn-Baja-2 Btn-Productos Bttn-Editar-2 Bttn-Alta-4 Bttn-Alta-3 Bttn-Baja-4 ~
-Bttn-Baja-3 Bttn-Editar-4 Bttn-Editar-3 RECT-10 RECT-18 RECT-2 RECT-3 ~
-RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
+Bttn-Baja-2 Btn-Productos Bttn-Editar-2 Bttn-Alta-4 Btn-Inventario ~
+Bttn-Baja-4 Bttn-Editar-4 RECT-10 RECT-18 RECT-2 RECT-3 RECT-4 RECT-5 ~
+RECT-6 RECT-7 RECT-8 RECT-9 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -63,6 +63,10 @@ RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
+DEFINE BUTTON Btn-Inventario 
+     LABEL "Inventario" 
+     SIZE 16 BY 1.14.
+
 DEFINE BUTTON Btn-Menu 
      LABEL "Menú" 
      SIZE 16 BY 1.14.
@@ -80,10 +84,6 @@ DEFINE BUTTON Bttn-Alta-2
      LABEL "Alta" 
      SIZE 16 BY 1.14.
 
-DEFINE BUTTON Bttn-Alta-3 
-     LABEL "Alta" 
-     SIZE 16 BY 1.14.
-
 DEFINE BUTTON Bttn-Alta-4 
      LABEL "Alta" 
      SIZE 16 BY 1.14.
@@ -92,19 +92,11 @@ DEFINE BUTTON Bttn-Baja-2
      LABEL "Baja" 
      SIZE 16 BY 1.14.
 
-DEFINE BUTTON Bttn-Baja-3 
-     LABEL "Baja" 
-     SIZE 16 BY 1.14.
-
 DEFINE BUTTON Bttn-Baja-4 
      LABEL "Baja" 
      SIZE 16 BY 1.14.
 
 DEFINE BUTTON Bttn-Editar-2 
-     LABEL "Editar" 
-     SIZE 16 BY 1.14.
-
-DEFINE BUTTON Bttn-Editar-3 
      LABEL "Editar" 
      SIZE 16 BY 1.14.
 
@@ -159,7 +151,7 @@ DEFINE RECTANGLE RECT-8
 
 DEFINE RECTANGLE RECT-9
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 19.4 BY 7.1.
+     SIZE 19.4 BY 3.29.
 
 
 /* ************************  Frame Definitions  *********************** */
@@ -173,11 +165,9 @@ DEFINE FRAME Dialog-Frame-Menu
      Btn-Productos AT ROW 11.1 COL 12.2
      Bttn-Editar-2 AT ROW 12.67 COL 100.2
      Bttn-Alta-4 AT ROW 22.71 COL 100.4
-     Bttn-Alta-3 AT ROW 22.95 COL 16.4
+     Btn-Inventario AT ROW 22.95 COL 16.4
      Bttn-Baja-4 AT ROW 24.67 COL 100.4
-     Bttn-Baja-3 AT ROW 24.91 COL 16.4
      Bttn-Editar-4 AT ROW 26.57 COL 100.4
-     Bttn-Editar-3 AT ROW 26.81 COL 16.4
      RECT-10 AT ROW 21.29 COL 98.8
      RECT-18 AT ROW 1.43 COL 5
      RECT-2 AT ROW 5.48 COL 4.8
@@ -209,7 +199,7 @@ DEFINE FRAME Dialog-Frame-Menu
      "       USUARIOS" VIEW-AS TEXT
           SIZE 19 BY .81 AT ROW 7.95 COL 35
           BGCOLOR 15 FGCOLOR 1 
-     "       USUARIOS" VIEW-AS TEXT
+     "           MENU" VIEW-AS TEXT
           SIZE 19 BY .81 AT ROW 21.62 COL 15
           BGCOLOR 15 FGCOLOR 1 
      "                                                     INVENTARIO" VIEW-AS TEXT
@@ -397,9 +387,9 @@ PROCEDURE enable_UI :
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
   ENABLE Bttn-MSalir Bttn-Alta-2 Btn-Menu Btn-Usuario Bttn-Baja-2 Btn-Productos 
-         Bttn-Editar-2 Bttn-Alta-4 Bttn-Alta-3 Bttn-Baja-4 Bttn-Baja-3 
-         Bttn-Editar-4 Bttn-Editar-3 RECT-10 RECT-18 RECT-2 RECT-3 RECT-4 
-         RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
+         Bttn-Editar-2 Bttn-Alta-4 Btn-Inventario Bttn-Baja-4 Bttn-Editar-4 
+         RECT-10 RECT-18 RECT-2 RECT-3 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 
+         RECT-9 
       WITH FRAME Dialog-Frame-Menu.
   VIEW FRAME Dialog-Frame-Menu.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame-Menu}

@@ -128,14 +128,14 @@ DEFINE FRAME Dlg_MenuProd
      Btn_Agregar AT ROW 9 COL 142.2
      RECT-18 AT ROW 1 COL 1
      RECT-21 AT ROW 8.62 COL 141.2
-     "PRODUCTOS" VIEW-AS TEXT
-          SIZE 20 BY .62 AT ROW 1.71 COL 71.2
+     "MENU PRODUCTOS" VIEW-AS TEXT
+          SIZE 22.8 BY .62 AT ROW 1.71 COL 71
           FGCOLOR 15 
-     SPACE(73.80) SKIP(18.33)
+     SPACE(71.20) SKIP(18.33)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
-         TITLE "Productos".
+         TITLE "Menu".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -193,7 +193,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Dlg_MenuProd
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dlg_MenuProd Dlg_MenuProd
-ON WINDOW-CLOSE OF FRAME Dlg_MenuProd /* Productos */
+ON WINDOW-CLOSE OF FRAME Dlg_MenuProd /* Menu */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.

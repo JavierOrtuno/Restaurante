@@ -45,10 +45,10 @@ DEF INPUT PARAM inintIdRol AS INT.
 &Scoped-define FRAME-NAME Dialog-Frame-Menu
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Bttn-MSalir Bttn-Alta-2 Bttn-Menu Bttn-Alta ~
-Bttn-Baja-2 Bttn-Productos Bttn-Baja Bttn-Editar-2 Bttn-Editar Bttn-Alta-4 ~
-Bttn-Alta-3 Bttn-Baja-4 Bttn-Baja-3 Bttn-Editar-4 Bttn-Editar-3 RECT-10 ~
-RECT-18 RECT-2 RECT-3 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
+&Scoped-Define ENABLED-OBJECTS Bttn-MSalir Bttn-Alta-2 Btn-Menu Btn-Usuario ~
+Bttn-Baja-2 Btn-Productos Bttn-Editar-2 Bttn-Alta-4 Bttn-Alta-3 Bttn-Baja-4 ~
+Bttn-Baja-3 Bttn-Editar-4 Bttn-Editar-3 RECT-10 RECT-18 RECT-2 RECT-3 ~
+RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -63,8 +63,17 @@ RECT-18 RECT-2 RECT-3 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
-DEFINE BUTTON Bttn-Alta 
-     LABEL "Alta" 
+DEFINE BUTTON Btn-Menu 
+     LABEL "Menú" 
+     SIZE 16 BY 1.14.
+
+DEFINE BUTTON Btn-Productos 
+     LABEL "Productos" 
+     SIZE 16 BY 1.14
+     BGCOLOR 16 .
+
+DEFINE BUTTON Btn-Usuario 
+     LABEL "Menu Usuario" 
      SIZE 16 BY 1.14.
 
 DEFINE BUTTON Bttn-Alta-2 
@@ -79,10 +88,6 @@ DEFINE BUTTON Bttn-Alta-4
      LABEL "Alta" 
      SIZE 16 BY 1.14.
 
-DEFINE BUTTON Bttn-Baja 
-     LABEL "Baja" 
-     SIZE 16 BY 1.14.
-
 DEFINE BUTTON Bttn-Baja-2 
      LABEL "Baja" 
      SIZE 16 BY 1.14.
@@ -93,10 +98,6 @@ DEFINE BUTTON Bttn-Baja-3
 
 DEFINE BUTTON Bttn-Baja-4 
      LABEL "Baja" 
-     SIZE 16 BY 1.14.
-
-DEFINE BUTTON Bttn-Editar 
-     LABEL "Editar" 
      SIZE 16 BY 1.14.
 
 DEFINE BUTTON Bttn-Editar-2 
@@ -111,18 +112,9 @@ DEFINE BUTTON Bttn-Editar-4
      LABEL "Editar" 
      SIZE 16 BY 1.14.
 
-DEFINE BUTTON Bttn-Menu 
-     LABEL "Menú" 
-     SIZE 16 BY 1.14.
-
 DEFINE BUTTON Bttn-MSalir 
      LABEL "Salir" 
      SIZE 15 BY 1.14.
-
-DEFINE BUTTON Bttn-Productos 
-     LABEL "Productos" 
-     SIZE 16 BY 1.14
-     BGCOLOR 16 .
 
 DEFINE RECTANGLE RECT-10
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
@@ -159,7 +151,7 @@ DEFINE RECTANGLE RECT-6
 
 DEFINE RECTANGLE RECT-7
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 19.4 BY 7.14.
+     SIZE 19.4 BY 3.14.
 
 DEFINE RECTANGLE RECT-8
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
@@ -175,13 +167,11 @@ DEFINE RECTANGLE RECT-9
 DEFINE FRAME Dialog-Frame-Menu
      Bttn-MSalir AT ROW 2.52 COL 141.4
      Bttn-Alta-2 AT ROW 8.81 COL 100.2
-     Bttn-Menu AT ROW 9.19 COL 12.2
-     Bttn-Alta AT ROW 9.33 COL 36.6
+     Btn-Menu AT ROW 9.19 COL 12.2
+     Btn-Usuario AT ROW 9.24 COL 36.6
      Bttn-Baja-2 AT ROW 10.76 COL 100.2
-     Bttn-Productos AT ROW 11.1 COL 12.2
-     Bttn-Baja AT ROW 11.29 COL 36.6
+     Btn-Productos AT ROW 11.1 COL 12.2
      Bttn-Editar-2 AT ROW 12.67 COL 100.2
-     Bttn-Editar AT ROW 13.19 COL 36.6
      Bttn-Alta-4 AT ROW 22.71 COL 100.4
      Bttn-Alta-3 AT ROW 22.95 COL 16.4
      Bttn-Baja-4 AT ROW 24.67 COL 100.4
@@ -201,6 +191,9 @@ DEFINE FRAME Dialog-Frame-Menu
      "MENU PRINCIPAL" VIEW-AS TEXT
           SIZE 47 BY 1.91 AT ROW 2.14 COL 66.8
           BGCOLOR 8 FGCOLOR 15 FONT 70
+     "                                                      REPORTES" VIEW-AS TEXT
+          SIZE 76.8 BY .81 AT ROW 19.57 COL 90.2
+          BGCOLOR 15 FGCOLOR 1 
      "     USUARIOS" VIEW-AS TEXT
           SIZE 19 BY .81 AT ROW 7.48 COL 98.8
           BGCOLOR 15 FGCOLOR 1 
@@ -225,10 +218,7 @@ DEFINE FRAME Dialog-Frame-Menu
      "       USUARIOS" VIEW-AS TEXT
           SIZE 19 BY .81 AT ROW 21.38 COL 99.2
           BGCOLOR 15 FGCOLOR 1 
-     "                                                      REPORTES" VIEW-AS TEXT
-          SIZE 76.8 BY .81 AT ROW 19.57 COL 90.2
-          BGCOLOR 15 FGCOLOR 1 
-     SPACE(4.59) SKIP(12.71)
+     SPACE(53.39) SKIP(10.90)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -283,6 +273,28 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Btn-Productos
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Productos Dialog-Frame-Menu
+ON CHOOSE OF Btn-Productos IN FRAME Dialog-Frame-Menu /* Productos */
+DO:
+  RUN menuProductos.w.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Btn-Usuario
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Usuario Dialog-Frame-Menu
+ON CHOOSE OF Btn-Usuario IN FRAME Dialog-Frame-Menu /* Menu Usuario */
+DO:
+  RUN menuUsuarios.w.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &Scoped-define SELF-NAME Bttn-MSalir
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bttn-MSalir Dialog-Frame-Menu
 ON CHOOSE OF Bttn-MSalir IN FRAME Dialog-Frame-Menu /* Salir */
@@ -297,17 +309,6 @@ DO:
     APPLY "WINDOW-CLOSE" TO FRAME Dialog-Frame-Menu.
   END.
 
-END.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-
-&Scoped-define SELF-NAME Bttn-Productos
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bttn-Productos Dialog-Frame-Menu
-ON CHOOSE OF Bttn-Productos IN FRAME Dialog-Frame-Menu /* Productos */
-DO:
-  RUN menuProductos.w.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -340,13 +341,9 @@ DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
       END.
 
       WHEN 2 THEN DO:
-
-           Bttn-Menu:SENSITIVE = NO.
-           Bttn-Productos:SENSITIVE = NO.
-           Bttn-Alta:SENSITIVE = NO.
-           Bttn-Baja:SENSITIVE = NO.
-           Bttn-Editar:SENSITIVE = NO.
-
+           Btn-Menu:SENSITIVE = NO.
+           Btn-Productos:SENSITIVE = NO.
+           Btn-Usuario:SENSITIVE = NO.
       END.
 
   END CASE.
@@ -388,10 +385,10 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Bttn-MSalir Bttn-Alta-2 Bttn-Menu Bttn-Alta Bttn-Baja-2 Bttn-Productos 
-         Bttn-Baja Bttn-Editar-2 Bttn-Editar Bttn-Alta-4 Bttn-Alta-3 
-         Bttn-Baja-4 Bttn-Baja-3 Bttn-Editar-4 Bttn-Editar-3 RECT-10 RECT-18 
-         RECT-2 RECT-3 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
+  ENABLE Bttn-MSalir Bttn-Alta-2 Btn-Menu Btn-Usuario Bttn-Baja-2 Btn-Productos 
+         Bttn-Editar-2 Bttn-Alta-4 Bttn-Alta-3 Bttn-Baja-4 Bttn-Baja-3 
+         Bttn-Editar-4 Bttn-Editar-3 RECT-10 RECT-18 RECT-2 RECT-3 RECT-4 
+         RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
       WITH FRAME Dialog-Frame-Menu.
   VIEW FRAME Dialog-Frame-Menu.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame-Menu}

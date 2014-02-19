@@ -49,7 +49,7 @@ DEFINE VARIABLE vcharIngredientes AS CHARACTER INITIAL "".
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Sel_Productos Fill_Descripcion Fill_Precio ~
-List_Clasificacion Sel_Ingredientes Btn_Agregar Btn_Salir 
+List_Clasificacion Sel_Ingredientes Btn_Agregar Btn_Salir RECT-18 RECT-24 
 &Scoped-Define DISPLAYED-OBJECTS Sel_Productos Fill_Descripcion Fill_Precio ~
 List_Clasificacion Sel_Ingredientes 
 
@@ -90,46 +90,66 @@ DEFINE VARIABLE List_Clasificacion AS CHARACTER FORMAT "X(256)":U
      LABEL "Clasificación" 
      VIEW-AS COMBO-BOX INNER-LINES 5
      DROP-DOWN-LIST
-     SIZE 35.4 BY 1 NO-UNDO.
+     SIZE 35.4 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE Fill_Descripcion AS CHARACTER FORMAT "X(256)":U 
      LABEL "Platillo" 
      VIEW-AS FILL-IN 
-     SIZE 19 BY 1 NO-UNDO.
+     SIZE 19 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE Fill_Precio AS DECIMAL FORMAT "->>,>>9.99":U INITIAL 0 
      LABEL "Precio" 
      VIEW-AS FILL-IN 
-     SIZE 19.4 BY 1 NO-UNDO.
+     SIZE 19.4 BY 1
+     BGCOLOR 15  NO-UNDO.
+
+DEFINE RECTANGLE RECT-18
+     EDGE-PIXELS 8  
+     SIZE 140.6 BY 2.38
+     BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-24
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 60.2 BY 10.71.
 
 DEFINE VARIABLE Sel_Ingredientes AS CHARACTER 
      VIEW-AS SELECTION-LIST SINGLE SCROLLBAR-VERTICAL 
      LIST-ITEM-PAIRS "0","0" 
-     SIZE 38 BY 4.76 NO-UNDO.
+     SIZE 38 BY 4.76
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE Sel_Productos AS CHARACTER 
      VIEW-AS SELECTION-LIST SINGLE SCROLLBAR-VERTICAL 
      LIST-ITEM-PAIRS "0","0" 
-     SIZE 42 BY 20.24 NO-UNDO.
+     SIZE 46.6 BY 18.71
+     BGCOLOR 15  NO-UNDO.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_CreacionP
-     Sel_Productos AT ROW 2.67 COL 7 NO-LABEL
-     Fill_Descripcion AT ROW 4.91 COL 63.6 COLON-ALIGNED
-     Fill_Precio AT ROW 6.19 COL 63.6 COLON-ALIGNED
-     List_Clasificacion AT ROW 7.48 COL 63.6 COLON-ALIGNED
-     Sel_Ingredientes AT ROW 8.81 COL 65.6 NO-LABEL
-     Btn_Agregar AT ROW 15.29 COL 72.4
-     Btn_Salir AT ROW 18.38 COL 72.4
+     Sel_Productos AT ROW 4.71 COL 18.2 NO-LABEL
+     Fill_Descripcion AT ROW 5.71 COL 89.6 COLON-ALIGNED
+     Fill_Precio AT ROW 7 COL 89.6 COLON-ALIGNED
+     List_Clasificacion AT ROW 8.29 COL 89.6 COLON-ALIGNED
+     Sel_Ingredientes AT ROW 9.62 COL 91.6 NO-LABEL
+     Btn_Agregar AT ROW 17.24 COL 96.2
+     Btn_Salir AT ROW 20.33 COL 96.2
+     RECT-18 AT ROW 1 COL 1
+     RECT-24 AT ROW 4.67 COL 74.8
      "Ingredientes:" VIEW-AS TEXT
-          SIZE 12.4 BY .62 AT ROW 10.81 COL 53
+          SIZE 12.4 BY .62 AT ROW 11.62 COL 79
+     "AGREGAR" VIEW-AS TEXT
+          SIZE 14 BY .62 AT ROW 1.91 COL 64.4
+          FGCOLOR 15 
      "Seleccionar Ingrediente:" VIEW-AS TEXT
-          SIZE 40 BY .62 AT ROW 1.86 COL 7
-     SPACE(62.39) SKIP(21.94)
+          SIZE 40 BY .62 AT ROW 3.91 COL 18.8
+     SPACE(82.79) SKIP(19.89)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
+         BGCOLOR 8 
          TITLE "Agregar Platillos".
 
 
@@ -324,7 +344,7 @@ PROCEDURE enable_UI :
           Sel_Ingredientes 
       WITH FRAME Dlg_CreacionP.
   ENABLE Sel_Productos Fill_Descripcion Fill_Precio List_Clasificacion 
-         Sel_Ingredientes Btn_Agregar Btn_Salir 
+         Sel_Ingredientes Btn_Agregar Btn_Salir RECT-18 RECT-24 
       WITH FRAME Dlg_CreacionP.
   VIEW FRAME Dlg_CreacionP.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_CreacionP}

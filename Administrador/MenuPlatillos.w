@@ -65,7 +65,8 @@ MENU.PRECIO getClasificacion(MENU.ID_CLASIFICACION)
     ~{&OPEN-QUERY-Bws_Platillos}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Bws_Platillos Btn_Agregar Btn_Salir 
+&Scoped-Define ENABLED-OBJECTS Btn_Salir Bws_Platillos Btn_Agregar RECT-18 ~
+RECT-23 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -82,11 +83,20 @@ MENU.PRECIO getClasificacion(MENU.ID_CLASIFICACION)
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Agregar 
      LABEL "Agregar" 
-     SIZE 20 BY 2.52.
+     SIZE 18 BY 2.14.
 
 DEFINE BUTTON Btn_Salir 
      LABEL "Salir" 
-     SIZE 20 BY 2.52.
+     SIZE 16 BY 1.19.
+
+DEFINE RECTANGLE RECT-18
+     EDGE-PIXELS 8  
+     SIZE 141.6 BY 2.38
+     BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-23
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 20 BY 2.86.
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -104,18 +114,25 @@ DEFINE BROWSE Bws_Platillos
       getClasificacion(MENU.ID_CLASIFICACION) COLUMN-LABEL "CLASIFICACIÓN" FORMAT "X(20)":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 104 BY 16.43 EXPANDABLE.
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 104 BY 18.05
+         BGCOLOR 15  ROW-HEIGHT-CHARS .86 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_Platillos
-     Bws_Platillos AT ROW 2.52 COL 7
-     Btn_Agregar AT ROW 4.81 COL 117
-     Btn_Salir AT ROW 8.62 COL 117
-     SPACE(5.59) SKIP(9.71)
+     Btn_Salir AT ROW 1.62 COL 122.4
+     Bws_Platillos AT ROW 4.86 COL 11
+     Btn_Agregar AT ROW 9.91 COL 121.8
+     RECT-18 AT ROW 1 COL 1
+     RECT-23 AT ROW 9.52 COL 120.6
+     "PLATILLOS" VIEW-AS TEXT
+          SIZE 19 BY .95 AT ROW 1.71 COL 57.6
+          FGCOLOR 15 
+     SPACE(65.99) SKIP(21.71)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
+         BGCOLOR 8 
          TITLE "Platillos".
 
 
@@ -136,7 +153,7 @@ DEFINE FRAME Dlg_Platillos
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR DIALOG-BOX Dlg_Platillos
                                                                         */
-/* BROWSE-TAB Bws_Platillos 1 Dlg_Platillos */
+/* BROWSE-TAB Bws_Platillos Btn_Salir Dlg_Platillos */
 ASSIGN 
        FRAME Dlg_Platillos:SCROLLABLE       = FALSE
        FRAME Dlg_Platillos:HIDDEN           = TRUE.
@@ -285,7 +302,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Bws_Platillos Btn_Agregar Btn_Salir 
+  ENABLE Btn_Salir Bws_Platillos Btn_Agregar RECT-18 RECT-23 
       WITH FRAME Dlg_Platillos.
   VIEW FRAME Dlg_Platillos.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_Platillos}

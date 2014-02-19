@@ -273,6 +273,17 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Btn-Menu
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Menu Dialog-Frame-Menu
+ON CHOOSE OF Btn-Menu IN FRAME Dialog-Frame-Menu /* Menú */
+DO:
+  RUN MenuPlatillos.w.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &Scoped-define SELF-NAME Btn-Productos
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Productos Dialog-Frame-Menu
 ON CHOOSE OF Btn-Productos IN FRAME Dialog-Frame-Menu /* Productos */

@@ -66,7 +66,8 @@ getUnidadMedida(PRODUCTO.ID_UNIDAD)
     ~{&OPEN-QUERY-Bws_Productos}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Bws_Productos Btn_Agregar Btn_Salir 
+&Scoped-Define ENABLED-OBJECTS Btn_Salir Bws_Productos Btn_Agregar RECT-18 ~
+RECT-21 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -83,11 +84,20 @@ getUnidadMedida(PRODUCTO.ID_UNIDAD)
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Agregar 
      LABEL "Nuevo" 
-     SIZE 20 BY 2.52.
+     SIZE 18 BY 2.14.
 
 DEFINE BUTTON Btn_Salir 
      LABEL "Salir" 
-     SIZE 20 BY 2.52.
+     SIZE 13.6 BY 1.1.
+
+DEFINE RECTANGLE RECT-18
+     EDGE-PIXELS 8  
+     SIZE 164 BY 2.14
+     BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-21
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 20 BY 2.86.
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -106,18 +116,25 @@ DEFINE BROWSE Bws_Productos
       getUnidadMedida(PRODUCTO.ID_UNIDAD) COLUMN-LABEL "UNIDAD DE MEDIDA" FORMAT "X(50)":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-BOX NO-ROW-MARKERS NO-COLUMN-SCROLLING SEPARATORS SIZE 126.4 BY 13.33 EXPANDABLE.
+    WITH NO-BOX NO-ROW-MARKERS NO-COLUMN-SCROLLING SEPARATORS SIZE 126.4 BY 13.33
+         BGCOLOR 15  EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_MenuProd
-     Bws_Productos AT ROW 1.81 COL 5.4
-     Btn_Agregar AT ROW 3.86 COL 137.4
-     Btn_Salir AT ROW 7.67 COL 137.6
-     SPACE(5.39) SKIP(5.94)
+     Btn_Salir AT ROW 1.57 COL 145.8
+     Bws_Productos AT ROW 4.81 COL 11
+     Btn_Agregar AT ROW 9 COL 142.2
+     RECT-18 AT ROW 1 COL 1
+     RECT-21 AT ROW 8.62 COL 141.2
+     "ACTUALIZAR" VIEW-AS TEXT
+          SIZE 20 BY .62 AT ROW 1.71 COL 71.2
+          FGCOLOR 15 
+     SPACE(73.79) SKIP(18.33)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
+         BGCOLOR 8 
          TITLE "Productos".
 
 
@@ -138,7 +155,7 @@ DEFINE FRAME Dlg_MenuProd
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR DIALOG-BOX Dlg_MenuProd
                                                                         */
-/* BROWSE-TAB Bws_Productos 1 Dlg_MenuProd */
+/* BROWSE-TAB Bws_Productos Btn_Salir Dlg_MenuProd */
 ASSIGN 
        FRAME Dlg_MenuProd:SCROLLABLE       = FALSE
        FRAME Dlg_MenuProd:HIDDEN           = TRUE.
@@ -309,7 +326,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Bws_Productos Btn_Agregar Btn_Salir 
+  ENABLE Btn_Salir Bws_Productos Btn_Agregar RECT-18 RECT-21 
       WITH FRAME Dlg_MenuProd.
   VIEW FRAME Dlg_MenuProd.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_MenuProd}

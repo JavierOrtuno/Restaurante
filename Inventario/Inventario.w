@@ -120,12 +120,15 @@ DEFINE BROWSE BROWSE-8
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-8 Inventario-Frame _STRUCTURED
   QUERY BROWSE-8 SHARE-LOCK NO-WAIT DISPLAY
       PRODUCTO.CODIGO FORMAT "X(10)":U
-      PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 55.4
+      PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 40.4
       STOCK.CANTIDAD FORMAT "->,>>>,>>9":U
-      UNIDAD_MEDIDA.DESCRIPCION FORMAT "X(50)":U WIDTH 33.4
-      STOCK.F_CADUCIDAD FORMAT "99/99/99":U
-      STOCK.F_INGRESO FORMAT "99/99/99":U
-      STOCK.LOTE FORMAT "X(11)":U
+      UNIDAD_MEDIDA.DESCRIPCION COLUMN-LABEL "MEDIDA" FORMAT "X(50)":U
+            WIDTH 22.4
+      STOCK.F_CADUCIDAD COLUMN-LABEL "FECHA DE CADUCIDAD" FORMAT "99/99/99":U
+            WIDTH 25.2
+      STOCK.F_INGRESO COLUMN-LABEL "FECHA DE INGRESO" FORMAT "99/99/99":U
+            WIDTH 23.2
+      STOCK.LOTE FORMAT "X(11)":U WIDTH 22.4
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
     WITH NO-ROW-MARKERS SEPARATORS SIZE 164 BY 24.05 EXPANDABLE.
@@ -182,14 +185,16 @@ ASSIGN
      _JoinCode[3]      = "UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD"
      _FldNameList[1]   = Restaurante.PRODUCTO.CODIGO
      _FldNameList[2]   > Restaurante.PRODUCTO.DESCRIPCION
-"PRODUCTO.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "55.4" yes no no "U" "" ""
+"PRODUCTO.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "40.4" yes no no "U" "" ""
      _FldNameList[3]   = Restaurante.STOCK.CANTIDAD
      _FldNameList[4]   > Restaurante.UNIDAD_MEDIDA.DESCRIPCION
-"UNIDAD_MEDIDA.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "33.4" yes no no "U" "" ""
-     _FldNameList[5]   = Restaurante.STOCK.F_CADUCIDAD
-     _FldNameList[6]   = Restaurante.STOCK.F_INGRESO
+"UNIDAD_MEDIDA.DESCRIPCION" "MEDIDA" ? "character" ? ? ? ? ? ? no ? no no "22.4" yes no no "U" "" ""
+     _FldNameList[5]   > Restaurante.STOCK.F_CADUCIDAD
+"STOCK.F_CADUCIDAD" "FECHA DE CADUCIDAD" ? "date" ? ? ? ? ? ? no ? no no "25.2" yes no no "U" "" ""
+     _FldNameList[6]   > Restaurante.STOCK.F_INGRESO
+"STOCK.F_INGRESO" "FECHA DE INGRESO" ? "date" ? ? ? ? ? ? no ? no no "23.2" yes no no "U" "" ""
      _FldNameList[7]   > Restaurante.STOCK.LOTE
-"STOCK.LOTE" ? "X(11)" "character" ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
+"STOCK.LOTE" ? "X(11)" "character" ? ? ? ? ? ? no ? no no "22.4" yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE BROWSE-8 */
 &ANALYZE-RESUME

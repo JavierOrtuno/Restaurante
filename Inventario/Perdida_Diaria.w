@@ -107,7 +107,7 @@ DEFINE BROWSE BROWSE-15
   QUERY BROWSE-15 NO-LOCK DISPLAY
       PRODUCTO.DESCRIPCION FORMAT "X(150)":U WIDTH 31.2
       STOCK.CANTIDAD FORMAT "->,>>>,>>9":U
-      STOCK.F_CADUCIDAD FORMAT "99/99/99":U WIDTH 44.6
+      STOCK.F_CADUCIDAD COLUMN-LABEL "FECHA DE CADUCIDAD" FORMAT "99/99/99":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
     WITH NO-ROW-MARKERS SEPARATORS SIZE 93 BY 8.57 EXPANDABLE.
@@ -164,7 +164,7 @@ ASSIGN
 "PRODUCTO.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "31.2" yes no no "U" "" ""
      _FldNameList[2]   = Restaurante.STOCK.CANTIDAD
      _FldNameList[3]   > Restaurante.STOCK.F_CADUCIDAD
-"STOCK.F_CADUCIDAD" ? ? "date" ? ? ? ? ? ? no ? no no "44.6" yes no no "U" "" ""
+"STOCK.F_CADUCIDAD" "FECHA DE CADUCIDAD" ? "date" ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE BROWSE-15 */
 &ANALYZE-RESUME

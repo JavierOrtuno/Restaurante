@@ -50,8 +50,7 @@
 &Scoped-define INTERNAL-TABLES USUARIO
 
 /* Definitions for BROWSE Bws_Usuarios                                  */
-&Scoped-define FIELDS-IN-QUERY-Bws_Usuarios USUARIO.ID_USUARIO ~
-USUARIO.USUARIO USUARIO.CONTRASENIA 
+&Scoped-define FIELDS-IN-QUERY-Bws_Usuarios USUARIO.USUARIO 
 &Scoped-define ENABLED-FIELDS-IN-QUERY-Bws_Usuarios 
 &Scoped-define QUERY-STRING-Bws_Usuarios FOR EACH USUARIO NO-LOCK INDEXED-REPOSITION
 &Scoped-define OPEN-QUERY-Bws_Usuarios OPEN QUERY Bws_Usuarios FOR EACH USUARIO NO-LOCK INDEXED-REPOSITION.
@@ -64,8 +63,8 @@ USUARIO.USUARIO USUARIO.CONTRASENIA
     ~{&OPEN-QUERY-Bws_Usuarios}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Bws_Usuarios Btn_Agregar Btn_Delete ~
-Btn_Salir 
+&Scoped-Define ENABLED-OBJECTS Btn_Salir Bws_Usuarios Btn_Agregar ~
+Btn_Delete RECT-18 RECT-19 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -82,18 +81,27 @@ Btn_Salir
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Agregar 
      LABEL "Nuevo" 
-     SIZE 20 BY 2.62
+     SIZE 18 BY 2.19
      BGCOLOR 8 .
 
 DEFINE BUTTON Btn_Delete 
      LABEL "Eliminar" 
-     SIZE 20 BY 2.62
+     SIZE 17.4 BY 2.19
      BGCOLOR 8 .
 
 DEFINE BUTTON Btn_Salir 
      LABEL "Salir" 
-     SIZE 20 BY 2.62
+     SIZE 15 BY .95
      BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-18
+     EDGE-PIXELS 8  
+     SIZE 90.2 BY 2.19
+     BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-19
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 20 BY 7.62.
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -105,24 +113,29 @@ DEFINE QUERY Bws_Usuarios FOR
 DEFINE BROWSE Bws_Usuarios
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS Bws_Usuarios Dlg_MenuUsuarios _STRUCTURED
   QUERY Bws_Usuarios NO-LOCK DISPLAY
-      USUARIO.ID_USUARIO FORMAT "->,>>>,>>9":U WIDTH 15.2
-      USUARIO.USUARIO FORMAT "X(50)":U WIDTH 33.2
-      USUARIO.CONTRASENIA COLUMN-LABEL "CONTRASEÑA" FORMAT "X(50)":U
+      USUARIO.USUARIO FORMAT "X(50)":U WIDTH 35.4
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 35 BY 13.33 ROW-HEIGHT-CHARS .76 EXPANDABLE.
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 40 BY 12.38
+         BGCOLOR 15  ROW-HEIGHT-CHARS .81 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_MenuUsuarios
-     Bws_Usuarios AT ROW 2.91 COL 27
-     Btn_Agregar AT ROW 3.86 COL 71
-     Btn_Delete AT ROW 7.67 COL 71
-     Btn_Salir AT ROW 11.48 COL 71
-     SPACE(10.39) SKIP(4.13)
+     Btn_Salir AT ROW 1.62 COL 73
+     Bws_Usuarios AT ROW 4.81 COL 11
+     Btn_Agregar AT ROW 7.76 COL 62
+     Btn_Delete AT ROW 12.14 COL 62.4
+     RECT-18 AT ROW 1 COL 1
+     RECT-19 AT ROW 7.19 COL 61
+     "USUARIOS" VIEW-AS TEXT
+          SIZE 13 BY 1.19 AT ROW 1.52 COL 36.2
+          BGCOLOR 8 FGCOLOR 15 FONT 68
+     SPACE(41.99) SKIP(15.52)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
+         BGCOLOR 8 
          TITLE "Usuarios".
 
 
@@ -143,14 +156,10 @@ DEFINE FRAME Dlg_MenuUsuarios
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR DIALOG-BOX Dlg_MenuUsuarios
                                                                         */
-/* BROWSE-TAB Bws_Usuarios 1 Dlg_MenuUsuarios */
+/* BROWSE-TAB Bws_Usuarios Btn_Salir Dlg_MenuUsuarios */
 ASSIGN 
        FRAME Dlg_MenuUsuarios:SCROLLABLE       = FALSE
        FRAME Dlg_MenuUsuarios:HIDDEN           = TRUE.
-
-ASSIGN 
-       USUARIO.ID_USUARIO:VISIBLE IN BROWSE Bws_Usuarios = FALSE
-       USUARIO.CONTRASENIA:VISIBLE IN BROWSE Bws_Usuarios = FALSE.
 
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
@@ -162,12 +171,8 @@ ASSIGN
 /* Query rebuild information for BROWSE Bws_Usuarios
      _TblList          = "Restaurante.USUARIO"
      _Options          = "NO-LOCK INDEXED-REPOSITION"
-     _FldNameList[1]   > Restaurante.USUARIO.ID_USUARIO
-"ID_USUARIO" ? ? "integer" ? ? ? ? ? ? no ? no no "15.2" no no no "U" "" ""
-     _FldNameList[2]   > Restaurante.USUARIO.USUARIO
-"USUARIO" ? ? "character" ? ? ? ? ? ? no ? no no "33.2" yes no no "U" "" ""
-     _FldNameList[3]   > Restaurante.USUARIO.CONTRASENIA
-"CONTRASENIA" "CONTRASEÑA" ? "character" ? ? ? ? ? ? no ? no no ? no no no "U" "" ""
+     _FldNameList[1]   > Restaurante.USUARIO.USUARIO
+"USUARIO" ? ? "character" ? ? ? ? ? ? no ? no no "35.4" yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE Bws_Usuarios */
 &ANALYZE-RESUME
@@ -206,9 +211,11 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Delete Dlg_MenuUsuarios
 ON CHOOSE OF Btn_Delete IN FRAME Dlg_MenuUsuarios /* Eliminar */
 DO:
-  RUN ActualizarUsuarios.w(1, ?).
-    {&OPEN-QUERY-Bws_Usuarios}
+    DEFINE VARIABLE vrowID AS ROWID.
 
+    vrowID = ROWID(USUARIO).
+    RUN ActualizarUsuarios.w(3, vrowID).
+    {&OPEN-QUERY-Bws_Usuarios}
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -233,6 +240,7 @@ ON MOUSE-SELECT-DBLCLICK OF Bws_Usuarios IN FRAME Dlg_MenuUsuarios
 DO:
   RUN selectedItem.
   Bws_Usuarios:REFRESH().
+  {&OPEN-QUERY-Bws_Usuarios}
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -244,6 +252,7 @@ ON RETURN OF Bws_Usuarios IN FRAME Dlg_MenuUsuarios
 DO:
   RUN selectedItem.
   Bws_Usuarios:REFRESH().
+  {&OPEN-QUERY-Bws_Usuarios}
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -265,6 +274,7 @@ DO:
 
     vhandQuery:QUERY-PREPARE(vcharOrden).
     vhandQuery:QUERY-OPEN().
+    {&OPEN-QUERY-Bws_Usuarios}
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -327,7 +337,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Bws_Usuarios Btn_Agregar Btn_Delete Btn_Salir 
+  ENABLE Btn_Salir Bws_Usuarios Btn_Agregar Btn_Delete RECT-18 RECT-19 
       WITH FRAME Dlg_MenuUsuarios.
   VIEW FRAME Dlg_MenuUsuarios.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_MenuUsuarios}

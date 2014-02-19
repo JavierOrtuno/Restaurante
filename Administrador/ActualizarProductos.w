@@ -47,7 +47,7 @@ DEFINE VARIABLE vintIdProducto AS INTEGER.
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Fill_Descripcion Fill_Cantidad List_Unidad ~
-Btn_Aceptar Btn_Cancelar RECT-1 
+Btn_Aceptar Btn_Cancelar RECT-1 RECT-22 
 &Scoped-Define DISPLAYED-OBJECTS Fill_Codigo Fill_Descripcion Fill_Cantidad ~
 List_Unidad 
 
@@ -86,45 +86,55 @@ DEFINE VARIABLE List_Unidad AS CHARACTER FORMAT "X(256)":U
      VIEW-AS COMBO-BOX INNER-LINES 5
      LIST-ITEM-PAIRS "Seleccionar"," 0"
      DROP-DOWN-LIST
-     SIZE 21 BY 1 NO-UNDO.
+     SIZE 21 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE Fill_Cantidad AS INTEGER FORMAT "->,>>>,>>9":U INITIAL 0 
      LABEL "Cant. Mínima" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 16 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE Fill_Codigo AS CHARACTER FORMAT "X(10)":U 
      LABEL "Código" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 14 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE Fill_Descripcion AS CHARACTER FORMAT "X(100)":U 
      LABEL "Descripción" 
      VIEW-AS FILL-IN 
-     SIZE 31 BY 1 NO-UNDO.
+     SIZE 32 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE RECTANGLE RECT-1
-     EDGE-PIXELS 2 GRAPHIC-EDGE  
-     SIZE 78 BY 2.38
-     BGCOLOR 12 .
+     EDGE-PIXELS 8  
+     SIZE 90 BY 2.38
+     BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-22
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 51 BY 9.52.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_UpdateProd
-     Fill_Codigo AT ROW 4.24 COL 19 COLON-ALIGNED
-     Fill_Descripcion AT ROW 6.14 COL 19 COLON-ALIGNED
-     Fill_Cantidad AT ROW 8.05 COL 19 COLON-ALIGNED
-     List_Unidad AT ROW 9.95 COL 19 COLON-ALIGNED
-     Btn_Aceptar AT ROW 12.43 COL 16.8
-     Btn_Cancelar AT ROW 12.43 COL 46.8
-     RECT-1 AT ROW 1.24 COL 2
+     Fill_Codigo AT ROW 5.81 COL 35 COLON-ALIGNED
+     Fill_Descripcion AT ROW 8.1 COL 35 COLON-ALIGNED
+     Fill_Cantidad AT ROW 10.52 COL 35 COLON-ALIGNED
+     List_Unidad AT ROW 12.76 COL 35 COLON-ALIGNED
+     Btn_Aceptar AT ROW 16.71 COL 21
+     Btn_Cancelar AT ROW 16.71 COL 51
+     RECT-1 AT ROW 1 COL 1
+     RECT-22 AT ROW 5.05 COL 20.6
      "PRODUCTOS" VIEW-AS TEXT
-          SIZE 28 BY 1.19 AT ROW 1.95 COL 28
-          BGCOLOR 12 FONT 12
-     SPACE(24.99) SKIP(12.95)
+          SIZE 28 BY 1.19 AT ROW 1.62 COL 39
+          BGCOLOR 8 FGCOLOR 15 FONT 12
+     SPACE(24.19) SKIP(17.80)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
+         BGCOLOR 8 
          TITLE "Actualizar Productos".
 
 
@@ -295,7 +305,7 @@ PROCEDURE enable_UI :
   DISPLAY Fill_Codigo Fill_Descripcion Fill_Cantidad List_Unidad 
       WITH FRAME Dlg_UpdateProd.
   ENABLE Fill_Descripcion Fill_Cantidad List_Unidad Btn_Aceptar Btn_Cancelar 
-         RECT-1 
+         RECT-1 RECT-22 
       WITH FRAME Dlg_UpdateProd.
   VIEW FRAME Dlg_UpdateProd.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_UpdateProd}

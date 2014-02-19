@@ -49,7 +49,7 @@ DEFINE VARIABLE vintIdUsuario AS INTEGER.
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Fill_Usuario Fill_Contrasena Btn_Aceptar ~
-Btn_Cancelar RECT-1 
+Btn_Cancelar RECT-1 RECT-20 
 &Scoped-Define DISPLAYED-OBJECTS Fill_IdUser Fill_Usuario Fill_Contrasena 
 
 /* Custom List Definitions                                              */
@@ -85,40 +85,49 @@ DEFINE BUTTON Btn_Cancelar
 DEFINE VARIABLE Fill_Contrasena AS CHARACTER FORMAT "X(100)":U 
      LABEL "Contraseña" 
      VIEW-AS FILL-IN 
-     SIZE 31 BY 1 NO-UNDO.
+     SIZE 31 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE Fill_IdUser AS CHARACTER FORMAT "X(10)":U 
      LABEL "ID Usuario" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 14 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE Fill_Usuario AS CHARACTER FORMAT "X(100)":U 
      LABEL "Usuario" 
      VIEW-AS FILL-IN 
-     SIZE 31 BY 1 NO-UNDO.
+     SIZE 31 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE RECTANGLE RECT-1
-     EDGE-PIXELS 2 GRAPHIC-EDGE  
-     SIZE 78 BY 2.38
-     BGCOLOR 12 .
+     EDGE-PIXELS 8  
+     SIZE 90 BY 2.38
+     BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-20
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 58 BY 8.33.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_UpdateUsua
-     Fill_IdUser AT ROW 4.24 COL 19 COLON-ALIGNED
-     Fill_Usuario AT ROW 6.29 COL 19 COLON-ALIGNED
-     Fill_Contrasena AT ROW 8.57 COL 19 COLON-ALIGNED
-     Btn_Aceptar AT ROW 12.43 COL 16.8
-     Btn_Cancelar AT ROW 12.43 COL 46.8
-     RECT-1 AT ROW 1.24 COL 2
-     "USUARIOS" VIEW-AS TEXT
-          SIZE 28 BY 1.19 AT ROW 1.95 COL 28
-          BGCOLOR 12 FONT 12
-     SPACE(24.79) SKIP(12.80)
+     Fill_IdUser AT ROW 5.19 COL 33.2 COLON-ALIGNED
+     Fill_Usuario AT ROW 7.24 COL 33.2 COLON-ALIGNED
+     Fill_Contrasena AT ROW 9.52 COL 33.2 COLON-ALIGNED
+     Btn_Aceptar AT ROW 13.67 COL 21
+     Btn_Cancelar AT ROW 13.67 COL 51
+     RECT-1 AT ROW 1 COL 1
+     RECT-20 AT ROW 3.86 COL 17
+     "ACTUALIZAR" VIEW-AS TEXT
+          SIZE 15 BY 1.19 AT ROW 1.62 COL 38.2
+          BGCOLOR 8 FGCOLOR 15 FONT 12
+     SPACE(37.79) SKIP(15.32)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "Usuarios".
+         BGCOLOR 8 
+         TITLE "Actualizar Usuarios".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -155,7 +164,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Dlg_UpdateUsua
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dlg_UpdateUsua Dlg_UpdateUsua
-ON WINDOW-CLOSE OF FRAME Dlg_UpdateUsua /* Usuarios */
+ON WINDOW-CLOSE OF FRAME Dlg_UpdateUsua /* Actualizar Usuarios */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -178,10 +187,8 @@ DO:
         MESSAGE "Todos los Campos son Requeridos" VIEW-AS ALERT-BOX.
         LEAVE.
     END.
-
     ASSIGN 
         Fill_Usuario Fill_Contrasena.
-
     CASE inIntEvento:
         WHEN 1 THEN DO:
             RUN addUsuario(vintIdUsuario, Fill_Usuario, getEncrypt(Fill_Contrasena)).
@@ -189,7 +196,11 @@ DO:
         END.
         WHEN 2 THEN DO:
             RUN updateUsuario(inRowId, Fill_Usuario, getEncrypt(Fill_Contrasena)).
-            APPLY "WINDOW-CLOSE" TO FRAME Dlg_UpdateUsua.    
+            APPLY "WINDOW-CLOSE" TO FRAME Dlg_UpdateUsua.
+        END.
+        WHEN 3 THEN DO:
+            RUN deleteUsuario(inRowId, Fill_Usuario, Fill_Contrasena).
+            APPLY "WINDOW-CLOSE" TO FRAME Dlg_UpdateUsua. 
         END.
     END CASE.
 END.
@@ -241,15 +252,30 @@ RUN disable_UI.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE asignarValores Dlg_UpdateUsua 
 PROCEDURE asignarValores :
 /*------------------------------------------------------------------------------
-        Purpose:     
+        Purpose: Asigna valores de a columna indicada.    
         Parameters:  <none>
         Notes:       
     ------------------------------------------------------------------------------*/
     FIND FIRST USUARIO WHERE ROWID(USUARIO) = inRowId.
 
-    Fill_IdUser:SCREEN-VALUE IN FRAME {&FRAME-NAME} = STRING(INTEGER(USUARIO.ID_USUARIO)).
-    Fill_Usuario:SCREEN-VALUE = UPPER(USUARIO.USUARIO).
-    Fill_Contrasena:SCREEN-VALUE = UPPER(USUARIO.CONTRASENIA).
+    CASE inIntEvento:
+        WHEN 2 THEN DO:
+            Fill_IdUser:SCREEN-VALUE IN FRAME {&FRAME-NAME} = STRING(INTEGER(USUARIO.ID_USUARIO)).
+            Fill_Usuario:SCREEN-VALUE = UPPER(USUARIO.USUARIO).
+            Fill_Contrasena:SCREEN-VALUE = UPPER(USUARIO.CONTRASENIA).
+        END.
+
+        WHEN 3 THEN DO: 
+            Fill_IdUser:SCREEN-VALUE IN FRAME {&FRAME-NAME} = STRING(INTEGER(USUARIO.ID_USUARIO)).
+            Fill_Usuario:SCREEN-VALUE = UPPER(USUARIO.USUARIO).
+            Fill_Contrasena:SCREEN-VALUE = UPPER(USUARIO.CONTRASENIA).
+
+            Fill_IdUser:SENSITIVE = NO.
+            Fill_Usuario:SENSITIVE = NO.
+            Fill_Contrasena:SENSITIVE = NO.
+
+        END.
+    END CASE.
 
 END PROCEDURE.
 
@@ -286,7 +312,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY Fill_IdUser Fill_Usuario Fill_Contrasena 
       WITH FRAME Dlg_UpdateUsua.
-  ENABLE Fill_Usuario Fill_Contrasena Btn_Aceptar Btn_Cancelar RECT-1 
+  ENABLE Fill_Usuario Fill_Contrasena Btn_Aceptar Btn_Cancelar RECT-1 RECT-20 
       WITH FRAME Dlg_UpdateUsua.
   VIEW FRAME Dlg_UpdateUsua.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_UpdateUsua}
@@ -298,9 +324,9 @@ END PROCEDURE.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE setInitial Dlg_UpdateUsua 
 PROCEDURE setInitial :
 /*------------------------------------------------------------------------------
-        Purpose: Inicialización del Dialogo de Registro de Productos    
+        Purpose: Inicialización del Dialogo de Registro de usuarios   
         Parameters: <none>
-        Author: I.S.C. Fco. Javier Ortuño Colchado
+        
     ------------------------------------------------------------------------------*/
     CASE inIntEvento:
         WHEN 1 THEN DO:
@@ -310,6 +336,11 @@ PROCEDURE setInitial :
         WHEN 2 THEN DO:
             RUN asignarValores.
         END.
+
+        WHEN 3 THEN DO:
+            RUN asignarValores.
+        END.
+
     END CASE.
 END PROCEDURE.
 
@@ -326,7 +357,7 @@ FUNCTION ValidarRegistroUsuario RETURNS LOGICAL
         Notes: Retorna TRUE si la validación es correcta
         Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
-    IF vcharUsu = "0" OR vcharContra = "0" THEN
+    IF vcharUsu = " " OR vcharContra = " " THEN
         RETURN FALSE.
     
     RETURN TRUE.

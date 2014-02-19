@@ -44,7 +44,7 @@ DEFINE STREAM outFile.
 &Scoped-define FRAME-NAME Dialog-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Btn_Menu 
+&Scoped-Define ENABLED-OBJECTS Edit_File Btn_Menu 
 &Scoped-Define DISPLAYED-OBJECTS Edit_File 
 
 /* Custom List Definitions                                              */
@@ -62,7 +62,7 @@ DEFINE STREAM outFile.
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Menu 
      LABEL "Generar Menú" 
-     SIZE 20 BY 2.5.
+     SIZE 20 BY 2.52.
 
 DEFINE VARIABLE Edit_File AS CHARACTER 
      VIEW-AS EDITOR NO-WORD-WRAP SCROLLBAR-HORIZONTAL SCROLLBAR-VERTICAL
@@ -74,7 +74,7 @@ DEFINE VARIABLE Edit_File AS CHARACTER
 DEFINE FRAME Dialog-Frame
      Edit_File AT ROW 2.19 COL 5 NO-LABEL
      Btn_Menu AT ROW 3.62 COL 82
-     SPACE(84.79) SKIP(20.20)
+     SPACE(84.79) SKIP(20.18)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "<insert dialog title>".
@@ -100,11 +100,6 @@ DEFINE FRAME Dialog-Frame
 ASSIGN 
        FRAME Dialog-Frame:SCROLLABLE       = FALSE
        FRAME Dialog-Frame:HIDDEN           = TRUE.
-
-/* SETTINGS FOR EDITOR Edit_File IN FRAME Dialog-Frame
-   NO-ENABLE                                                            */
-ASSIGN 
-       Edit_File:HIDDEN IN FRAME Dialog-Frame           = TRUE.
 
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
@@ -206,7 +201,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY Edit_File 
       WITH FRAME Dialog-Frame.
-  ENABLE Btn_Menu 
+  ENABLE Edit_File Btn_Menu 
       WITH FRAME Dialog-Frame.
   VIEW FRAME Dialog-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}

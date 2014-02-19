@@ -92,6 +92,25 @@ END PROCEDURE.
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE deleteUsuario Include 
+PROCEDURE deleteUsuario :
+/*------------------------------------------------------------------------------
+        Purpose:
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    DEFINE INPUT PARAMETER inIntRowId AS ROWID.
+    DEFINE INPUT PARAMETER inCharUsuario AS CHARACTER.
+    DEFINE INPUT PARAMETER inCharContra AS CHARACTER.
+    
+    FIND USUARIO WHERE ROWID(USUARIO) = inIntRowId.
+    DELETE Usuario.
+
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE updateUsuario Include 
 PROCEDURE updateUsuario :
 /*------------------------------------------------------------------------------

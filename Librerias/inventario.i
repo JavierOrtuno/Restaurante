@@ -167,9 +167,12 @@ FUNCTION Genera_Lote RETURNS CHARACTER
       Purpose:  
         Notes:  
     ------------------------------------------------------------------------------*/
-    DEF VAR vchrlote AS CHAR.
+    DEF VAR vchrlote    AS CHAR.
+    DEF VAR vchrmes     AS CHAR.
+    DEF VAR vchrdia     AS CHAR.
+    DEF VAR vchrano     AS CHAR.
     DEF VAR vintnumlote AS INT.
-    DEF VAR vdteactual AS DATE.
+    DEF VAR vdteactual  AS DATE.
 
     vdteactual = TODAY.
     FIND LAST stock WHERE f_ingreso = vdtefecha NO-LOCK NO-ERROR.
@@ -182,9 +185,28 @@ FUNCTION Genera_Lote RETURNS CHARACTER
          IF vintnumlote < 100 THEN
              vchrlote = "0" + string(vintnumlote).
          END.
-      vchrlote = "LT-" + STRING(MONTH(vdteactual)) + STRING(YEAR(vdteactual)) + vchrlote.
+      IF  DAY(vdteactual) < 10 THEN DO:
+          vchrdia = "0" + STRING(MONTH(vdteactual)).
+      END.
+      ELSE DO:
+          vchrdia = STRING(MONTH(vdteactual)).
+      END.
+      IF  MONTH(vdteactual) < 10 THEN DO:
+          vchrmes = "0" + STRING(MONTH(vdteactual)).
+      END.
+      ELSE DO:
+          vchrmes = STRING(MONTH(vdteactual)).
+      END.
+      vchrano = (SUBSTR(STRING(YEAR(vdteactual)),3)).
+      vchrlote = "LT-" + vchrdia + vchrmes + vchrano + vchrlote.
     END.
     ELSE DO:
+        IF  DAY(vdteactual) < 10 THEN DO:
+          vchrdia = "0" + STRING(MONTH(vdteactual)).
+        END.
+        IF  MONTH(vdteactual) < 10 THEN DO:
+          vchrmes = "0" + STRING(MONTH(vdteactual)).
+        END.
         vchrlote = "LT-" + STRING(MONTH(vdteactual)) + STRING(YEAR(vdteactual)) + "001".
     END.
 

@@ -45,6 +45,17 @@ FUNCTION getDescClasificacion RETURNS CHARACTER
 
 &ENDIF
 
+&IF DEFINED(EXCLUDE-getReporteInventario) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getReporteInventario Method-Library 
+FUNCTION getReporteInventario RETURNS CHARACTER
+    ( /* parameter-definitions */ )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 &IF DEFINED(EXCLUDE-getReporteMenu) = 0 &THEN
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getReporteMenu Method-Library 
@@ -113,6 +124,41 @@ FUNCTION getDescClasificacion RETURNS CHARACTER
     FIND FIRST CLASIFICACION WHERE CLASIFICACION.ID_CLASIFICACION = vintIdClasificacion.
 
     RETURN CLASIFICACION.DESCRIPCION.
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
+&IF DEFINED(EXCLUDE-getReporteInventario) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getReporteInventario Method-Library 
+FUNCTION getReporteInventario RETURNS CHARACTER
+    ( /* parameter-definitions */ ) :
+    /*------------------------------------------------------------------------------
+        Purpose:  
+        Notes:  
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vcharReporte AS CHARACTER.
+
+    FOR EACH STOCK BY STOCK.CANTIDAD DESC:
+        FIND FIRST PRODUCTO WHERE PRODUCTO.ID_PRODUCTO = STOCK.ID_PRODUCTO.
+        FIND FIRST UNIDAD_MEDIDA WHERE UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD.
+        IF STOCK.CANTIDAD <= 0 OR STOCK.F_CADUCIDAD <= TODAY THEN
+            vcharReporte = vcharReporte + "<tr class='alta'>~n".
+        ELSE
+            IF PRODUCTO.CANT_MINIMA >= STOCK.CANTIDAD THEN
+                vcharReporte = vcharReporte + "<tr class='media'>~n".
+            ELSE
+                vcharReporte = vcharReporte + "<tr class='normal'>~n".
+        vcharReporte = vcharReporte + "<td>" + STOCK.LOTE + "</td>~n".
+        vcharReporte = vcharReporte + "<td>" + PRODUCTO.DESCRIPCION + "</td>~n".
+        vcharReporte = vcharReporte + "<td>" + STRING(STOCK.CANTIDAD) + " " + UNIDAD_MEDIDA.DESCRIPCION + "</td>~n".
+        vcharReporte = vcharReporte + "<td>" + STRING(STOCK.F_CADUCIDAD) + "</td>~n</tr>~n".
+    END.
+
+    RETURN vcharReporte.
 END FUNCTION.
 
 /* _UIB-CODE-BLOCK-END */

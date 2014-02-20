@@ -33,16 +33,18 @@
 
 DEF VAR vintProducto AS INT.
 DEF VAR vintCantidad AS INT.
-DEF VAR vintUno AS INT.
-DEF VAR vdecSubtotal AS DEC.
-DEF VAR vdecIVA AS DEC.
-DEF VAR vdecTotal AS DEC.
 DEF VAR vchrFolio AS CHAR.
 DEF VAR vdteFecha AS DATE.
 DEF VAR vchrEntrada AS CHAR.
 DEF VAR vchrSalida AS CHAR.
 DEF VAR vdecPropina AS DEC.
+DEF VAR vdecSubtotal AS DEC.
+DEF VAR vdecIVA AS DEC.
+DEF VAR vdecTotal AS DEC.
 DEF VAR vdecCuenta AS DEC.
+DEF VAR vintStock AS INT.
+DEF VAR vlogBandera AS LOG.
+DEF VAR vintTotal AS INT.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -60,7 +62,7 @@ DEF VAR vdecCuenta AS DEC.
 &Scoped-define BROWSE-NAME BROWSE-11
 
 /* Internal Tables (found by Frame, Query & Browse Queries)             */
-&Scoped-define INTERNAL-TABLES ESTATUS MENU FORMA_PAGO PERSONA EMPLEADO ROL ~
+&Scoped-define INTERNAL-TABLES ESTATUS FORMA_PAGO MENU PERSONA EMPLEADO ROL ~
 MESA
 
 /* Definitions for BROWSE BROWSE-11                                     */
@@ -72,15 +74,6 @@ MESA
 &Scoped-define FIRST-TABLE-IN-QUERY-BROWSE-11 ESTATUS
 
 
-/* Definitions for BROWSE BROWSE-12                                     */
-&Scoped-define FIELDS-IN-QUERY-BROWSE-12 MENU.DESCRIPCION MENU.PRECIO 
-&Scoped-define ENABLED-FIELDS-IN-QUERY-BROWSE-12 
-&Scoped-define QUERY-STRING-BROWSE-12 FOR EACH MENU NO-LOCK INDEXED-REPOSITION
-&Scoped-define OPEN-QUERY-BROWSE-12 OPEN QUERY BROWSE-12 FOR EACH MENU NO-LOCK INDEXED-REPOSITION.
-&Scoped-define TABLES-IN-QUERY-BROWSE-12 MENU
-&Scoped-define FIRST-TABLE-IN-QUERY-BROWSE-12 MENU
-
-
 /* Definitions for BROWSE BROWSE-2                                      */
 &Scoped-define FIELDS-IN-QUERY-BROWSE-2 FORMA_PAGO.DESCRIPCION 
 &Scoped-define ENABLED-FIELDS-IN-QUERY-BROWSE-2 
@@ -88,6 +81,15 @@ MESA
 &Scoped-define OPEN-QUERY-BROWSE-2 OPEN QUERY BROWSE-2 FOR EACH FORMA_PAGO NO-LOCK INDEXED-REPOSITION.
 &Scoped-define TABLES-IN-QUERY-BROWSE-2 FORMA_PAGO
 &Scoped-define FIRST-TABLE-IN-QUERY-BROWSE-2 FORMA_PAGO
+
+
+/* Definitions for BROWSE BROWSE-20                                     */
+&Scoped-define FIELDS-IN-QUERY-BROWSE-20 MENU.DESCRIPCION MENU.PRECIO 
+&Scoped-define ENABLED-FIELDS-IN-QUERY-BROWSE-20 
+&Scoped-define QUERY-STRING-BROWSE-20 FOR EACH MENU NO-LOCK INDEXED-REPOSITION
+&Scoped-define OPEN-QUERY-BROWSE-20 OPEN QUERY BROWSE-20 FOR EACH MENU NO-LOCK INDEXED-REPOSITION.
+&Scoped-define TABLES-IN-QUERY-BROWSE-20 MENU
+&Scoped-define FIRST-TABLE-IN-QUERY-BROWSE-20 MENU
 
 
 /* Definitions for BROWSE BROWSE-3                                      */
@@ -119,13 +121,13 @@ MESA
 /* Definitions for DIALOG-BOX RegVenta-Frame                            */
 &Scoped-define OPEN-BROWSERS-IN-QUERY-RegVenta-Frame ~
     ~{&OPEN-QUERY-BROWSE-11}~
-    ~{&OPEN-QUERY-BROWSE-12}~
     ~{&OPEN-QUERY-BROWSE-2}~
+    ~{&OPEN-QUERY-BROWSE-20}~
     ~{&OPEN-QUERY-BROWSE-3}~
     ~{&OPEN-QUERY-BROWSE-9}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Folio HoraEntrada HoraSalida BROWSE-12 ~
+&Scoped-Define ENABLED-OBJECTS Folio HoraEntrada HoraSalida BROWSE-20 ~
 BROWSE-9 BROWSE-2 BROWSE-11 Subtotal BROWSE-3 IVA Cantidad BUTTON-1 Total ~
 Propina BtnOK BtnCancel 
 &Scoped-Define DISPLAYED-OBJECTS Fecha Folio HoraEntrada HoraSalida ~
@@ -217,11 +219,11 @@ DEFINE VARIABLE Total AS DECIMAL FORMAT "->>,>>9.99":U INITIAL 0
 DEFINE QUERY BROWSE-11 FOR 
       ESTATUS SCROLLING.
 
-DEFINE QUERY BROWSE-12 FOR 
-      MENU SCROLLING.
-
 DEFINE QUERY BROWSE-2 FOR 
       FORMA_PAGO SCROLLING.
+
+DEFINE QUERY BROWSE-20 FOR 
+      MENU SCROLLING.
 
 DEFINE QUERY BROWSE-3 FOR 
       PERSONA, 
@@ -241,15 +243,6 @@ DEFINE BROWSE BROWSE-11
 &ANALYZE-RESUME
     WITH NO-ROW-MARKERS SEPARATORS NO-SCROLLBAR-VERTICAL SIZE 24 BY 4.05 ROW-HEIGHT-CHARS .76 EXPANDABLE.
 
-DEFINE BROWSE BROWSE-12
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-12 RegVenta-Frame _STRUCTURED
-  QUERY BROWSE-12 NO-LOCK DISPLAY
-      MENU.DESCRIPCION FORMAT "X(15)":U WIDTH 32.2
-      MENU.PRECIO FORMAT "->>,>>9.99":U
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 61 BY 7.62 EXPANDABLE.
-
 DEFINE BROWSE BROWSE-2
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-2 RegVenta-Frame _STRUCTURED
   QUERY BROWSE-2 NO-LOCK DISPLAY
@@ -257,6 +250,15 @@ DEFINE BROWSE BROWSE-2
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
     WITH NO-ROW-MARKERS SEPARATORS NO-SCROLLBAR-VERTICAL SIZE 22 BY 3.57 ROW-HEIGHT-CHARS .67 EXPANDABLE.
+
+DEFINE BROWSE BROWSE-20
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-20 RegVenta-Frame _STRUCTURED
+  QUERY BROWSE-20 NO-LOCK DISPLAY
+      MENU.DESCRIPCION FORMAT "X(25)":U WIDTH 31.2
+      MENU.PRECIO FORMAT "->>,>>9.99":U WIDTH 25.4
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 62 BY 8.81 EXPANDABLE.
 
 DEFINE BROWSE BROWSE-3
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-3 RegVenta-Frame _STRUCTURED
@@ -282,20 +284,20 @@ DEFINE FRAME RegVenta-Frame
      Folio AT ROW 1.95 COL 40 COLON-ALIGNED
      HoraEntrada AT ROW 1.95 COL 74 COLON-ALIGNED
      HoraSalida AT ROW 1.95 COL 104 COLON-ALIGNED
-     BROWSE-12 AT ROW 1.95 COL 122
+     BROWSE-20 AT ROW 1.95 COL 121
      BROWSE-9 AT ROW 3.86 COL 10
      BROWSE-2 AT ROW 3.86 COL 44
      BROWSE-11 AT ROW 3.86 COL 77
      Subtotal AT ROW 9.33 COL 51 COLON-ALIGNED
      BROWSE-3 AT ROW 9.57 COL 9
      IVA AT ROW 9.57 COL 76 COLON-ALIGNED
-     Cantidad AT ROW 10.52 COL 145 COLON-ALIGNED
-     BUTTON-1 AT ROW 10.52 COL 164
+     Cantidad AT ROW 11.24 COL 144 COLON-ALIGNED
+     BUTTON-1 AT ROW 11.24 COL 164
      Total AT ROW 11.48 COL 50 COLON-ALIGNED
      Propina AT ROW 11.48 COL 76 COLON-ALIGNED
-     BtnOK AT ROW 14.1 COL 142
-     BtnCancel AT ROW 14.1 COL 161
-     SPACE(15.99) SKIP(0.94)
+     BtnOK AT ROW 14.1 COL 151
+     BtnCancel AT ROW 14.1 COL 169
+     SPACE(7.99) SKIP(0.94)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Registro de Venta"
@@ -329,8 +331,8 @@ DEFINE FRAME RegVenta-Frame
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR DIALOG-BOX RegVenta-Frame
                                                                         */
-/* BROWSE-TAB BROWSE-12 HoraSalida RegVenta-Frame */
-/* BROWSE-TAB BROWSE-9 BROWSE-12 RegVenta-Frame */
+/* BROWSE-TAB BROWSE-20 HoraSalida RegVenta-Frame */
+/* BROWSE-TAB BROWSE-9 BROWSE-20 RegVenta-Frame */
 /* BROWSE-TAB BROWSE-2 BROWSE-9 RegVenta-Frame */
 /* BROWSE-TAB BROWSE-11 BROWSE-2 RegVenta-Frame */
 /* BROWSE-TAB BROWSE-3 Subtotal RegVenta-Frame */
@@ -359,17 +361,6 @@ ASSIGN
 */  /* BROWSE BROWSE-11 */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _QUERY-BLOCK BROWSE BROWSE-12
-/* Query rebuild information for BROWSE BROWSE-12
-     _TblList          = "Restaurante.MENU"
-     _Options          = "NO-LOCK INDEXED-REPOSITION"
-     _FldNameList[1]   > Restaurante.MENU.DESCRIPCION
-"MENU.DESCRIPCION" ? "X(15)" "character" ? ? ? ? ? ? no ? no no "32.2" yes no no "U" "" ""
-     _FldNameList[2]   = Restaurante.MENU.PRECIO
-     _Query            is OPENED
-*/  /* BROWSE BROWSE-12 */
-&ANALYZE-RESUME
-
 &ANALYZE-SUSPEND _QUERY-BLOCK BROWSE BROWSE-2
 /* Query rebuild information for BROWSE BROWSE-2
      _TblList          = "Restaurante.FORMA_PAGO"
@@ -378,6 +369,18 @@ ASSIGN
 "FORMA_PAGO.DESCRIPCION" "Forma de Pago" "X(15)" "character" ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE BROWSE-2 */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _QUERY-BLOCK BROWSE BROWSE-20
+/* Query rebuild information for BROWSE BROWSE-20
+     _TblList          = "Restaurante.MENU"
+     _Options          = "NO-LOCK INDEXED-REPOSITION"
+     _FldNameList[1]   > Restaurante.MENU.DESCRIPCION
+"MENU.DESCRIPCION" ? "X(25)" "character" ? ? ? ? ? ? no ? no no "31.2" yes no no "U" "" ""
+     _FldNameList[2]   > Restaurante.MENU.PRECIO
+"MENU.PRECIO" ? ? "decimal" ? ? ? ? ? ? no ? no no "25.4" yes no no "U" "" ""
+     _Query            is OPENED
+*/  /* BROWSE BROWSE-20 */
 &ANALYZE-RESUME
 
 &ANALYZE-SUSPEND _QUERY-BLOCK BROWSE BROWSE-3
@@ -444,20 +447,25 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-1 RegVenta-Frame
 ON CHOOSE OF BUTTON-1 IN FRAME RegVenta-Frame /* Agregar */
 DO:
-  vintCantidad = INT(Cantidad:SCREEN-VALUE).
+  ASSIGN vintCantidad = INT(Cantidad:SCREEN-VALUE).
 
-  vdecSubTotal = CalcularSubtotal(vintCantidad).
-  ASSIGN Subtotal:SCREEN-VALUE = STRING(vdecSubtotal).
-  
-  vdecIVA = CalcularIVA(vdecSubtotal).
-  ASSIGN IVA:SCREEN-VALUE = STRING(vdecIVA).
-
+  vdecSubtotal = vdecSubtotal + CalcularSubtotal(vintCantidad).
+  vdecIVA = vdecIva + CalcularIVA(vdecSubtotal).
   vdecTotal = CalcularTotal(vdecSubtotal,vdecIVA).
-  ASSIGN TOTAL:SCREEN-VALUE = String(vdecTotal).
 
-  RUN DescontarInventario(vintCantidad,OUTPUT vintProducto,OUTPUT vintCantidad,OUTPUT vintUno).
-
-  DescontarExistencia(vintProducto,vintCantidad,vintUno).
+  vlogBandera = DescontarInventario(vintCantidad).
+  IF vlogBandera = FALSE THEN DO:
+      ASSIGN Subtotal:SCREEN-VALUE = STRING(vdecSubtotal)
+             IVA:SCREEN-VALUE = STRING(vdecIVA)
+              TOTAL:SCREEN-VALUE = STRING(vdecTotal).
+      FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = MENU.ID_Menu.
+          vintTotal = vintCantidad * Ingrediente.Cantidad.
+          vintproducto = Ingrediente.ID_Producto.
+         DescontarExistencia(vintproducto,vintTotal,1).
+      END.
+      END.
+  ELSE
+      MESSAGE "No te puedo vender esa cantidad" VIEW-AS ALERT-BOX.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -524,7 +532,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY Fecha Folio HoraEntrada HoraSalida Subtotal IVA Cantidad Total Propina 
       WITH FRAME RegVenta-Frame.
-  ENABLE Folio HoraEntrada HoraSalida BROWSE-12 BROWSE-9 BROWSE-2 BROWSE-11 
+  ENABLE Folio HoraEntrada HoraSalida BROWSE-20 BROWSE-9 BROWSE-2 BROWSE-11 
          Subtotal BROWSE-3 IVA Cantidad BUTTON-1 Total Propina BtnOK BtnCancel 
       WITH FRAME RegVenta-Frame.
   VIEW FRAME RegVenta-Frame.

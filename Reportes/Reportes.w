@@ -44,7 +44,7 @@ DEFINE STREAM outFile.
 &Scoped-define FRAME-NAME Dialog-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Edit_File Btn_Menu 
+&Scoped-Define ENABLED-OBJECTS Edit_File Btn_Menu Btn_Inventario 
 &Scoped-Define DISPLAYED-OBJECTS Edit_File 
 
 /* Custom List Definitions                                              */
@@ -60,6 +60,10 @@ DEFINE STREAM outFile.
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
+DEFINE BUTTON Btn_Inventario 
+     LABEL "Generar Inventario" 
+     SIZE 20 BY 2.5.
+
 DEFINE BUTTON Btn_Menu 
      LABEL "Generar Menú" 
      SIZE 20 BY 2.52.
@@ -74,7 +78,8 @@ DEFINE VARIABLE Edit_File AS CHARACTER
 DEFINE FRAME Dialog-Frame
      Edit_File AT ROW 2.19 COL 5 NO-LABEL
      Btn_Menu AT ROW 3.62 COL 82
-     SPACE(84.79) SKIP(20.18)
+     Btn_Inventario AT ROW 6.71 COL 82
+     SPACE(84.79) SKIP(17.11)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "<insert dialog title>".
@@ -121,11 +126,12 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME Btn_Menu
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Menu Dialog-Frame
-ON CHOOSE OF Btn_Menu IN FRAME Dialog-Frame /* Generar Menú */
+&Scoped-define SELF-NAME Btn_Inventario
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Inventario Dialog-Frame
+ON CHOOSE OF Btn_Inventario IN FRAME Dialog-Frame /* Generar Inventario */
 DO:
     DEFINE VARIABLE vcharFileName AS CHARACTER.
+    Edit_File:SCREEN-VALUE = "".
 
     SYSTEM-DIALOG 
         GET-FILE vcharFileName 
@@ -133,10 +139,29 @@ DO:
         FILTERS "Archivos (*.html)"   "*.html" 
         SAVE-AS.
 
-    RUN generarMenu.
+    RUN generarInventario.
+    Edit_File:SAVE-FILE ( vcharFileName + ".html" ).
+END.
 
-    OUTPUT STREAM outFile TO VALUE(vcharFileName + ".html") APPEND.
-    PUT STREAM outFile UNFORMATTED Edit_File:SCREEN-VALUE.
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Btn_Menu
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Menu Dialog-Frame
+ON CHOOSE OF Btn_Menu IN FRAME Dialog-Frame /* Generar Menú */
+DO:    
+    DEFINE VARIABLE vcharFileName AS CHARACTER.
+
+    Edit_File:SCREEN-VALUE = "".
+    SYSTEM-DIALOG 
+        GET-FILE vcharFileName 
+        TITLE "Guardar Archivo ..." 
+        FILTERS "Archivos (*.html)"   "*.html" 
+        SAVE-AS.
+
+    RUN generarMenu.
+    Edit_File:SAVE-FILE ( vcharFileName + ".html" ).
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -201,10 +226,40 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY Edit_File 
       WITH FRAME Dialog-Frame.
-  ENABLE Edit_File Btn_Menu 
+  ENABLE Edit_File Btn_Menu Btn_Inventario 
       WITH FRAME Dialog-Frame.
   VIEW FRAME Dialog-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE generarInventario Dialog-Frame 
+PROCEDURE generarInventario :
+/*------------------------------------------------------------------------------
+        Purpose:     
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vintCursor AS INTEGER.
+    DEFINE VARIABLE vcharFile AS CHARACTER.
+    DEFINE VARIABLE vcharTexto AS CHARACTER.    
+    DEFINE VARIABLE vcharOut AS CHARACTER.       
+
+    vcharFile = search("inventario.html").
+    Edit_File:INSERT-FILE(vcharFile) IN FRAME Dialog-Frame.
+    vcharTexto = Edit_File:SCREEN-VALUE.
+        
+    DO vintCursor = 1 TO NUM-ENTRIES(vcharTexto, "~n"):        
+        IF LENGTH(TRIM(ENTRY(vintCursor, vcharTexto, "~n"))) > 0 THEN DO:
+            vcharOut = vcharOut + ENTRY(vintCursor, vcharTexto, "~n") + "~n".
+        END.
+        ELSE DO:
+            vcharOut = vcharOut + getReporteInventario() + "~n".
+        END.
+    END.
+    ASSIGN Edit_File:SCREEN-VALUE = vcharOut.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
@@ -217,12 +272,12 @@ PROCEDURE generarMenu :
         Parameters:  <none>
         Notes:       
     ------------------------------------------------------------------------------*/    
-    DEFINE VARIABLE vintCursor AS INTEGER.    
+    DEFINE VARIABLE vintCursor AS INTEGER.
     DEFINE VARIABLE vcharFile AS CHARACTER.
     DEFINE VARIABLE vcharTexto AS CHARACTER.    
     DEFINE VARIABLE vcharOut AS CHARACTER.       
 
-    vcharFile = "C:\Users\Javier Orduño\Documents\GitHub\Restaurante\Reportes\menu.html".
+    vcharFile = search("menu.html").
     Edit_File:INSERT-FILE(vcharFile) IN FRAME Dialog-Frame.
     vcharTexto = Edit_File:SCREEN-VALUE.
         
@@ -235,6 +290,19 @@ PROCEDURE generarMenu :
         END.
     END.
     ASSIGN Edit_File:SCREEN-VALUE = vcharOut.
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE generarPedido Dialog-Frame 
+PROCEDURE generarPedido :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

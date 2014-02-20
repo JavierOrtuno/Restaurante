@@ -117,14 +117,14 @@ DEF VAR vinttotal  AS INT.
 vdteactual = TODAY.
 CASE vinttipo:
     WHEN 1 THEN DO:
-        FOR EACH stock WHERE id_producto = vintproducto AND f_caducidad > vdteactual AND cantidad > 0 BY f_caducidad BY cantidad.
-            IF cantidad >= vintcantidad THEN DO:
-                vinttotal = cantidad - vintcantidad.
+        FOR EACH stock WHERE stock.id_producto = vintproducto AND stock.f_caducidad > vdteactual AND stock.cantidad > 0 BY f_caducidad BY cantidad.
+            IF stock.cantidad >= vintcantidad THEN DO:
+                vinttotal = stock.cantidad - vintcantidad.
                 ASSIGN stock.cantidad = vinttotal.
                 LEAVE.
             END.
             ELSE DO:
-                vintcantidad = vintcantidad - cantidad.
+                vintcantidad = vintcantidad - stock.cantidad.
                 ASSIGN stock.cantidad = 0.
                 IF vintcantidad = 0 THEN DO:
                     LEAVE.

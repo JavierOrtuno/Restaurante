@@ -179,16 +179,20 @@ FUNCTION Genera_Lote RETURNS CHARACTER
     IF AVAILABLE stock THEN DO:
       vintnumlote = INT(SUBSTR (stock.lote,LENGTH(TRIM(stock.lote)) - 2)).
       vintnumlote = vintnumlote + 1.
-      IF vintnumlote < 10 THEN
-        vchrlote = "00" + string(vintnumlote).
+      IF vintnumlote < 10 THEN DO:
+          vchrlote = "00" + string(vintnumlote).
+      END.
       ELSE DO:
-         IF vintnumlote < 100 THEN
+         IF vintnumlote < 100 THEN DO:
              vchrlote = "0" + string(vintnumlote).
          END.
+         END.
       IF  DAY(vdteactual) < 10 THEN DO:
+          MESSAGE "entre en el dia" VIEW-AS ALERT-BOX.
           vchrdia = "0" + STRING(MONTH(vdteactual)).
       END.
       ELSE DO:
+          MESSAGE "entre en el else" VIEW-AS ALERT-BOX.
           vchrdia = STRING(MONTH(vdteactual)).
       END.
       IF  MONTH(vdteactual) < 10 THEN DO:

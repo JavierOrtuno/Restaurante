@@ -148,7 +148,7 @@ DEFINE FRAME Dlg_CreacionP
           SIZE 40 BY .62 AT ROW 6.1 COL 65.6
      "Seleccionar Ingrediente:" VIEW-AS TEXT
           SIZE 40 BY .62 AT ROW 3.91 COL 11.8
-     SPACE(83.19) SKIP(19.89)
+     SPACE(83.20) SKIP(19.89)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -244,24 +244,17 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Sel_Productos Dlg_CreacionP
 ON MOUSE-SELECT-DBLCLICK OF Sel_Productos IN FRAME Dlg_CreacionP
 DO:
-    DEFINE VARIABLE vintCantidad AS INTEGER.
-    DEFINE VARIABLE vcharId AS CHARACTER.    
-    DEFINE VARIABLE vcharDesc AS CHARACTER.
-    DEFINE VARIABLE vcharUnidad AS CHARACTER.
+    RUN validarAgregado.
+END.
 
-    vcharId = Sel_Productos:SCREEN-VALUE.
-    vcharDesc = getDescProducto(INTEGER(vcharId)).
-    
-    IF LOOKUP (vcharId, Sel_Ingredientes:LIST-ITEM-PAIRS) = 0 THEN DO:
-        RUN agregarCantidad.w(INTEGER(vcharId), OUTPUT vintCantidad, OUTPUT vcharUnidad).
-        IF vintCantidad <> 0 THEN
-            RUN addIngredienteList(vcharId, vcharDesc + "/" + STRING(vintCantidad) + "-" + vcharUnidad).
-        ELSE
-            MESSAGE "LA CANTIDAD DEBE SER MAYOR A CERO" VIEW-AS ALERT-BOX.
-    END.
-    ELSE DO:
-        MESSAGE "YA HA AGREGADO ESE INGREDIENTE" VIEW-AS ALERT-BOX.
-    END.
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Sel_Productos Dlg_CreacionP
+ON RETURN OF Sel_Productos IN FRAME Dlg_CreacionP
+DO:
+    RUN validarAgregado.  
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -407,6 +400,36 @@ PROCEDURE setInitial :
     vcharCatClasif = getCatClasificacion().
     ASSIGN List_Clasificacion:LIST-ITEM-PAIRS = vcharCatClasif.
     
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE validarAgregado Dlg_CreacionP 
+PROCEDURE validarAgregado :
+/*------------------------------------------------------------------------------
+        Purpose:     
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vintCantidad AS INTEGER.
+    DEFINE VARIABLE vcharId AS CHARACTER.    
+    DEFINE VARIABLE vcharDesc AS CHARACTER.
+    DEFINE VARIABLE vcharUnidad AS CHARACTER.
+
+    vcharId = Sel_Productos:SCREEN-VALUE IN FRAME Dlg_CreacionP.
+    vcharDesc = getDescProducto(INTEGER(vcharId)).
+    
+    IF LOOKUP (vcharId, Sel_Ingredientes:LIST-ITEM-PAIRS) = 0 THEN DO:
+        RUN agregarCantidad.w(INTEGER(vcharId), OUTPUT vintCantidad, OUTPUT vcharUnidad).
+        IF vintCantidad <> 0 THEN
+            RUN addIngredienteList(vcharId, vcharDesc + "/" + STRING(vintCantidad) + "-" + vcharUnidad).
+        ELSE
+            MESSAGE "LA CANTIDAD DEBE SER MAYOR A CERO" VIEW-AS ALERT-BOX.
+    END.
+    ELSE DO:
+        MESSAGE "YA HA AGREGADO ESE INGREDIENTE" VIEW-AS ALERT-BOX.
+    END.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

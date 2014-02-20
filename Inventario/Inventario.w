@@ -109,7 +109,7 @@ DEFINE RECTANGLE RECT-1
 
 DEFINE RECTANGLE RECT-18
      EDGE-PIXELS 8  
-     SIZE 220 BY 2.33
+     SIZE 210 BY 2.33
      BGCOLOR 8 .
 
 /* Query definitions                                                    */
@@ -133,27 +133,27 @@ DEFINE BROWSE BROWSE-8
             WIDTH 25.2
       STOCK.F_INGRESO COLUMN-LABEL "FECHA DE INGRESO" FORMAT "99/99/99":U
             WIDTH 23.2
-      STOCK.LOTE FORMAT "X(11)":U
+      STOCK.LOTE FORMAT "X(12)":U WIDTH 28.4
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 164 BY 22.14
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 166 BY 22.14
          BGCOLOR 15  ROW-HEIGHT-CHARS .62 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Inventario-Frame
-     BUTTON-25 AT ROW 1.67 COL 201
+     BUTTON-25 AT ROW 1.62 COL 193.6
      BROWSE-8 AT ROW 4.14 COL 11
-     BUTTON-1 AT ROW 9.1 COL 183
-     BUTTON-22 AT ROW 12.95 COL 183
-     BUTTON-20 AT ROW 16.95 COL 183.2
-     RECT-1 AT ROW 8.43 COL 181.2
-     RECT-18 AT ROW 1.05 COL 1
+     BUTTON-1 AT ROW 9.1 COL 184.4
+     BUTTON-22 AT ROW 12.95 COL 184.4
+     BUTTON-20 AT ROW 16.95 COL 184.6
+     RECT-1 AT ROW 8.43 COL 182.6
+     RECT-18 AT ROW 1 COL 1
      "INVENTARIO" VIEW-AS TEXT
           SIZE 15.2 BY 1.19 AT ROW 1.62 COL 92.4
           BGCOLOR 8 FGCOLOR 15 
-     SPACE(113.59) SKIP(24.42)
+     SPACE(103.39) SKIP(24.42)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -205,7 +205,7 @@ ASSIGN
      _FldNameList[6]   > Restaurante.STOCK.F_INGRESO
 "STOCK.F_INGRESO" "FECHA DE INGRESO" ? "date" ? ? ? ? ? ? no ? no no "23.2" yes no no "U" "" ""
      _FldNameList[7]   > Restaurante.STOCK.LOTE
-"STOCK.LOTE" ? "X(11)" "character" ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
+"STOCK.LOTE" ? ? "character" ? ? ? ? ? ? no ? no no "24.4" yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE BROWSE-8 */
 &ANALYZE-RESUME

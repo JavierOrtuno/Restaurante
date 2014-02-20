@@ -45,6 +45,17 @@ FUNCTION getDescClasificacion RETURNS CHARACTER
 
 &ENDIF
 
+&IF DEFINED(EXCLUDE-getReporteFactura) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getReporteFactura Method-Library 
+FUNCTION getReporteFactura RETURNS CHARACTER
+    ( INPUT vintFactura AS INTEGER )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 &IF DEFINED(EXCLUDE-getReporteInventario) = 0 &THEN
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getReporteInventario Method-Library 
@@ -124,6 +135,38 @@ FUNCTION getDescClasificacion RETURNS CHARACTER
     FIND FIRST CLASIFICACION WHERE CLASIFICACION.ID_CLASIFICACION = vintIdClasificacion.
 
     RETURN CLASIFICACION.DESCRIPCION.
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
+&IF DEFINED(EXCLUDE-getReporteFactura) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getReporteFactura Method-Library 
+FUNCTION getReporteFactura RETURNS CHARACTER
+    ( INPUT vintFactura AS INTEGER ) :
+    /*------------------------------------------------------------------------------
+        Purpose:  
+        Notes:  
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vcharReporte AS CHARACTER.
+
+    FIND FIRST FACTURA WHERE FACTURA.ID_FACTURA = vintFactura.
+    FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
+    FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA.
+    FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO.
+    FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+
+    vcharReporte = vcharReporte + "<thead>~n<tr>~n".
+    vcharReporte = vcharReporte + "<th colspan='2'>Folio: " + FACTURA.FOLIO + "</th>~n".
+    vcharReporte = vcharReporte + "<th>" + "</th>~n</tr>~n<tr>~n".
+    vcharReporte = vcharReporte + "<th colspan='2'>Mesa: " + MESA.DESCRIPCION + "</th>~n<th></th>~n</tr>~n<tr>~n".
+    vcharReporte = vcharReporte + "<th colspan='2'>Mesero: " + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</th>~n<th></th>~n</tr>~n<tr>~n".
+    vcharReporte = vcharReporte + "<th colspan='3'>&nbsp;</th>~n</tr>~n</thead>~n".
+
+    RETURN vcharReporte.
 END FUNCTION.
 
 /* _UIB-CODE-BLOCK-END */

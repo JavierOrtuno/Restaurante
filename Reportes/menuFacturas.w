@@ -1,8 +1,11 @@
 &ANALYZE-SUSPEND _VERSION-NUMBER UIB_v9r12 GUI
 &ANALYZE-RESUME
+/* Connected Databases 
+          restaurante      PROGRESS
+*/
 &Scoped-define WINDOW-NAME CURRENT-WINDOW
-&Scoped-define FRAME-NAME Dlg_Reportes
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Dlg_Reportes 
+&Scoped-define FRAME-NAME Dlg_Facturas
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Dlg_Facturas 
 /*------------------------------------------------------------------------
 
   File: 
@@ -27,7 +30,6 @@
 /* Parameters Definitions ---                                           */
 
 /* Local Variable Definitions ---                                       */
-DEFINE STREAM outFile.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -41,12 +43,29 @@ DEFINE STREAM outFile.
 &Scoped-define DB-AWARE no
 
 /* Name of first Frame and/or Browse and/or first Query                 */
-&Scoped-define FRAME-NAME Dlg_Reportes
+&Scoped-define FRAME-NAME Dlg_Facturas
+&Scoped-define BROWSE-NAME Bws_Facturas
+
+/* Internal Tables (found by Frame, Query & Browse Queries)             */
+&Scoped-define INTERNAL-TABLES FACTURA
+
+/* Definitions for BROWSE Bws_Facturas                                  */
+&Scoped-define FIELDS-IN-QUERY-Bws_Facturas FACTURA.FOLIO FACTURA.FECHA ~
+FACTURA.TOTAL FACTURA.ID_ESTATUS 
+&Scoped-define ENABLED-FIELDS-IN-QUERY-Bws_Facturas 
+&Scoped-define QUERY-STRING-Bws_Facturas FOR EACH FACTURA NO-LOCK INDEXED-REPOSITION
+&Scoped-define OPEN-QUERY-Bws_Facturas OPEN QUERY Bws_Facturas FOR EACH FACTURA NO-LOCK INDEXED-REPOSITION.
+&Scoped-define TABLES-IN-QUERY-Bws_Facturas FACTURA
+&Scoped-define FIRST-TABLE-IN-QUERY-Bws_Facturas FACTURA
+
+
+/* Definitions for DIALOG-BOX Dlg_Facturas                              */
+&Scoped-define OPEN-BROWSERS-IN-QUERY-Dlg_Facturas ~
+    ~{&OPEN-QUERY-Bws_Facturas}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Edit_File Btn_Menu Btn_Inventario ~
-Btn_Facturas 
-&Scoped-Define DISPLAYED-OBJECTS Edit_File 
+&Scoped-Define ENABLED-OBJECTS Bws_Facturas Edit_Factura 
+&Scoped-Define DISPLAYED-OBJECTS Edit_Factura 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -61,34 +80,38 @@ Btn_Facturas
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
-DEFINE BUTTON Btn_Facturas 
-     LABEL "Facturas" 
-     SIZE 20 BY 2.5.
-
-DEFINE BUTTON Btn_Inventario 
-     LABEL "Generar Inventario" 
-     SIZE 20 BY 2.5.
-
-DEFINE BUTTON Btn_Menu 
-     LABEL "Generar Menú" 
-     SIZE 20 BY 2.52.
-
-DEFINE VARIABLE Edit_File AS CHARACTER 
+DEFINE VARIABLE Edit_Factura AS CHARACTER 
      VIEW-AS EDITOR NO-WORD-WRAP SCROLLBAR-HORIZONTAL SCROLLBAR-VERTICAL
-     SIZE 62 BY 20.95 NO-UNDO.
+     SIZE 44 BY 7.14 NO-UNDO.
+
+/* Query definitions                                                    */
+&ANALYZE-SUSPEND
+DEFINE QUERY Bws_Facturas FOR 
+      FACTURA SCROLLING.
+&ANALYZE-RESUME
+
+/* Browse definitions                                                   */
+DEFINE BROWSE Bws_Facturas
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS Bws_Facturas Dlg_Facturas _STRUCTURED
+  QUERY Bws_Facturas NO-LOCK DISPLAY
+      FACTURA.FOLIO FORMAT "X(50)":U WIDTH 26.2
+      FACTURA.FECHA FORMAT "99/99/99":U WIDTH 33.2
+      FACTURA.TOTAL FORMAT "->>,>>9.99":U WIDTH 33.2
+      FACTURA.ID_ESTATUS FORMAT "->,>>>,>>9":U WIDTH 21.4
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 121 BY 10.71 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
-DEFINE FRAME Dlg_Reportes
-     Edit_File AT ROW 2.19 COL 5 NO-LABEL
-     Btn_Menu AT ROW 3.86 COL 81
-     Btn_Inventario AT ROW 6.71 COL 81
-     Btn_Facturas AT ROW 9.57 COL 81
-     SPACE(85.79) SKIP(14.25)
+DEFINE FRAME Dlg_Facturas
+     Bws_Facturas AT ROW 2.67 COL 7
+     Edit_Factura AT ROW 14.1 COL 7 NO-LABEL
+     SPACE(82.99) SKIP(0.56)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "Reportes".
+         TITLE "Facturas".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -106,13 +129,33 @@ DEFINE FRAME Dlg_Reportes
 /* ***********  Runtime Attributes and AppBuilder Settings  *********** */
 
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
-/* SETTINGS FOR DIALOG-BOX Dlg_Reportes
+/* SETTINGS FOR DIALOG-BOX Dlg_Facturas
                                                                         */
+/* BROWSE-TAB Bws_Facturas 1 Dlg_Facturas */
 ASSIGN 
-       FRAME Dlg_Reportes:SCROLLABLE       = FALSE
-       FRAME Dlg_Reportes:HIDDEN           = TRUE.
+       FRAME Dlg_Facturas:SCROLLABLE       = FALSE
+       FRAME Dlg_Facturas:HIDDEN           = TRUE.
 
 /* _RUN-TIME-ATTRIBUTES-END */
+&ANALYZE-RESUME
+
+
+/* Setting information for Queries and Browse Widgets fields            */
+
+&ANALYZE-SUSPEND _QUERY-BLOCK BROWSE Bws_Facturas
+/* Query rebuild information for BROWSE Bws_Facturas
+     _TblList          = "Restaurante.FACTURA"
+     _Options          = "NO-LOCK INDEXED-REPOSITION"
+     _FldNameList[1]   > Restaurante.FACTURA.FOLIO
+"FOLIO" ? ? "character" ? ? ? ? ? ? no ? no no "26.2" yes no no "U" "" ""
+     _FldNameList[2]   > Restaurante.FACTURA.FECHA
+"FECHA" ? ? "date" ? ? ? ? ? ? no ? no no "33.2" yes no no "U" "" ""
+     _FldNameList[3]   > Restaurante.FACTURA.TOTAL
+"TOTAL" ? ? "decimal" ? ? ? ? ? ? no ? no no "33.2" yes no no "U" "" ""
+     _FldNameList[4]   > Restaurante.FACTURA.ID_ESTATUS
+"ID_ESTATUS" ? ? "integer" ? ? ? ? ? ? no ? no no "21.4" yes no no "U" "" ""
+     _Query            is OPENED
+*/  /* BROWSE Bws_Facturas */
 &ANALYZE-RESUME
 
  
@@ -121,9 +164,9 @@ ASSIGN
 
 /* ************************  Control Triggers  ************************ */
 
-&Scoped-define SELF-NAME Dlg_Reportes
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dlg_Reportes Dlg_Reportes
-ON WINDOW-CLOSE OF FRAME Dlg_Reportes /* Reportes */
+&Scoped-define SELF-NAME Dlg_Facturas
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dlg_Facturas Dlg_Facturas
+ON WINDOW-CLOSE OF FRAME Dlg_Facturas /* Facturas */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -132,53 +175,22 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME Btn_Facturas
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Facturas Dlg_Reportes
-ON CHOOSE OF Btn_Facturas IN FRAME Dlg_Reportes /* Facturas */
-DO:
-    RUN menuFacturas.w.  
-END.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-
-&Scoped-define SELF-NAME Btn_Inventario
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Inventario Dlg_Reportes
-ON CHOOSE OF Btn_Inventario IN FRAME Dlg_Reportes /* Generar Inventario */
+&Scoped-define BROWSE-NAME Bws_Facturas
+&Scoped-define SELF-NAME Bws_Facturas
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bws_Facturas Dlg_Facturas
+ON MOUSE-SELECT-DBLCLICK OF Bws_Facturas IN FRAME Dlg_Facturas /* Browse 21 */
 DO:
     DEFINE VARIABLE vcharFileName AS CHARACTER.
-    Edit_File:SCREEN-VALUE = "".
 
+    Edit_Factura:SCREEN-VALUE = "".
     SYSTEM-DIALOG 
         GET-FILE vcharFileName 
         TITLE "Guardar Archivo ..." 
         FILTERS "Archivos (*.html)"   "*.html" 
         SAVE-AS.
 
-    RUN generarInventario.
-    Edit_File:SAVE-FILE ( vcharFileName + ".html" ).
-END.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-
-&Scoped-define SELF-NAME Btn_Menu
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Menu Dlg_Reportes
-ON CHOOSE OF Btn_Menu IN FRAME Dlg_Reportes /* Generar Menú */
-DO:    
-    DEFINE VARIABLE vcharFileName AS CHARACTER.
-
-    Edit_File:SCREEN-VALUE = "".
-    SYSTEM-DIALOG 
-        GET-FILE vcharFileName 
-        TITLE "Guardar Archivo ..." 
-        FILTERS "Archivos (*.html)"   "*.html" 
-        SAVE-AS.
-
-    RUN generarMenu.
-    Edit_File:SAVE-FILE ( vcharFileName + ".html" ).
+    RUN generarFactura(ROWID(FACTURA)).
+    Edit_Factura:SAVE-FILE ( vcharFileName + ".html" ).
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -187,7 +199,7 @@ END.
 
 &UNDEFINE SELF-NAME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dlg_Reportes 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dlg_Facturas 
 
 
 /* ***************************  Main Block  *************************** */
@@ -213,7 +225,7 @@ RUN disable_UI.
 
 /* **********************  Internal Procedures  *********************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Dlg_Reportes  _DEFAULT-DISABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE disable_UI Dlg_Facturas  _DEFAULT-DISABLE
 PROCEDURE disable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     DISABLE the User Interface
@@ -224,13 +236,13 @@ PROCEDURE disable_UI :
                we are ready to "clean-up" after running.
 ------------------------------------------------------------------------------*/
   /* Hide all frames. */
-  HIDE FRAME Dlg_Reportes.
+  HIDE FRAME Dlg_Facturas.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Dlg_Reportes  _DEFAULT-ENABLE
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE enable_UI Dlg_Facturas  _DEFAULT-ENABLE
 PROCEDURE enable_UI :
 /*------------------------------------------------------------------------------
   Purpose:     ENABLE the User Interface
@@ -241,84 +253,47 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  DISPLAY Edit_File 
-      WITH FRAME Dlg_Reportes.
-  ENABLE Edit_File Btn_Menu Btn_Inventario Btn_Facturas 
-      WITH FRAME Dlg_Reportes.
-  VIEW FRAME Dlg_Reportes.
-  {&OPEN-BROWSERS-IN-QUERY-Dlg_Reportes}
+  DISPLAY Edit_Factura 
+      WITH FRAME Dlg_Facturas.
+  ENABLE Bws_Facturas Edit_Factura 
+      WITH FRAME Dlg_Facturas.
+  VIEW FRAME Dlg_Facturas.
+  {&OPEN-BROWSERS-IN-QUERY-Dlg_Facturas}
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE generarInventario Dlg_Reportes 
-PROCEDURE generarInventario :
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE generarFactura Dlg_Facturas 
+PROCEDURE generarFactura :
 /*------------------------------------------------------------------------------
         Purpose:     
         Parameters:  <none>
         Notes:       
     ------------------------------------------------------------------------------*/
+    DEFINE INPUT PARAMETER pinIdFactura AS ROWID.
+    DEFINE VARIABLE vintIdFactura AS INTEGER.
     DEFINE VARIABLE vintCursor AS INTEGER.
     DEFINE VARIABLE vcharFile AS CHARACTER.
-    DEFINE VARIABLE vcharTexto AS CHARACTER.    
-    DEFINE VARIABLE vcharOut AS CHARACTER.       
+    DEFINE VARIABLE vcharTexto AS CHARACTER.
+    DEFINE VARIABLE vcharOut AS CHARACTER.    
 
-    vcharFile = search("inventario.html").
-    Edit_File:INSERT-FILE(vcharFile) IN FRAME Dlg_Reportes.
-    vcharTexto = Edit_File:SCREEN-VALUE.
+    vcharFile = search("factura.html").
+    Edit_Factura:INSERT-FILE(vcharFile) IN FRAME Dlg_Facturas.
+    vcharTexto = Edit_Factura:SCREEN-VALUE.
+
+    FIND FIRST FACTURA WHERE ROWID(FACTURA) = pinIdFactura.
+    vintIdFactura = FACTURA.ID_FACTURA.
         
-    DO vintCursor = 1 TO NUM-ENTRIES(vcharTexto, "~n"):        
+    DO vintCursor = 1 TO NUM-ENTRIES(vcharTexto, "~n"):
         IF LENGTH(TRIM(ENTRY(vintCursor, vcharTexto, "~n"))) > 0 THEN DO:
             vcharOut = vcharOut + ENTRY(vintCursor, vcharTexto, "~n") + "~n".
         END.
         ELSE DO:
-            vcharOut = vcharOut + getReporteInventario() + "~n".
+            vcharOut = vcharOut + getReporteFactura(vintIdFactura) + "~n".
         END.
     END.
-    ASSIGN Edit_File:SCREEN-VALUE = vcharOut.
-END PROCEDURE.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE generarMenu Dlg_Reportes 
-PROCEDURE generarMenu :
-/*------------------------------------------------------------------------------
-        Purpose:     
-        Parameters:  <none>
-        Notes:       
-    ------------------------------------------------------------------------------*/    
-    DEFINE VARIABLE vintCursor AS INTEGER.
-    DEFINE VARIABLE vcharFile AS CHARACTER.
-    DEFINE VARIABLE vcharTexto AS CHARACTER.    
-    DEFINE VARIABLE vcharOut AS CHARACTER.       
-
-    vcharFile = search("menu.html").
-    Edit_File:INSERT-FILE(vcharFile) IN FRAME Dlg_Reportes.
-    vcharTexto = Edit_File:SCREEN-VALUE.
-        
-    DO vintCursor = 1 TO NUM-ENTRIES(vcharTexto, "~n"):        
-        IF LENGTH(TRIM(ENTRY(vintCursor, vcharTexto, "~n"))) > 0 THEN DO:
-            vcharOut = vcharOut + ENTRY(vintCursor, vcharTexto, "~n") + "~n".
-        END.
-        ELSE DO:
-            vcharOut = vcharOut + getReporteMenu() + "~n".
-        END.
-    END.
-    ASSIGN Edit_File:SCREEN-VALUE = vcharOut.
-END PROCEDURE.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE generarPedido Dlg_Reportes 
-PROCEDURE generarPedido :
-/*------------------------------------------------------------------------------
-  Purpose:     
-  Parameters:  <none>
-  Notes:       
-------------------------------------------------------------------------------*/
+    ASSIGN Edit_Factura:SCREEN-VALUE = vcharOut.
 
 END PROCEDURE.
 

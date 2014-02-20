@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>MEN&Uacute;</title>
+        <title>INVENTARIO</title>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
         <meta name="viewport" content="width=device-width">
         <style type="text/css">
@@ -47,7 +47,7 @@
             }            
             .clasificacion {
                 background-color: white;
-                width: 45%;
+                width: 94%;
                 height: auto;
                 float: left;
                 margin-left: 3%;
@@ -58,19 +58,33 @@
                 width: 100%;
                 margin-top: 5px;
                 text-align: center;
-            }               
-            .clasificacion > ul {
-                position: relative;
+            }                                        
+            .clasificacion > table {
+                width: 90%;
+                margin-left: 5%; 
+                border-collapse: collapse;
             }            
-            .clasificacion > ul > li {
+            .clasificacion > table > thead > tr {
+                background-color: gainsboro;
+            }
+            .clasificacion > table > thead > tr > th {
                 font-family: cursive;
+                font-size: 30px;
+            }
+            .clasificacion > table > tbody > tr > td {                
                 font-size: 25px;
-            }                        
-            .clasificacion > ul > li > div {
-                width: 50px;
-                float: right;
-                margin-right: 45px;
-                position: relative;
+            }            
+            .clasificacion > table > tbody > tr:hover {
+                background-color: #D3E5E6;
+            }
+            .normal {
+                background-color: white;
+            }            
+            .media {
+                background-color: #FFFF6E;
+            }            
+            .alta {
+                background-color: #FF6161;
             }
         </style>
     </head>
@@ -81,9 +95,24 @@
             </div>
             <div class="body">
                 <div class="titulo text-shadow">LOS MEJORES PLATILLOS DE LA REGI&Oacute;N</div>
-                
+                <div class="clasificacion shadow">
+                    <div class="titulo text-shadow">INVENTARIO</div>
+                    <table class="shadow">
+                        <thead class="text-shadow">
+                            <tr>
+                                <th style="width: 25%">Lote</th>
+                                <th style="width: 35%">Producto</th>
+                                <th style="width: 20%">Existencia</th>
+                                <th style="width: 20%">Caducidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>                            
+                            
+                        </tbody>
+                    </table>
+                    <br>
+                </div>
             </div>
         </div>
-		<br>
     </body>
 </html>

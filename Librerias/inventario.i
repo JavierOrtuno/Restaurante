@@ -187,15 +187,13 @@ FUNCTION Genera_Lote RETURNS CHARACTER
              vchrlote = "0" + string(vintnumlote).
          END.
          END.
-      IF  DAY(vdteactual) < 10 THEN DO:
-          MESSAGE "entre en el dia" VIEW-AS ALERT-BOX.
-          vchrdia = "0" + STRING(MONTH(vdteactual)).
+      IF  int(DAY(vdteactual)) < 10 THEN DO:
+          vchrdia = "0" + STRING(DAY(vdteactual)).
       END.
       ELSE DO:
-          MESSAGE "entre en el else" VIEW-AS ALERT-BOX.
-          vchrdia = STRING(MONTH(vdteactual)).
+          vchrdia = STRING(DAY(vdteactual)).
       END.
-      IF  MONTH(vdteactual) < 10 THEN DO:
+      IF  int(MONTH(vdteactual)) < 10 THEN DO:
           vchrmes = "0" + STRING(MONTH(vdteactual)).
       END.
       ELSE DO:
@@ -205,13 +203,20 @@ FUNCTION Genera_Lote RETURNS CHARACTER
       vchrlote = "LT-" + vchrdia + vchrmes + vchrano + vchrlote.
     END.
     ELSE DO:
-        IF  DAY(vdteactual) < 10 THEN DO:
-          vchrdia = "0" + STRING(MONTH(vdteactual)).
+        IF  int(DAY(vdteactual)) < 10 THEN DO:
+          vchrdia = "0" + STRING(DAY(vdteactual)).
         END.
-        IF  MONTH(vdteactual) < 10 THEN DO:
+        ELSE DO:
+          vchrdia = STRING(DAY(vdteactual)).
+        END.
+        IF  int(MONTH(vdteactual)) < 10 THEN DO:
           vchrmes = "0" + STRING(MONTH(vdteactual)).
         END.
-        vchrlote = "LT-" + STRING(MONTH(vdteactual)) + STRING(YEAR(vdteactual)) + "001".
+        ELSE DO:
+          vchrmes = STRING(MONTH(vdteactual)).
+        END.
+        vchrano = (SUBSTR(STRING(YEAR(vdteactual)),3)).
+        vchrlote = "LT-" + vchrdia + vchrmes + vchrano + vchrlote.
     END.
 
       RETURN vchrlote.   /* Function return value. */

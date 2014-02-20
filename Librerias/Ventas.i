@@ -56,6 +56,20 @@ FUNCTION CalcularTotal RETURNS DECIMAL
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD DescontarInventario Include 
+FUNCTION DescontarInventario RETURNS LOGICAL
+  ( vintCantidad AS INT /* parameter-definitions */ )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD ListarMenu Include 
+FUNCTION ListarMenu RETURNS CHARACTER
+  ( /* parameter-definitions */ )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD Sumatoria Include 
 FUNCTION Sumatoria RETURNS INTEGER
   ( /* parameter-definitions */ )  FORWARD.
@@ -100,43 +114,6 @@ FUNCTION Sumatoria RETURNS INTEGER
 
 
 /* **********************  Internal Procedures  *********************** */
-
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE DescontarInventario Include 
-PROCEDURE DescontarInventario :
-/*------------------------------------------------------------------------------
-  Purpose: Enviar al inventario el producto y la cantidad que se descontarán del stock
-           por la venta de un platillo/bebida.    
-  Parameters:  1.- outintProducto es el producto que se dará de baja del stock
-               2.- outintCantidad es la cantidad del producto que se descontará del stock
-               3.- outintUno es el valor que le indica a inventario que la baja de producto
-                   es por consumo y no por desperdicio
-  Notes:       
-------------------------------------------------------------------------------*/
-DEF INPUT PARAMETER inintCantidad AS INT.
-DEF OUTPUT PARAMETER outintProducto AS INT. 
-DEF OUTPUT PARAMETER outintCantidad AS INT.
-DEF OUTPUT PARAMETER outintUno AS INT.
-DEF VAR vintStock AS INT.
-
-FIND CURRENT MENU.
-
-FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = MENU.ID_Menu.
-    FIND Stock WHERE Stock.ID_Producto = Ingrediente.ID_Producto AND Stock.F_Caducidad > TODAY.
-    IF (inintCantidad * Ingrediente.Cantidad) <= Sumatoria() 
-        THEN DO:
-            outintProducto = Stock.ID_Producto.
-            outintCantidad = inintCantidad.
-            outintUno = 1.
-             END.
-    ELSE
-        MESSAGE "No hay stock para competar venta" VIEW-AS ALERT-BOX.
-END.
-
-
-END PROCEDURE.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE LlenarComanda Include 
 PROCEDURE LlenarComanda :
@@ -236,8 +213,8 @@ FUNCTION CalcularIVA RETURNS DEC
   Purpose: Calcular el IVA que se cobrará al cliente por el total de su consumo 
     Notes:  
 ------------------------------------------------------------------------------*/
-  DEF VAR vdecIVA AS DEC.
-  
+  DEF VAR vdecIVA AS DEC.  
+
   vdecIVA = vdecSubTotal * 0.15.
 
   RETURN vdecIVA.
@@ -254,8 +231,10 @@ FUNCTION CalcularSubtotal RETURNS DECIMAL
   Purpose:  
     Notes:  
 ------------------------------------------------------------------------------*/
+  DEF VAR vdecCuenta AS DEC.
 
   FIND CURRENT MENU.
+
   vdecCuenta = vdecCuenta + (vintCantidad * Menu.Precio).
 
   RETURN vdecCuenta.
@@ -284,6 +263,82 @@ END FUNCTION.
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION DescontarInventario Include 
+FUNCTION DescontarInventario RETURNS LOGICAL
+  ( vintCantidad AS INT /* parameter-definitions */ ) :
+/*------------------------------------------------------------------------------
+  Purpose:  
+    Notes:  
+------------------------------------------------------------------------------*/
+
+DEF VAR vintNumero AS INT.
+DEF VAR vlogBandera AS LOG.
+DEF VAR vlogLinterna AS LOG.
+
+FIND CURRENT MENU.
+
+FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = MENU.ID_Menu:
+    vintNumero = Ingrediente.Cantidad * vintCantidad.
+    vlogLinterna = FALSE.
+    FOR EACH Stock WHERE Stock.ID_Producto = Ingrediente.ID_Producto AND Stock.Cantidad > 0 AND Stock.F_Caducidad > TODAY.
+    IF AVAILABLE Stock 
+        THEN DO:
+                    IF  Stock.Cantidad >= vintNumero THEN DO:
+                        vlogLinterna = TRUE.
+                        LEAVE.
+                    END.
+                    ELSE DO:
+                        vintNumero = vintNumero - Stock.Cantidad.
+                         END.
+             END.
+     ELSE DO:
+         vintNumero = 1.
+         LEAVE.
+     END.
+    END.
+    IF vlogLinterna = FALSE THEN DO:
+        IF vintNumero > 0 THEN DO:
+            vlogBandera = TRUE.
+            LEAVE.   
+        END.
+    END.
+END.
+
+  RETURN vlogBandera.   /* Function return value. */
+
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION ListarMenu Include 
+FUNCTION ListarMenu RETURNS CHARACTER
+  ( /* parameter-definitions */ ) :
+/*------------------------------------------------------------------------------
+  Purpose:  
+    Notes:  
+------------------------------------------------------------------------------*/
+  DEF VAR vchrLista AS CHAR.
+  DEF VAR vintCantidad AS INT.
+
+  FOR EACH MENU:
+      FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = MENU.ID_Menu:
+          vintCantidad = Ingrediente.Cantidad.
+          FOR EACH Producto:
+              FOR EACH Stock WHERE Stock.ID_Producto = Producto.ID_Producto.
+                  vchrLista = vchrLista + string(MENU.Descripcion) + " " + STRING(MENU.Precio).
+              END.
+          END.
+      END.
+  END.
+
+  RETURN vchrLista.   /* Function return value. */
+
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION Sumatoria Include 
 FUNCTION Sumatoria RETURNS INTEGER
   ( /* parameter-definitions */ ) :
@@ -293,7 +348,9 @@ FUNCTION Sumatoria RETURNS INTEGER
 ------------------------------------------------------------------------------*/
   DEF VAR vintStock AS INT.
 
-  vintStock = vintStock + Stock.Cantidad.
+  FIND CURRENT MENU.
+
+        vintStock = vintStock + Stock.Cantidad.
 
   RETURN vintStock.   /* Function return value. */
 

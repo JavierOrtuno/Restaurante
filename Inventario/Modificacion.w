@@ -44,8 +44,8 @@ DEF INPUT PARAM inrowReg AS ROWID.
 &Scoped-define FRAME-NAME Modificar-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS FILL-IN-1 BUTTON-27 FILL-IN-2 BUTTON-26 ~
-FILL-IN-31 FILL-IN-32 
+&Scoped-Define ENABLED-OBJECTS BUTTON-26 FILL-IN-1 FILL-IN-2 FILL-IN-31 ~
+FILL-IN-32 BUTTON-27 RECT-18 RECT-25 
 &Scoped-Define DISPLAYED-OBJECTS FILL-IN-1 FILL-IN-2 FILL-IN-31 FILL-IN-32 
 
 /* Custom List Definitions                                              */
@@ -63,46 +63,67 @@ FILL-IN-31 FILL-IN-32
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON BUTTON-26 
      LABEL "Salir" 
-     SIZE 15 BY 2.14.
+     SIZE 11 BY .95.
 
 DEFINE BUTTON BUTTON-27 AUTO-GO 
-     LABEL "OK" 
-     SIZE 15 BY 2.14.
+     LABEL "Modificar" 
+     SIZE 20 BY 1.91.
 
 DEFINE VARIABLE FILL-IN-1 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Codigo" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 14 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-2 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Descripcion" 
      VIEW-AS FILL-IN 
-     SIZE 24.4 BY 1 NO-UNDO.
+     SIZE 24.4 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-31 AS DATE FORMAT "99/99/99":U 
      LABEL "Fecha de Caducidad" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 14 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-32 AS INTEGER FORMAT "->,>>>,>>9":U INITIAL 0 
      LABEL "Cantidad" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 14 BY 1
+     BGCOLOR 15  NO-UNDO.
+
+DEFINE RECTANGLE RECT-18
+     EDGE-PIXELS 8  
+     SIZE 80 BY 2.1
+     BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-25
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 60.4 BY 9.62.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Modificar-Frame
-     FILL-IN-1 AT ROW 2.91 COL 20 COLON-ALIGNED
-     BUTTON-27 AT ROW 2.91 COL 61
-     FILL-IN-2 AT ROW 4.81 COL 20 COLON-ALIGNED
-     BUTTON-26 AT ROW 6.71 COL 61
-     FILL-IN-31 AT ROW 6.81 COL 20 COLON-ALIGNED
-     FILL-IN-32 AT ROW 8.62 COL 20 COLON-ALIGNED
-     SPACE(45.39) SKIP(1.28)
+     BUTTON-26 AT ROW 1.62 COL 67.8
+     FILL-IN-1 AT ROW 5.76 COL 37.2 COLON-ALIGNED
+     FILL-IN-2 AT ROW 7.91 COL 37.2 COLON-ALIGNED
+     FILL-IN-31 AT ROW 10.1 COL 37.2 COLON-ALIGNED
+     FILL-IN-32 AT ROW 12.38 COL 37.2 COLON-ALIGNED
+     BUTTON-27 AT ROW 15.29 COL 31
+     RECT-18 AT ROW 1 COL 1.2
+     RECT-25 AT ROW 4.67 COL 11.2
+     "MODIFICAR PRODUCTO" VIEW-AS TEXT
+          SIZE 25 BY .62 AT ROW 1.76 COL 28.8
+          FGCOLOR 15 
+     "Campos Requeridos:" VIEW-AS TEXT
+          SIZE 23 BY .62 AT ROW 3.86 COL 11
+     SPACE(47.39) SKIP(13.61)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "<insert dialog title>".
+         BGCOLOR 8 
+         TITLE "Modificar".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -143,7 +164,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Modificar-Frame
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Modificar-Frame Modificar-Frame
-ON WINDOW-CLOSE OF FRAME Modificar-Frame /* <insert dialog title> */
+ON WINDOW-CLOSE OF FRAME Modificar-Frame /* Modificar */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -165,7 +186,7 @@ END.
 
 &Scoped-define SELF-NAME BUTTON-27
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-27 Modificar-Frame
-ON CHOOSE OF BUTTON-27 IN FRAME Modificar-Frame /* OK */
+ON CHOOSE OF BUTTON-27 IN FRAME Modificar-Frame /* Modificar */
 DO:
     ROWID(stock).
     ASSIGN stock.f_caducidad = INPUT fill-in-31
@@ -237,7 +258,8 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY FILL-IN-1 FILL-IN-2 FILL-IN-31 FILL-IN-32 
       WITH FRAME Modificar-Frame.
-  ENABLE FILL-IN-1 BUTTON-27 FILL-IN-2 BUTTON-26 FILL-IN-31 FILL-IN-32 
+  ENABLE BUTTON-26 FILL-IN-1 FILL-IN-2 FILL-IN-31 FILL-IN-32 BUTTON-27 RECT-18 
+         RECT-25 
       WITH FRAME Modificar-Frame.
   VIEW FRAME Modificar-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Modificar-Frame}

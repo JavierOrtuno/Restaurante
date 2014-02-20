@@ -71,7 +71,8 @@ STOCK.CANTIDAD STOCK.F_CADUCIDAD
     ~{&OPEN-QUERY-BROWSE-15}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BROWSE-15 BUTTON-29 BUTTON-30 
+&Scoped-Define ENABLED-OBJECTS BUTTON-30 BROWSE-15 BUTTON-29 RECT-18 ~
+RECT-26 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -87,12 +88,21 @@ STOCK.CANTIDAD STOCK.F_CADUCIDAD
 
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON BUTTON-29 
-     LABEL "OK" 
-     SIZE 15 BY 1.91.
+     LABEL "Agregar" 
+     SIZE 15 BY 2.38.
 
 DEFINE BUTTON BUTTON-30 
      LABEL "Salir" 
-     SIZE 15 BY 1.91.
+     SIZE 13 BY .95.
+
+DEFINE RECTANGLE RECT-18
+     EDGE-PIXELS 8  
+     SIZE 118.8 BY 2.1
+     BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-26
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 16.4 BY 2.95.
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -110,19 +120,26 @@ DEFINE BROWSE BROWSE-15
       STOCK.F_CADUCIDAD COLUMN-LABEL "FECHA DE CADUCIDAD" FORMAT "99/99/99":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 93 BY 8.57 EXPANDABLE.
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 80 BY 8.81
+         BGCOLOR 15  EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Perdida-Frame
-     BROWSE-15 AT ROW 2.91 COL 11
-     BUTTON-29 AT ROW 2.91 COL 121
-     BUTTON-30 AT ROW 6.71 COL 121
-     SPACE(14.99) SKIP(4.94)
+     BUTTON-30 AT ROW 1.57 COL 104.8
+     BROWSE-15 AT ROW 3.91 COL 12
+     BUTTON-29 AT ROW 6.95 COL 99
+     RECT-18 AT ROW 1 COL 1.2
+     RECT-26 AT ROW 6.67 COL 98.2
+     "PERDIDA DIARIA" VIEW-AS TEXT
+          SIZE 19.2 BY .62 AT ROW 1.71 COL 48
+          FGCOLOR 15 
+     SPACE(52.99) SKIP(11.23)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "<insert dialog title>".
+         BGCOLOR 8 
+         TITLE "Perdidas".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -142,7 +159,7 @@ DEFINE FRAME Perdida-Frame
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR DIALOG-BOX Perdida-Frame
                                                                         */
-/* BROWSE-TAB BROWSE-15 1 Perdida-Frame */
+/* BROWSE-TAB BROWSE-15 BUTTON-30 Perdida-Frame */
 ASSIGN 
        FRAME Perdida-Frame:SCROLLABLE       = FALSE
        FRAME Perdida-Frame:HIDDEN           = TRUE.
@@ -164,7 +181,7 @@ ASSIGN
 "PRODUCTO.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "31.2" yes no no "U" "" ""
      _FldNameList[2]   = Restaurante.STOCK.CANTIDAD
      _FldNameList[3]   > Restaurante.STOCK.F_CADUCIDAD
-"STOCK.F_CADUCIDAD" "FECHA DE CADUCIDAD" ? "date" ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
+"STOCK.F_CADUCIDAD" "FECHA DE CADUCIDAD" ? "date" ? ? ? ? ? ? no ? no no "31.6" yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE BROWSE-15 */
 &ANALYZE-RESUME
@@ -177,7 +194,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Perdida-Frame
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Perdida-Frame Perdida-Frame
-ON WINDOW-CLOSE OF FRAME Perdida-Frame /* <insert dialog title> */
+ON WINDOW-CLOSE OF FRAME Perdida-Frame /* Perdidas */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -188,7 +205,7 @@ END.
 
 &Scoped-define SELF-NAME BUTTON-29
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-29 Perdida-Frame
-ON CHOOSE OF BUTTON-29 IN FRAME Perdida-Frame /* OK */
+ON CHOOSE OF BUTTON-29 IN FRAME Perdida-Frame /* Agregar */
 DO:
   RUN Eliminar_Desperdicio.w(ROWID(producto),ROWID(stock)).
   {&OPEN-query-BROWSE-15}
@@ -266,7 +283,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE BROWSE-15 BUTTON-29 BUTTON-30 
+  ENABLE BUTTON-30 BROWSE-15 BUTTON-29 RECT-18 RECT-26 
       WITH FRAME Perdida-Frame.
   VIEW FRAME Perdida-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Perdida-Frame}

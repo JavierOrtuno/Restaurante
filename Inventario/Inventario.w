@@ -71,8 +71,8 @@ STOCK.F_CADUCIDAD STOCK.F_INGRESO STOCK.LOTE
     ~{&OPEN-QUERY-BROWSE-8}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BROWSE-8 BUTTON-1 BUTTON-22 BUTTON-20 ~
-BUTTON-25 RECT-1 
+&Scoped-Define ENABLED-OBJECTS BUTTON-25 BROWSE-8 BUTTON-1 BUTTON-22 ~
+BUTTON-20 RECT-1 RECT-18 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -101,11 +101,16 @@ DEFINE BUTTON BUTTON-22
 
 DEFINE BUTTON BUTTON-25 
      LABEL "Salir" 
-     SIZE 20 BY 2.86.
+     SIZE 15 BY 1.19.
 
 DEFINE RECTANGLE RECT-1
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 30 BY 16.43.
+     SIZE 23.8 BY 11.95.
+
+DEFINE RECTANGLE RECT-18
+     EDGE-PIXELS 8  
+     SIZE 220 BY 2.33
+     BGCOLOR 8 .
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -128,25 +133,31 @@ DEFINE BROWSE BROWSE-8
             WIDTH 25.2
       STOCK.F_INGRESO COLUMN-LABEL "FECHA DE INGRESO" FORMAT "99/99/99":U
             WIDTH 23.2
-      STOCK.LOTE FORMAT "X(11)":U WIDTH 22.4
+      STOCK.LOTE FORMAT "X(11)":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 164 BY 24.05 EXPANDABLE.
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 164 BY 22.14
+         BGCOLOR 15  ROW-HEIGHT-CHARS .62 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Inventario-Frame
-     BROWSE-8 AT ROW 1.95 COL 11
-     BUTTON-1 AT ROW 6.71 COL 186.4
-     BUTTON-22 AT ROW 10.29 COL 186.4
-     BUTTON-20 AT ROW 14.33 COL 186.4
-     BUTTON-25 AT ROW 18.14 COL 186.4
-     RECT-1 AT ROW 5.76 COL 181.2
-     SPACE(9.99) SKIP(4.42)
+     BUTTON-25 AT ROW 1.67 COL 201
+     BROWSE-8 AT ROW 4.14 COL 11
+     BUTTON-1 AT ROW 9.1 COL 183
+     BUTTON-22 AT ROW 12.95 COL 183
+     BUTTON-20 AT ROW 16.95 COL 183.2
+     RECT-1 AT ROW 8.43 COL 181.2
+     RECT-18 AT ROW 1.05 COL 1
+     "INVENTARIO" VIEW-AS TEXT
+          SIZE 15.2 BY 1.19 AT ROW 1.62 COL 92.4
+          BGCOLOR 8 FGCOLOR 15 
+     SPACE(113.59) SKIP(24.42)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "<insert dialog title>".
+         BGCOLOR 8 
+         TITLE "Inventario".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -166,7 +177,7 @@ DEFINE FRAME Inventario-Frame
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR DIALOG-BOX Inventario-Frame
                                                                         */
-/* BROWSE-TAB BROWSE-8 1 Inventario-Frame */
+/* BROWSE-TAB BROWSE-8 BUTTON-25 Inventario-Frame */
 ASSIGN 
        FRAME Inventario-Frame:SCROLLABLE       = FALSE
        FRAME Inventario-Frame:HIDDEN           = TRUE.
@@ -194,7 +205,7 @@ ASSIGN
      _FldNameList[6]   > Restaurante.STOCK.F_INGRESO
 "STOCK.F_INGRESO" "FECHA DE INGRESO" ? "date" ? ? ? ? ? ? no ? no no "23.2" yes no no "U" "" ""
      _FldNameList[7]   > Restaurante.STOCK.LOTE
-"STOCK.LOTE" ? "X(11)" "character" ? ? ? ? ? ? no ? no no "22.4" yes no no "U" "" ""
+"STOCK.LOTE" ? "X(11)" "character" ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE BROWSE-8 */
 &ANALYZE-RESUME
@@ -207,7 +218,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Inventario-Frame
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Inventario-Frame Inventario-Frame
-ON WINDOW-CLOSE OF FRAME Inventario-Frame /* <insert dialog title> */
+ON WINDOW-CLOSE OF FRAME Inventario-Frame /* Inventario */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -334,7 +345,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE BROWSE-8 BUTTON-1 BUTTON-22 BUTTON-20 BUTTON-25 RECT-1 
+  ENABLE BUTTON-25 BROWSE-8 BUTTON-1 BUTTON-22 BUTTON-20 RECT-1 RECT-18 
       WITH FRAME Inventario-Frame.
   VIEW FRAME Inventario-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Inventario-Frame}

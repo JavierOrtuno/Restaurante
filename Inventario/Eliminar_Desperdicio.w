@@ -46,8 +46,8 @@ DEF INPUT PARAM inrowReg2 AS ROWID.
 &Scoped-define FRAME-NAME Delete-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS FILL-IN-31 BUTTON-31 FILL-IN-32 FILL-IN-33 ~
-BUTTON-32 FILL-IN-34 
+&Scoped-Define ENABLED-OBJECTS BUTTON-32 FILL-IN-31 FILL-IN-32 FILL-IN-33 ~
+FILL-IN-34 BUTTON-31 RECT-18 RECT-25 
 &Scoped-Define DISPLAYED-OBJECTS FILL-IN-31 FILL-IN-32 FILL-IN-33 ~
 FILL-IN-34 
 
@@ -65,47 +65,68 @@ FILL-IN-34
 
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON BUTTON-31 
-     LABEL "OK" 
-     SIZE 15 BY 1.14.
+     LABEL "Eliminar" 
+     SIZE 20 BY 1.91.
 
 DEFINE BUTTON BUTTON-32 
      LABEL "Salir" 
-     SIZE 15 BY 1.14.
+     SIZE 15 BY .95.
 
 DEFINE VARIABLE FILL-IN-31 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Descripción" 
      VIEW-AS FILL-IN 
-     SIZE 23.8 BY 1 NO-UNDO.
+     SIZE 23.8 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-32 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Cantidad" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 14 BY 1
+     BGCOLOR 15  NO-UNDO.
 
-DEFINE VARIABLE FILL-IN-33 AS DATE FORMAT "99/99/99":U INITIAL ? 
+DEFINE VARIABLE FILL-IN-33 AS DATE FORMAT "99/99/99":U 
      LABEL "Caducidad" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 14 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-34 AS INTEGER FORMAT "->,>>>,>>9":U INITIAL 0 
      LABEL "Cantidad a Eliminar" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 14 BY 1
+     BGCOLOR 15  NO-UNDO.
+
+DEFINE RECTANGLE RECT-18
+     EDGE-PIXELS 8  
+     SIZE 79.6 BY 2.1
+     BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-25
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 60.4 BY 9.62.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Delete-Frame
-     FILL-IN-31 AT ROW 1.95 COL 15.2 COLON-ALIGNED
-     BUTTON-31 AT ROW 2.91 COL 51
-     FILL-IN-32 AT ROW 3.86 COL 15.2 COLON-ALIGNED
-     FILL-IN-33 AT ROW 5.76 COL 15.2 COLON-ALIGNED
-     BUTTON-32 AT ROW 5.76 COL 51
-     FILL-IN-34 AT ROW 8.62 COL 25 COLON-ALIGNED
-     SPACE(32.99) SKIP(1.94)
+     BUTTON-32 AT ROW 1.62 COL 63.2
+     FILL-IN-31 AT ROW 5.81 COL 33 COLON-ALIGNED
+     FILL-IN-32 AT ROW 8 COL 43 COLON-ALIGNED
+     FILL-IN-33 AT ROW 10.1 COL 43 COLON-ALIGNED
+     FILL-IN-34 AT ROW 12.38 COL 43 COLON-ALIGNED
+     BUTTON-31 AT ROW 15.29 COL 31
+     RECT-18 AT ROW 1 COL 1
+     RECT-25 AT ROW 4.67 COL 10.6
+     "ELIMINAR DESPERDICIO" VIEW-AS TEXT
+          SIZE 27.2 BY .62 AT ROW 1.76 COL 28.4
+          FGCOLOR 15 
+     "Campos Requeridos:" VIEW-AS TEXT
+          SIZE 23 BY .62 AT ROW 3.86 COL 11
+     SPACE(46.60) SKIP(13.70)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "<insert dialog title>".
+         BGCOLOR 8 
+         TITLE "Eliminar".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -149,7 +170,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Delete-Frame
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Delete-Frame Delete-Frame
-ON WINDOW-CLOSE OF FRAME Delete-Frame /* <insert dialog title> */
+ON WINDOW-CLOSE OF FRAME Delete-Frame /* Eliminar */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -160,7 +181,7 @@ END.
 
 &Scoped-define SELF-NAME BUTTON-31
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-31 Delete-Frame
-ON CHOOSE OF BUTTON-31 IN FRAME Delete-Frame /* OK */
+ON CHOOSE OF BUTTON-31 IN FRAME Delete-Frame /* Eliminar */
 DO:
 DEF VAR vintCantidadActual AS INT.
 DEF VAR vintCantidadElimin AS INT.
@@ -274,7 +295,8 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY FILL-IN-31 FILL-IN-32 FILL-IN-33 FILL-IN-34 
       WITH FRAME Delete-Frame.
-  ENABLE FILL-IN-31 BUTTON-31 FILL-IN-32 FILL-IN-33 BUTTON-32 FILL-IN-34 
+  ENABLE BUTTON-32 FILL-IN-31 FILL-IN-32 FILL-IN-33 FILL-IN-34 BUTTON-31 
+         RECT-18 RECT-25 
       WITH FRAME Delete-Frame.
   VIEW FRAME Delete-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Delete-Frame}

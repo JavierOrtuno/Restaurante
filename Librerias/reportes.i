@@ -154,6 +154,7 @@ FUNCTION getReporteFactura RETURNS CHARACTER
     DEFINE VARIABLE vcharReporte AS CHARACTER.
 
     FIND FIRST FACTURA WHERE FACTURA.ID_FACTURA = vintFactura.
+    FIND FIRST FORMA_PAGO WHERE FORMA_PAGO.ID_PAGO = FACTURA.ID_PAGO.
     FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
     FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA.
     FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO.
@@ -161,10 +162,37 @@ FUNCTION getReporteFactura RETURNS CHARACTER
 
     vcharReporte = vcharReporte + "<thead>~n<tr>~n".
     vcharReporte = vcharReporte + "<th colspan='2'>Folio: " + FACTURA.FOLIO + "</th>~n".
-    vcharReporte = vcharReporte + "<th>" + "</th>~n</tr>~n<tr>~n".
+    vcharReporte = vcharReporte + "<th>" + STRING(FACTURA.FECHA) + " " + STRING(COMANDA.HORA_SALIDA) + "</th>~n</tr>~n<tr>~n".
     vcharReporte = vcharReporte + "<th colspan='2'>Mesa: " + MESA.DESCRIPCION + "</th>~n<th></th>~n</tr>~n<tr>~n".
     vcharReporte = vcharReporte + "<th colspan='2'>Mesero: " + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</th>~n<th></th>~n</tr>~n<tr>~n".
     vcharReporte = vcharReporte + "<th colspan='3'>&nbsp;</th>~n</tr>~n</thead>~n".
+    
+    vcharReporte = vcharReporte + "<tbody>~n".
+    FOR EACH CONSUMO WHERE CONSUMO.ID_COMANDA = COMANDA.ID_COMANDA:
+        FIND FIRST MENU WHERE MENU.ID_MENU = CONSUMO.ID_MENU.
+        vcharReporte = vcharReporte + "<tr>~n".
+        vcharReporte = vcharReporte + "<td style='width: 5%'>" + STRING(CONSUMO.CANTIDAD) + "</td>~n".
+        vcharReporte = vcharReporte + "<td style='width: 65%'>" + MENU.DESCRIPCION + "</td>~n".
+        vcharReporte = vcharReporte + "<td style='width: 30%'>" + STRING(CONSUMO.CANTIDAD * MENU.PRECIO) + "</td>~n".
+        vcharReporte = vcharReporte + "</tr>~n".
+    END.
+
+    vcharReporte = vcharReporte + "<tr>~n<td></td>~n".
+    vcharReporte = vcharReporte + "<td class='right'>SUBTOTAL</td>~n".
+    vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.SUBTOTAL) + "</td>~n</tr>~n<tr>~n<td></td>~n".
+    vcharReporte = vcharReporte + "<td class='right'>IVA</td>~n".
+    vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.IVA) + "</td>~n".
+    vcharReporte = vcharReporte + "</tr>~n<tr>~n<td></td>~n".
+    vcharReporte = vcharReporte + "<td class='right'>PROPINA</td>~n".
+    vcharReporte = vcharReporte + "<td>" + STRING(COMANDA.PROPINA) + "</td>~n</tr>~n<tr>~n<td></td>~n".
+    vcharReporte = vcharReporte + "<td class='right'>TOTAL</td>~n".
+    vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.TOTAL) + "</td>~n</tr>~n".
+    vcharReporte = vcharReporte + "<tr>~n".
+    vcharReporte = vcharReporte + "<td colspan='3' class='center'>" + "Forma de Pago: " + FORMA_PAGO.DESCRIPCION + "</td>~n".
+    vcharReporte = vcharReporte + "</tr>~n<tr>~n".
+    vcharReporte = vcharReporte + "<td colspan='3' class='center'><br><span>¡Gracias por su Preferencia!</span><br></td>~n".
+    vcharReporte = vcharReporte + "</tr>~n".    
+    vcharReporte = vcharReporte + "</tbody>".
 
     RETURN vcharReporte.
 END FUNCTION.

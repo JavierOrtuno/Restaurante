@@ -64,8 +64,7 @@ FACTURA.TOTAL FACTURA.ID_ESTATUS
     ~{&OPEN-QUERY-Bws_Facturas}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Bws_Facturas Edit_Factura 
-&Scoped-Define DISPLAYED-OBJECTS Edit_Factura 
+&Scoped-Define ENABLED-OBJECTS Bws_Facturas 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -97,7 +96,7 @@ DEFINE BROWSE Bws_Facturas
       FACTURA.FOLIO FORMAT "X(50)":U WIDTH 26.2
       FACTURA.FECHA FORMAT "99/99/99":U WIDTH 33.2
       FACTURA.TOTAL FORMAT "->>,>>9.99":U WIDTH 33.2
-      FACTURA.ID_ESTATUS FORMAT "->,>>>,>>9":U WIDTH 21.4
+      FACTURA.ID_ESTATUS FORMAT "->,>>>,>>9":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
     WITH NO-ROW-MARKERS SEPARATORS SIZE 121 BY 10.71 EXPANDABLE.
@@ -106,9 +105,9 @@ DEFINE BROWSE Bws_Facturas
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_Facturas
-     Bws_Facturas AT ROW 2.67 COL 7
-     Edit_Factura AT ROW 14.1 COL 7 NO-LABEL
-     SPACE(82.99) SKIP(0.56)
+     Bws_Facturas AT ROW 5.43 COL 7
+     Edit_Factura AT ROW 7.57 COL 45 NO-LABEL
+     SPACE(44.99) SKIP(3.09)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Facturas".
@@ -136,6 +135,11 @@ ASSIGN
        FRAME Dlg_Facturas:SCROLLABLE       = FALSE
        FRAME Dlg_Facturas:HIDDEN           = TRUE.
 
+/* SETTINGS FOR EDITOR Edit_Factura IN FRAME Dlg_Facturas
+   NO-DISPLAY NO-ENABLE                                                 */
+ASSIGN 
+       Edit_Factura:HIDDEN IN FRAME Dlg_Facturas           = TRUE.
+
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
 
@@ -147,13 +151,12 @@ ASSIGN
      _TblList          = "Restaurante.FACTURA"
      _Options          = "NO-LOCK INDEXED-REPOSITION"
      _FldNameList[1]   > Restaurante.FACTURA.FOLIO
-"FOLIO" ? ? "character" ? ? ? ? ? ? no ? no no "26.2" yes no no "U" "" ""
+"FACTURA.FOLIO" ? ? "character" ? ? ? ? ? ? no ? no no "26.2" yes no no "U" "" ""
      _FldNameList[2]   > Restaurante.FACTURA.FECHA
-"FECHA" ? ? "date" ? ? ? ? ? ? no ? no no "33.2" yes no no "U" "" ""
+"FACTURA.FECHA" ? ? "date" ? ? ? ? ? ? no ? no no "33.2" yes no no "U" "" ""
      _FldNameList[3]   > Restaurante.FACTURA.TOTAL
-"TOTAL" ? ? "decimal" ? ? ? ? ? ? no ? no no "33.2" yes no no "U" "" ""
-     _FldNameList[4]   > Restaurante.FACTURA.ID_ESTATUS
-"ID_ESTATUS" ? ? "integer" ? ? ? ? ? ? no ? no no "21.4" yes no no "U" "" ""
+"FACTURA.TOTAL" ? ? "decimal" ? ? ? ? ? ? no ? no no "33.2" yes no no "U" "" ""
+     _FldNameList[4]   = Restaurante.FACTURA.ID_ESTATUS
      _Query            is OPENED
 */  /* BROWSE Bws_Facturas */
 &ANALYZE-RESUME
@@ -178,7 +181,7 @@ END.
 &Scoped-define BROWSE-NAME Bws_Facturas
 &Scoped-define SELF-NAME Bws_Facturas
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bws_Facturas Dlg_Facturas
-ON MOUSE-SELECT-DBLCLICK OF Bws_Facturas IN FRAME Dlg_Facturas /* Browse 21 */
+ON MOUSE-SELECT-DBLCLICK OF Bws_Facturas IN FRAME Dlg_Facturas
 DO:
     DEFINE VARIABLE vcharFileName AS CHARACTER.
 
@@ -253,9 +256,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  DISPLAY Edit_Factura 
-      WITH FRAME Dlg_Facturas.
-  ENABLE Bws_Facturas Edit_Factura 
+  ENABLE Bws_Facturas 
       WITH FRAME Dlg_Facturas.
   VIEW FRAME Dlg_Facturas.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_Facturas}

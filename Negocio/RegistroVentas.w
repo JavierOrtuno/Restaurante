@@ -471,20 +471,15 @@ DO:
   IF vlogSemaforo = TRUE THEN DO:
   ASSIGN vintCantidad = INT(Cantidad:SCREEN-VALUE).
   vdecSubtotal = vdecSubtotal + CalcularSubtotal(vintCantidad).
-  vdecIVA = vdecIva + CalcularIVA(vdecSubtotal).
-  vdecTotal = CalcularTotal(vdecSubtotal,vdecIVA).
+  vdecIVA = CalcularIVA(vdecSubtotal).
+  vdecTotal = CalcularTotal(vdecSubtotal,vdecIVA) + DEC(Propina:SCREEN-VALUE).
 
   vlogBandera = DescontarInventario(vintCantidad).
   IF vlogBandera = FALSE THEN DO:
       ASSIGN Subtotal:SCREEN-VALUE = STRING(vdecSubtotal)
              IVA:SCREEN-VALUE = STRING(vdecIVA)
               TOTAL:SCREEN-VALUE = STRING(vdecTotal).
-      FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = MENU.ID_Menu.
-          vintTotal = vintCantidad * Ingrediente.Cantidad.
-          vintproducto = Ingrediente.ID_Producto.
-         DescontarExistencia(vintproducto,vintTotal,1).
-      END.
-      /*ASSIGN SELECT-1:LIST-ITEM-PAIRS = STRING(MENU.Descripcion) + STRING(MENU.Precio).*/
+      RUN Platillos(vintCantidad).
   END.
   ELSE
       MESSAGE "No te puedo vender esa cantidad" VIEW-AS ALERT-BOX.
@@ -565,6 +560,30 @@ PROCEDURE enable_UI :
       WITH FRAME RegVenta-Frame.
   VIEW FRAME RegVenta-Frame.
   {&OPEN-BROWSERS-IN-QUERY-RegVenta-Frame}
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE Platillos RegVenta-Frame 
+PROCEDURE Platillos :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+
+  DEF INPUT PARAMETER inintCantidad AS INT.
+  DEF VAR vchrList1 AS CHAR.
+  DEF VAR vchrList2 AS CHAR.
+
+  IF inintCantidad <> 0 
+      THEN DO:
+            ASSIGN vchrList1 = STRING(MENU.Descripcion).
+            SELECT-1:LIST-ITEM-PAIRS IN FRAME RegVenta-Frame = vchrList1 + ",Menu.ID".
+            SELECT-1:SCREEN-VALUE.
+  END.
+
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

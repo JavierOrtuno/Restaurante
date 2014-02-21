@@ -78,6 +78,17 @@ FUNCTION getReporteMenu RETURNS CHARACTER
 
 &ENDIF
 
+&IF DEFINED(EXCLUDE-getReportePropinas) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getReportePropinas Method-Library 
+FUNCTION getReportePropinas RETURNS CHARACTER
+    ( INPUT vcharFechas AS CHARACTER )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 
 /* *********************** Procedure Settings ************************ */
 
@@ -120,6 +131,87 @@ FUNCTION getReporteMenu RETURNS CHARACTER
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
+
+/* **********************  Internal Procedures  *********************** */
+
+&IF DEFINED(EXCLUDE-getProporciones) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE getProporciones Method-Library 
+PROCEDURE getProporciones :
+/*------------------------------------------------------------------------------
+        Purpose:     
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    DEFINE INPUT PARAMETER pinCharFechas AS CHARACTER.
+    DEFINE OUTPUT PARAMETER poutDecTotal AS DECIMAL.    
+    DEFINE OUTPUT PARAMETER poutDecMe AS DECIMAL.
+    DEFINE OUTPUT PARAMETER poutDecCo AS DECIMAL.
+    DEFINE OUTPUT PARAMETER poutDecAd AS DECIMAL.    
+    DEFINE VARIABLE vintNumMe AS INTEGER.
+    DEFINE VARIABLE vintNumCo AS INTEGER.
+    DEFINE VARIABLE vintNumAd AS INTEGER.
+    DEFINE VARIABLE vdecMeserosT AS DECIMAL.
+    DEFINE VARIABLE vdecCocinerosT AS DECIMAL.
+    DEFINE VARIABLE vdecAdminT AS DECIMAL.
+    
+    IF pinCharFechas = "#" THEN DO:
+        FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0:
+            FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
+            poutDecTotal = poutDecTotal + COMANDA.PROPINA.
+        END.
+    END.
+    ELSE DO:
+        IF TRIM(ENTRY(1, pinCharFechas, ":")) = "" THEN DO:
+            FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
+                FACTURA.FECHA <= DATE(ENTRY(2, pinCharFechas, ":")):       
+                    FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
+                    poutDecTotal = poutDecTotal + COMANDA.PROPINA.
+            END.
+        END.
+        ELSE DO:
+            IF TRIM(ENTRY(2, pinCharFechas, ":")) = "" THEN DO:
+                FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
+                    FACTURA.FECHA >= DATE(ENTRY(1, pinCharFechas, ":")):
+                        FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
+                        poutDecTotal = poutDecTotal + COMANDA.PROPINA.
+                END.
+            END.
+            ELSE DO:
+                FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
+                    FACTURA.FECHA >= DATE(ENTRY(1, pinCharFechas, ":")) AND
+                    FACTURA.FECHA <= DATE(ENTRY(2, pinCharFechas, ":")):       
+                        FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
+                        poutDecTotal = poutDecTotal + COMANDA.PROPINA.
+                END.
+            END.
+        END.        
+    END.
+
+    vdecMeserosT = poutDecTotal * 0.8.
+    vdecCocinerosT = poutDecTotal * 0.15.
+    vdecAdminT = poutDecTotal * 0.05.
+
+    FOR EACH EMPLEADO:
+        CASE EMPLEADO.ID_ROL:
+            WHEN 1 THEN
+                vintNumAd = vintNumAd + 1.
+            WHEN 2 THEN
+                vintNumMe = vintNumMe + 1.
+            WHEN 4 THEN
+                vintNumCo = vintNumCo + 1.
+        END CASE.
+    END.
+
+    poutDecMe = vdecMeserosT / vintNumMe.
+    poutDecCo = vdecCocinerosT / vintNumCo.
+    poutDecAd = vdecAdminT / vintNumAd.
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
 
 /* ************************  Function Implementations ***************** */
 
@@ -268,6 +360,62 @@ FUNCTION getReporteMenu RETURNS CHARACTER
     END.
     IF vlogPrev = TRUE THEN
         vcharReporte = vcharReporte + "</ul>~n</div>~n".
+    RETURN vcharReporte.
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
+&IF DEFINED(EXCLUDE-getReportePropinas) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getReportePropinas Method-Library 
+FUNCTION getReportePropinas RETURNS CHARACTER
+    ( INPUT vcharFechas AS CHARACTER ) :
+    /*------------------------------------------------------------------------------
+        Purpose:  
+        Notes:  
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vdecTotal AS DECIMAL.    
+    DEFINE VARIABLE vdecSubMe AS DECIMAL.
+    DEFINE VARIABLE vdecSubCo AS DECIMAL.
+    DEFINE VARIABLE vdecSubAd AS DECIMAL.    
+    DEFINE VARIABLE vcharReporte AS CHARACTER.
+
+    RUN getProporciones(vcharFechas, OUTPUT vdecTotal,
+        OUTPUT vdecSubMe, OUTPUT vdecSubCo, OUTPUT vdecSubAd ).
+    
+    vcharReporte = vcharReporte + "<tr class='sub-th'>~n".
+    vcharReporte = vcharReporte + "<td colspan='2' class='left'>MESEROS</td>~n</tr>~n".
+
+    FOR EACH EMPLEADO WHERE EMPLEADO.ID_ROL = 2:
+        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+        vcharReporte = vcharReporte + "<tr>~n<td class='right'>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
+        vcharReporte = vcharReporte + "<td>$" + STRING(vdecSubMe) + "</td>~n</tr>~n".
+    END.
+
+    vcharReporte = vcharReporte + "<tr class='sub-th'>~n".
+    vcharReporte = vcharReporte + "<td colspan='2' class='left'>COCINEROS</td>~n</tr>~n".
+
+    FOR EACH EMPLEADO WHERE EMPLEADO.ID_ROL = 4:
+        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+        vcharReporte = vcharReporte + "<tr>~n<td class='right'>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
+        vcharReporte = vcharReporte + "<td>$" + STRING(vdecSubCo) + "</td>~n</tr>~n".
+    END.
+
+    vcharReporte = vcharReporte + "<tr class='sub-th'>~n".
+    vcharReporte = vcharReporte + "<td colspan='2' class='left'>ADMIN</td>~n</tr>~n".
+
+    FOR EACH EMPLEADO WHERE EMPLEADO.ID_ROL = 1:
+        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+        vcharReporte = vcharReporte + "<tr>~n<td class='right'>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
+        vcharReporte = vcharReporte + "<td>$" + STRING(vdecSubAd) + "</td>~n</tr>~n".
+    END.
+
+    vcharReporte = vcharReporte + "<tr class='sub-th'>~n".
+    vcharReporte = vcharReporte + "<td colspan='2' class='left'>TOTAL</td>~n</tr>~n".
+    vcharReporte = vcharReporte + "<tr>~n<td></td>~n<td>$" + STRING(vdecTotal) + "</td>~n</tr>~n".
     RETURN vcharReporte.
 END FUNCTION.
 

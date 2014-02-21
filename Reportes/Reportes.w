@@ -45,7 +45,7 @@ DEFINE STREAM outFile.
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Edit_File Btn_Menu Btn_Inventario ~
-Btn_Facturas 
+Btn_Facturas Btn_Propinas 
 &Scoped-Define DISPLAYED-OBJECTS Edit_File 
 
 /* Custom List Definitions                                              */
@@ -63,14 +63,18 @@ Btn_Facturas
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Facturas 
      LABEL "Facturas" 
-     SIZE 20 BY 2.5.
+     SIZE 20 BY 2.52.
 
 DEFINE BUTTON Btn_Inventario 
-     LABEL "Generar Inventario" 
-     SIZE 20 BY 2.5.
+     LABEL "Inventario" 
+     SIZE 20 BY 2.52.
 
 DEFINE BUTTON Btn_Menu 
-     LABEL "Generar Menú" 
+     LABEL "Menú" 
+     SIZE 20 BY 2.52.
+
+DEFINE BUTTON Btn_Propinas 
+     LABEL "Propinas" 
      SIZE 20 BY 2.52.
 
 DEFINE VARIABLE Edit_File AS CHARACTER 
@@ -85,7 +89,8 @@ DEFINE FRAME Dlg_Reportes
      Btn_Menu AT ROW 3.86 COL 81
      Btn_Inventario AT ROW 6.71 COL 81
      Btn_Facturas AT ROW 9.57 COL 81
-     SPACE(85.79) SKIP(14.25)
+     Btn_Propinas AT ROW 12.43 COL 81
+     SPACE(85.79) SKIP(11.37)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Reportes".
@@ -145,7 +150,7 @@ END.
 
 &Scoped-define SELF-NAME Btn_Inventario
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Inventario Dlg_Reportes
-ON CHOOSE OF Btn_Inventario IN FRAME Dlg_Reportes /* Generar Inventario */
+ON CHOOSE OF Btn_Inventario IN FRAME Dlg_Reportes /* Inventario */
 DO:
     DEFINE VARIABLE vcharFileName AS CHARACTER.
     Edit_File:SCREEN-VALUE = "".
@@ -166,7 +171,7 @@ END.
 
 &Scoped-define SELF-NAME Btn_Menu
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Menu Dlg_Reportes
-ON CHOOSE OF Btn_Menu IN FRAME Dlg_Reportes /* Generar Menú */
+ON CHOOSE OF Btn_Menu IN FRAME Dlg_Reportes /* Menú */
 DO:    
     DEFINE VARIABLE vcharFileName AS CHARACTER.
 
@@ -179,6 +184,33 @@ DO:
 
     RUN generarMenu.
     Edit_File:SAVE-FILE ( vcharFileName + ".html" ).
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Btn_Propinas
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Propinas Dlg_Reportes
+ON CHOOSE OF Btn_Propinas IN FRAME Dlg_Reportes /* Propinas */
+DO:
+    DEFINE VARIABLE vcharFechas AS CHARACTER INITIAL ?.
+    DEFINE VARIABLE vcharFileName AS CHARACTER.
+
+    RUN menuPropinas.w(OUTPUT vcharFechas).
+    MESSAGE vcharFechas VIEW-AS ALERT-BOX.
+    IF vcharFechas <> ? THEN DO:
+        Edit_File:SCREEN-VALUE = "".
+
+        SYSTEM-DIALOG 
+            GET-FILE vcharFileName 
+            TITLE "Guardar Archivo ..." 
+            FILTERS "Archivos (*.html)"   "*.html" 
+            SAVE-AS.
+
+        RUN generarPropinas(vcharFechas).
+        Edit_File:SAVE-FILE ( vcharFileName + ".html" ).
+    END.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -243,7 +275,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY Edit_File 
       WITH FRAME Dlg_Reportes.
-  ENABLE Edit_File Btn_Menu Btn_Inventario Btn_Facturas 
+  ENABLE Edit_File Btn_Menu Btn_Inventario Btn_Facturas Btn_Propinas 
       WITH FRAME Dlg_Reportes.
   VIEW FRAME Dlg_Reportes.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_Reportes}
@@ -319,6 +351,38 @@ PROCEDURE generarPedido :
   Parameters:  <none>
   Notes:       
 ------------------------------------------------------------------------------*/
+
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE generarPropinas Dlg_Reportes 
+PROCEDURE generarPropinas :
+/*------------------------------------------------------------------------------
+        Purpose:     
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    DEFINE INPUT PARAMETER pinCharFechas AS CHARACTER.
+    DEFINE VARIABLE vintCursor AS INTEGER.
+    DEFINE VARIABLE vcharFile AS CHARACTER.
+    DEFINE VARIABLE vcharTexto AS CHARACTER.    
+    DEFINE VARIABLE vcharOut AS CHARACTER.       
+
+    vcharFile = search("propinas.html").
+    Edit_File:INSERT-FILE(vcharFile) IN FRAME Dlg_Reportes.
+    vcharTexto = Edit_File:SCREEN-VALUE.
+        
+    DO vintCursor = 1 TO NUM-ENTRIES(vcharTexto, "~n"):
+        IF LENGTH(TRIM(ENTRY(vintCursor, vcharTexto, "~n"))) > 0 THEN DO:
+            vcharOut = vcharOut + ENTRY(vintCursor, vcharTexto, "~n") + "~n".
+        END.
+        ELSE DO:
+            vcharOut = vcharOut + getReportePropinas(pinCharFechas) + "~n".
+        END.
+    END.
+    ASSIGN Edit_File:SCREEN-VALUE = vcharOut.
 
 END PROCEDURE.
 

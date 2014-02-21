@@ -81,7 +81,7 @@ FACTURA.TOTAL FACTURA.ID_ESTATUS
 /* Definitions of the field level widgets                               */
 DEFINE VARIABLE Edit_Factura AS CHARACTER 
      VIEW-AS EDITOR NO-WORD-WRAP SCROLLBAR-HORIZONTAL SCROLLBAR-VERTICAL
-     SIZE 44 BY 7.14 NO-UNDO.
+     SIZE 10 BY 1.91 NO-UNDO.
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -105,9 +105,9 @@ DEFINE BROWSE Bws_Facturas
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_Facturas
-     Bws_Facturas AT ROW 5.43 COL 7
-     Edit_Factura AT ROW 7.57 COL 45 NO-LABEL
-     SPACE(44.99) SKIP(3.09)
+     Bws_Facturas AT ROW 4.05 COL 7
+     Edit_Factura AT ROW 14.81 COL 7 NO-LABEL
+     SPACE(116.99) SKIP(0.22)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Facturas".

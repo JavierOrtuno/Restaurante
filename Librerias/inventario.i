@@ -56,6 +56,17 @@ FUNCTION Genera_Lote RETURNS CHARACTER
 
 &ENDIF
 
+&IF DEFINED(EXCLUDE-Insertar_Bitacora) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD Insertar_Bitacora Method-Library 
+FUNCTION Insertar_Bitacora RETURNS LOGICAL
+  ( vintmov AS INT, vintuser AS INT, vintstock AS INT, vintcant AS INT /* parameter-definitions */ )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 
 /* *********************** Procedure Settings ************************ */
 
@@ -216,10 +227,39 @@ FUNCTION Genera_Lote RETURNS CHARACTER
           vchrmes = STRING(MONTH(vdteactual)).
         END.
         vchrano = (SUBSTR(STRING(YEAR(vdteactual)),3)).
-        vchrlote = "LT-" + vchrdia + vchrmes + vchrano + vchrlote.
+        vchrlote = "LT-" + vchrdia + vchrmes + vchrano + "001".
     END.
 
       RETURN vchrlote.   /* Function return value. */
+
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
+&IF DEFINED(EXCLUDE-Insertar_Bitacora) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION Insertar_Bitacora Method-Library 
+FUNCTION Insertar_Bitacora RETURNS LOGICAL
+  ( vintmov AS INT, vintuser AS INT, vintstock AS INT, vintcant AS INT /* parameter-definitions */ ) :
+/*------------------------------------------------------------------------------
+  Purpose:  
+    Notes:  
+------------------------------------------------------------------------------*/
+DEF VAR vdteactual AS DATE.
+
+vdteactual = TODAY.
+
+CREATE bitacora_stock.
+ASSIGN bitacora_stock.id_bit_stock = NEXT-VALUE(sec_bitacora_stock)
+       bitacora_stock.fecha = vdteactual
+       bitacora_stock.id_movimiento = vintmov
+       bitacora_stock.id_usuario = vintuser
+       bitacora_stock.id_stock = vintstock
+       bitacora_stock.cantidad = vintcant.
+  RETURN FALSE.   /* Function return value. */
 
 END FUNCTION.
 

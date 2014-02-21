@@ -222,6 +222,7 @@ DO:
                  stock.f_ingreso = vdteactual
                  stock.f_caducidad = INPUT FILL-in-30
                  stock.id_producto = producto.id_producto.
+          Insertar_Bitacora(1,1,stock.id_stock,stock.cantidad).
           MESSAGE "Registro insertado correctamente" VIEW-AS ALERT-BOX.
       END.
     END.

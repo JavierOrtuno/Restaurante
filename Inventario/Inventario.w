@@ -133,7 +133,7 @@ DEFINE BROWSE BROWSE-8
             WIDTH 25.2
       STOCK.F_INGRESO COLUMN-LABEL "FECHA DE INGRESO" FORMAT "99/99/99":U
             WIDTH 23.2
-      STOCK.LOTE FORMAT "X(12)":U WIDTH 28.4
+      STOCK.LOTE FORMAT "X(12)":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
     WITH NO-ROW-MARKERS SEPARATORS SIZE 166 BY 22.14
@@ -153,7 +153,7 @@ DEFINE FRAME Inventario-Frame
      "INVENTARIO" VIEW-AS TEXT
           SIZE 15.2 BY 1.19 AT ROW 1.62 COL 92.4
           BGCOLOR 8 FGCOLOR 15 
-     SPACE(103.39) SKIP(24.42)
+     SPACE(103.40) SKIP(24.42)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -204,8 +204,7 @@ ASSIGN
 "STOCK.F_CADUCIDAD" "FECHA DE CADUCIDAD" ? "date" ? ? ? ? ? ? no ? no no "25.2" yes no no "U" "" ""
      _FldNameList[6]   > Restaurante.STOCK.F_INGRESO
 "STOCK.F_INGRESO" "FECHA DE INGRESO" ? "date" ? ? ? ? ? ? no ? no no "23.2" yes no no "U" "" ""
-     _FldNameList[7]   > Restaurante.STOCK.LOTE
-"STOCK.LOTE" ? ? "character" ? ? ? ? ? ? no ? no no "24.4" yes no no "U" "" ""
+     _FldNameList[7]   = Restaurante.STOCK.LOTE
      _Query            is OPENED
 */  /* BROWSE BROWSE-8 */
 &ANALYZE-RESUME

@@ -174,6 +174,8 @@ DEF INPUT PARAMETER inintCantidad AS INT.
 DO TRANSACTION:
     CREATE Consumo.
 
+    Consumo.ID_Consumo = NEXT-VALUE(SEC_CONSUMO).
+
     Consumo.Cantidad = inintCantidad.
     
     FIND CURRENT MENU.

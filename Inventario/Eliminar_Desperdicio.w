@@ -202,15 +202,13 @@ vintCantidadElimin = INT(fill-in-34:SCREEN-VALUE).
       MESSAGE "La cantidad eliminada es mayor a la del stock" VIEW-AS ALERT-BOX.
       RETURN NO-APPLY.
   END.
-  ELSE DO:
+  ELSE DO TRANSACTION:
    vintCantidad = vintCantidadActual - vintCantidadElimin.
-   ROWID(stock).
+   FIND stock WHERE ROWID(stock) = inrowReg2.
    ASSIGN stock.cantidad = vintCantidad.
-   Insertar_Bitacora(4,1,stock.id_producto,vintCantidadElimin).
-   MESSAGE "Eliminado Correctamente" VIEW-AS ALERT-BOX.
-   {&open-query-BROWSE-15}
-   APPLY "window-close" TO FRAME Delete-Frame.
+   insertar_bitacora(4,1,stock.id_stock,vintCantidadElimin).
   END.
+ APPLY "window-close" TO FRAME Delete-Frame.
 END.
 
 /* _UIB-CODE-BLOCK-END */

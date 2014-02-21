@@ -128,6 +128,7 @@ DEF VAR vinttotal  AS INT.
 vdteactual = TODAY.
 CASE vinttipo:
     WHEN 1 THEN DO:
+        Insertar_Bitacora(3,1,vintproducto,vintcantidad).
         FOR EACH stock WHERE stock.id_producto = vintproducto AND stock.f_caducidad > vdteactual AND stock.cantidad > 0 BY f_caducidad BY cantidad.
             IF stock.cantidad >= vintcantidad THEN DO:
                 vinttotal = stock.cantidad - vintcantidad.

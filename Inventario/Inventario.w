@@ -174,6 +174,15 @@ DEFINE FRAME Inventario-Frame
  */
 &ANALYZE-RESUME _END-PROCEDURE-SETTINGS
 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _INCLUDED-LIB Inventario-Frame 
+/* ************************* Included-Libraries *********************** */
+
+{librerias/inventario.i}
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 
 
 /* ***********  Runtime Attributes and AppBuilder Settings  *********** */
@@ -251,6 +260,7 @@ DO:
    MESSAGE "Esta seguro de borrar este registro" VIEW-AS ALERT-BOX BUTTONS YES-NO SET vlogborrar.
    IF vlogborrar = TRUE THEN DO:
        ROWID(stock).
+       Insertar_Bitacora(2,1,stock.id_stock,stock.cantidad).
        DELETE stock.
        {&OPEN-query-BROWSE-8}
    END.

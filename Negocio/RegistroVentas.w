@@ -45,6 +45,7 @@ DEF VAR vdecCuenta AS DEC.
 DEF VAR vintStock AS INT.
 DEF VAR vlogBandera AS LOG.
 DEF VAR vintTotal AS INT.
+DEF VAR vlogSemaforo AS LOG.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -127,11 +128,11 @@ MESA
     ~{&OPEN-QUERY-BROWSE-9}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Folio HoraEntrada HoraSalida BROWSE-20 ~
-BROWSE-9 BROWSE-2 BROWSE-11 Subtotal BROWSE-3 IVA Cantidad BUTTON-1 Total ~
+&Scoped-Define ENABLED-OBJECTS HoraEntrada HoraSalida BROWSE-20 BROWSE-9 ~
+BROWSE-2 BROWSE-11 Cantidad BUTTON-1 Subtotal BROWSE-3 IVA SELECT-1 Total ~
 Propina BtnOK BtnCancel 
-&Scoped-Define DISPLAYED-OBJECTS Fecha Folio HoraEntrada HoraSalida ~
-Subtotal IVA Cantidad Total Propina 
+&Scoped-Define DISPLAYED-OBJECTS Fecha HoraEntrada HoraSalida Cantidad ~
+Subtotal IVA SELECT-1 Total Propina 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -144,6 +145,13 @@ Subtotal IVA Cantidad Total Propina
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD FechaActual RegVenta-Frame 
 FUNCTION FechaActual RETURNS DATE
+  ( /* parameter-definitions */ )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD ValidarSalida RegVenta-Frame 
+FUNCTION ValidarSalida RETURNS LOGICAL
   ( /* parameter-definitions */ )  FORWARD.
 
 /* _UIB-CODE-BLOCK-END */
@@ -179,12 +187,7 @@ DEFINE VARIABLE Fecha AS DATE FORMAT "99/99/99":U
      VIEW-AS FILL-IN 
      SIZE 14 BY 1 NO-UNDO.
 
-DEFINE VARIABLE Folio AS CHARACTER FORMAT "X(256)":U 
-     LABEL "No. de Folio" 
-     VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
-
-DEFINE VARIABLE HoraEntrada AS CHARACTER FORMAT "99:99":U 
+DEFINE VARIABLE HoraEntrada AS CHARACTER FORMAT "x(5)":U 
      LABEL "Hora Entrada" 
      VIEW-AS FILL-IN 
      SIZE 10 BY 1 NO-UNDO.
@@ -213,6 +216,10 @@ DEFINE VARIABLE Total AS DECIMAL FORMAT "->>,>>9.99":U INITIAL 0
      LABEL "Total" 
      VIEW-AS FILL-IN 
      SIZE 14 BY 1 NO-UNDO.
+
+DEFINE VARIABLE SELECT-1 AS CHARACTER 
+     VIEW-AS SELECTION-LIST SINGLE SCROLLBAR-VERTICAL 
+     SIZE 63 BY 4.52 NO-UNDO.
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -255,10 +262,10 @@ DEFINE BROWSE BROWSE-20
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-20 RegVenta-Frame _STRUCTURED
   QUERY BROWSE-20 NO-LOCK DISPLAY
       MENU.DESCRIPCION FORMAT "X(25)":U WIDTH 31.2
-      MENU.PRECIO FORMAT "->>,>>9.99":U WIDTH 25.4
+      MENU.PRECIO FORMAT "->>,>>9.99":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 62 BY 8.81 EXPANDABLE.
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 62 BY 5 EXPANDABLE.
 
 DEFINE BROWSE BROWSE-3
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-3 RegVenta-Frame _STRUCTURED
@@ -281,23 +288,23 @@ DEFINE BROWSE BROWSE-9
 
 DEFINE FRAME RegVenta-Frame
      Fecha AT ROW 1.95 COL 9 COLON-ALIGNED
-     Folio AT ROW 1.95 COL 40 COLON-ALIGNED
-     HoraEntrada AT ROW 1.95 COL 74 COLON-ALIGNED
-     HoraSalida AT ROW 1.95 COL 104 COLON-ALIGNED
+     HoraEntrada AT ROW 1.95 COL 43.2 COLON-ALIGNED
+     HoraSalida AT ROW 1.95 COL 73 COLON-ALIGNED
      BROWSE-20 AT ROW 1.95 COL 121
      BROWSE-9 AT ROW 3.86 COL 10
      BROWSE-2 AT ROW 3.86 COL 44
      BROWSE-11 AT ROW 3.86 COL 77
+     Cantidad AT ROW 7.67 COL 140 COLON-ALIGNED
+     BUTTON-1 AT ROW 7.67 COL 165
      Subtotal AT ROW 9.33 COL 51 COLON-ALIGNED
      BROWSE-3 AT ROW 9.57 COL 9
      IVA AT ROW 9.57 COL 76 COLON-ALIGNED
-     Cantidad AT ROW 11.24 COL 144 COLON-ALIGNED
-     BUTTON-1 AT ROW 11.24 COL 164
+     SELECT-1 AT ROW 9.57 COL 121 NO-LABEL
      Total AT ROW 11.48 COL 50 COLON-ALIGNED
      Propina AT ROW 11.48 COL 76 COLON-ALIGNED
-     BtnOK AT ROW 14.1 COL 151
-     BtnCancel AT ROW 14.1 COL 169
-     SPACE(7.99) SKIP(0.94)
+     BtnOK AT ROW 14.1 COL 9
+     BtnCancel AT ROW 14.1 COL 25
+     SPACE(151.99) SKIP(1.04)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Registro de Venta"
@@ -345,6 +352,18 @@ ASSIGN
 ASSIGN 
        Fecha:READ-ONLY IN FRAME RegVenta-Frame        = TRUE.
 
+ASSIGN 
+       HoraEntrada:READ-ONLY IN FRAME RegVenta-Frame        = TRUE.
+
+ASSIGN 
+       IVA:READ-ONLY IN FRAME RegVenta-Frame        = TRUE.
+
+ASSIGN 
+       Subtotal:READ-ONLY IN FRAME RegVenta-Frame        = TRUE.
+
+ASSIGN 
+       Total:READ-ONLY IN FRAME RegVenta-Frame        = TRUE.
+
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
 
@@ -377,8 +396,7 @@ ASSIGN
      _Options          = "NO-LOCK INDEXED-REPOSITION"
      _FldNameList[1]   > Restaurante.MENU.DESCRIPCION
 "MENU.DESCRIPCION" ? "X(25)" "character" ? ? ? ? ? ? no ? no no "31.2" yes no no "U" "" ""
-     _FldNameList[2]   > Restaurante.MENU.PRECIO
-"MENU.PRECIO" ? ? "decimal" ? ? ? ? ? ? no ? no no "25.4" yes no no "U" "" ""
+     _FldNameList[2]   = Restaurante.MENU.PRECIO
      _Query            is OPENED
 */  /* BROWSE BROWSE-20 */
 &ANALYZE-RESUME
@@ -427,16 +445,14 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BtnOK RegVenta-Frame
 ON CHOOSE OF BtnOK IN FRAME RegVenta-Frame /* OK */
 DO:
-  
-  vchrFolio = Folio:SCREEN-VALUE.
   vdteFecha = DATE(Fecha:SCREEN-VALUE).
   vchrEntrada = HoraEntrada:SCREEN-VALUE.
   vchrSalida = HoraSalida:SCREEN-VALUE.
   vdecPropina = DEC(Propina:SCREEN-VALUE).
 
   RUN LlenarComanda(vdteFecha,vchrEntrada,vchrSalida,vdecPropina).
-  RUN LlenarFactura(vchrFolio,vdecSubtotal,vdecIVA,vdecTotal).
-  RUN LlenarConsumo.
+  RUN LlenarFactura(vdecSubtotal,vdecIVA,vdecTotal).
+  RUN LlenarConsumo(vintCantidad).
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -447,8 +463,13 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-1 RegVenta-Frame
 ON CHOOSE OF BUTTON-1 IN FRAME RegVenta-Frame /* Agregar */
 DO:
-  ASSIGN vintCantidad = INT(Cantidad:SCREEN-VALUE).
+  IF ValidarSalida() = TRUE 
+      THEN vlogSemaforo = ValidarFrame().
+  ELSE 
+      MESSAGE "La hora de salida debe estar en formato de 24 horas" VIEW-AS ALERT-BOX.
 
+  IF vlogSemaforo = TRUE THEN DO:
+  ASSIGN vintCantidad = INT(Cantidad:SCREEN-VALUE).
   vdecSubtotal = vdecSubtotal + CalcularSubtotal(vintCantidad).
   vdecIVA = vdecIva + CalcularIVA(vdecSubtotal).
   vdecTotal = CalcularTotal(vdecSubtotal,vdecIVA).
@@ -463,9 +484,13 @@ DO:
           vintproducto = Ingrediente.ID_Producto.
          DescontarExistencia(vintproducto,vintTotal,1).
       END.
-      END.
+      /*ASSIGN SELECT-1:LIST-ITEM-PAIRS = STRING(MENU.Descripcion) + STRING(MENU.Precio).*/
+  END.
   ELSE
       MESSAGE "No te puedo vender esa cantidad" VIEW-AS ALERT-BOX.
+  END.
+  ELSE
+      MESSAGE "Venta no registrada" VIEW-AS ALERT-BOX.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -492,6 +517,8 @@ DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
    ON END-KEY UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK:
   RUN enable_UI.
   ASSIGN Fecha:SCREEN-VALUE = string(FechaActual()).
+  vchrEntrada = HoraEntrada().
+  ASSIGN HoraEntrada:SCREEN-VALUE = vchrEntrada.
   WAIT-FOR GO OF FRAME {&FRAME-NAME}.
 END.
 RUN disable_UI.
@@ -530,10 +557,11 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  DISPLAY Fecha Folio HoraEntrada HoraSalida Subtotal IVA Cantidad Total Propina 
+  DISPLAY Fecha HoraEntrada HoraSalida Cantidad Subtotal IVA SELECT-1 Total 
+          Propina 
       WITH FRAME RegVenta-Frame.
-  ENABLE Folio HoraEntrada HoraSalida BROWSE-20 BROWSE-9 BROWSE-2 BROWSE-11 
-         Subtotal BROWSE-3 IVA Cantidad BUTTON-1 Total Propina BtnOK BtnCancel 
+  ENABLE HoraEntrada HoraSalida BROWSE-20 BROWSE-9 BROWSE-2 BROWSE-11 Cantidad 
+         BUTTON-1 Subtotal BROWSE-3 IVA SELECT-1 Total Propina BtnOK BtnCancel 
       WITH FRAME RegVenta-Frame.
   VIEW FRAME RegVenta-Frame.
   {&OPEN-BROWSERS-IN-QUERY-RegVenta-Frame}
@@ -556,6 +584,30 @@ FUNCTION FechaActual RETURNS DATE
   vchrFecha = TODAY.  
 
   RETURN vchrFecha.   /* Function return value. */
+
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION ValidarSalida RegVenta-Frame 
+FUNCTION ValidarSalida RETURNS LOGICAL
+  ( /* parameter-definitions */ ) :
+/*------------------------------------------------------------------------------
+  Purpose:  
+    Notes:  
+------------------------------------------------------------------------------*/
+  DEF VAR vlogPase AS LOG.
+
+  ASSIGN vchrSalida = (HoraSalida:SCREEN-VALUE IN FRAME RegVenta-Frame).
+
+
+  IF INT(TRIM(SUBSTR(vchrSalida,1,2),":")) < 24 AND INT(TRIM(SUBSTR(vchrSalida,4,2),":")) < 60
+  THEN DO:
+      vlogPase = TRUE.
+  END.
+
+  RETURN vlogPase.   /* Function return value. */
 
 END FUNCTION.
 

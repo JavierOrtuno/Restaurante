@@ -34,6 +34,14 @@
 
 /* ************************  Function Prototypes ********************** */
 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD AsignarFolio Include 
+FUNCTION AsignarFolio RETURNS CHARACTER
+    ( INPUT vintIdFactura AS INTEGER,  
+      INPUT vintElementos AS INTEGER )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD CalcularIVA Include 
 FUNCTION CalcularIVA RETURNS DEC
   ( vdecSubtotal AS DEC /* parameter-definitions */ )  FORWARD.
@@ -63,6 +71,13 @@ FUNCTION DescontarInventario RETURNS LOGICAL
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD HoraEntrada Include 
+FUNCTION HoraEntrada RETURNS CHARACTER
+  ( /* parameter-definitions */ )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD ListarMenu Include 
 FUNCTION ListarMenu RETURNS CHARACTER
   ( /* parameter-definitions */ )  FORWARD.
@@ -70,8 +85,8 @@ FUNCTION ListarMenu RETURNS CHARACTER
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD Sumatoria Include 
-FUNCTION Sumatoria RETURNS INTEGER
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD ValidarFrame Include 
+FUNCTION ValidarFrame RETURNS LOGICAL
   ( /* parameter-definitions */ )  FORWARD.
 
 /* _UIB-CODE-BLOCK-END */
@@ -154,8 +169,14 @@ PROCEDURE LlenarConsumo :
   Parameters:  <none>
   Notes:       
 ------------------------------------------------------------------------------*/
+DEF INPUT PARAMETER inintCantidad AS INT.
+    
 DO TRANSACTION:
     CREATE Consumo.
+
+    Consumo.ID_Consumo = NEXT-VALUE(SEC_CONSUMO).
+
+    Consumo.Cantidad = inintCantidad.
     
     FIND CURRENT MENU.
     Consumo.ID_Menu = MENU.ID_Menu.
@@ -175,19 +196,21 @@ PROCEDURE LlenarFactura :
   Parameters:  <none>
   Notes:       
 ------------------------------------------------------------------------------*/
-DEF INPUT PARAMETER inchrFolio AS CHAR.
 DEF INPUT PARAMETER indecSubtotal AS DEC.
 DEF INPUT PARAMETER indecIVA AS DEC.
 DEF INPUT PARAMETER indecTotal AS DEC.
 
+DEF VAR vintIDFactura AS INT.
+
 DO TRANSACTION: 
     CREATE Factura.
-
-    Factura.Folio = inchrFolio.
+    
     Factura.Subtotal = indecSubtotal.
     Factura.IVA = indecIVA.
     Factura.TOTAL = indecTotal.
-    Factura.ID_Factura = NEXT-VALUE(SEC_FACTURA).
+    vintIDFactura = NEXT-VALUE(SEC_FACTURA).
+    Factura.ID_Factura = vintIDFactura.
+    Factura.Folio = AsignarFolio(vintIDFactura,4).
 
     FIND CURRENT Comanda.
     Factura.Fecha = Comanda.F_Atencion.
@@ -205,6 +228,28 @@ END PROCEDURE.
 &ANALYZE-RESUME
 
 /* ************************  Function Implementations ***************** */
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION AsignarFolio Include 
+FUNCTION AsignarFolio RETURNS CHARACTER
+    ( INPUT vintIdFactura AS INTEGER,  
+      INPUT vintElementos AS INTEGER ) :
+    /*------------------------------------------------------------------------------
+        Purpose:  
+        Notes:  
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vintCount AS INTEGER.
+    DEFINE VARIABLE vcharCodigo AS CHARACTER INITIAL "FT-".    
+
+    DO vintCount = LENGTH(STRING(vintIdFactura)) TO vintElementos:
+        vcharCodigo = vcharCodigo + "0".
+    END.
+    vcharCodigo = vcharCodigo + STRING(vintIdFactura).
+
+    RETURN vcharCodigo.
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION CalcularIVA Include 
 FUNCTION CalcularIVA RETURNS DEC
@@ -311,6 +356,41 @@ END FUNCTION.
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION HoraEntrada Include 
+FUNCTION HoraEntrada RETURNS CHARACTER
+  ( /* parameter-definitions */ ) :
+/*------------------------------------------------------------------------------
+  Purpose:  
+    Notes:  
+------------------------------------------------------------------------------*/
+  DEFINE VARIABLE hour AS INTEGER.
+  DEFINE VARIABLE minute AS INTEGER.
+  DEFINE VARIABLE sec AS INTEGER.
+  DEFINE VARIABLE timeleft AS INTEGER.
+  DEFINE VARIABLE vchrHora AS CHAR.
+      
+      timeleft = (24 * 60 * 60) - TIME.  
+  
+  /* seconds till next midnight */
+  sec = timeleft MOD 60.
+      timeleft = (timeleft - sec) / 60.  
+  
+  /* minutes till next midnight */
+  minute = timeleft MOD 60.
+      
+  /* hours till next midnight */
+      hour = (timeleft - minute) / 60. 
+  IF minute > 9 
+      THEN vchrHora = STRING(23 - hour) + ":" + STRING(59 - minute).
+  ELSE vchrHora = STRING(23 - hour) + ":" + "0" + STRING(59 - minute).
+
+  RETURN vchrHora.   /* Function return value. */
+
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION ListarMenu Include 
 FUNCTION ListarMenu RETURNS CHARACTER
   ( /* parameter-definitions */ ) :
@@ -339,20 +419,34 @@ END FUNCTION.
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION Sumatoria Include 
-FUNCTION Sumatoria RETURNS INTEGER
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION ValidarFrame Include 
+FUNCTION ValidarFrame RETURNS LOGICAL
   ( /* parameter-definitions */ ) :
 /*------------------------------------------------------------------------------
   Purpose:  
     Notes:  
 ------------------------------------------------------------------------------*/
-  DEF VAR vintStock AS INT.
+  DEF VAR vlogSemaforo AS LOG.
 
-  FIND CURRENT MENU.
+    FIND CURRENT Mesa NO-ERROR.
+    IF  NOT AVAILABLE Mesa THEN MESSAGE "Selecciona una mesa" VIEW-AS ALERT-BOX.
+    ELSE DO:
+        FIND CURRENT Persona NO-ERROR.
+        IF  NOT AVAILABLE Persona THEN MESSAGE "Selecciona un mesero" VIEW-AS ALERT-BOX.
+        ELSE DO:
+            FIND CURRENT FORMA_pago NO-ERROR.
+            IF  NOT AVAILABLE Forma_Pago THEN MESSAGE "Selecciona una forma de pago" VIEW-AS ALERT-BOX.
+            ELSE DO:
+                FIND CURRENT Estatus NO-ERROR.
+                IF  NOT AVAILABLE Estatus THEN MESSAGE "Selecciona un estatus" VIEW-AS ALERT-BOX.
+                ELSE DO:
+                    vlogSemaforo = TRUE.
+                END.
+            END.
+        END.
+    END.
 
-        vintStock = vintStock + Stock.Cantidad.
-
-  RETURN vintStock.   /* Function return value. */
+  RETURN vlogSemaforo.   /* Function return value. */
 
 END FUNCTION.
 

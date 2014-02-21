@@ -64,12 +64,12 @@ DEFINE BUTTON Btn_Aceptar
      LABEL "Aceptar" 
      SIZE 20 BY 2.52.
 
-DEFINE VARIABLE Fill_Desde AS DATE FORMAT "99/99/99":U INITIAL ? 
+DEFINE VARIABLE Fill_Desde AS DATE FORMAT "99/99/99":U 
      LABEL "Desde" 
      VIEW-AS FILL-IN 
      SIZE 14 BY 1 NO-UNDO.
 
-DEFINE VARIABLE Fill_Hasta AS DATE FORMAT "99/99/99":U INITIAL ? 
+DEFINE VARIABLE Fill_Hasta AS DATE FORMAT "99/99/99":U 
      LABEL "Hasta" 
      VIEW-AS FILL-IN 
      SIZE 14 BY 1 NO-UNDO.
@@ -132,16 +132,26 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Aceptar Dlg_Propinas
 ON CHOOSE OF Btn_Aceptar IN FRAME Dlg_Propinas /* Aceptar */
 DO:
+    DEFINE VARIABLE vcharDesde AS CHARACTER.
+    DEFINE VARIABLE vcharHasta AS CHARACTER.
+
     ASSIGN
         Fill_Desde
         Fill_Hasta.    
 
-    IF Fill_Desde <> ? AND Fill_Hasta <> ? AND Fill_Desde >= Fill_Hasta THEN DO:
-        MESSAGE "La Fecha Hasta no Puede ser Mayor a la Fecha Desde" VIEW-AS ALERT-BOX.        
+    vcharDesde = STRING(Fill_Desde).
+    vcharHasta = STRING(Fill_Hasta).
+
+    IF vcharDesde <> ? AND vcharHasta <> ? AND Fill_Desde > Fill_Hasta THEN DO:
+        MESSAGE "La Fecha Hasta no Puede ser Mayor a la Fecha Desde" VIEW-AS ALERT-BOX.
     END.
-    ELSE DO:
-        poutCharFechas = STRING(Fill_Desde) + "#" + STRING(Fill_Hasta).
-        MESSAGE poutCharFechas VIEW-AS ALERT-BOX.        
+    ELSE DO:                
+        IF vcharDesde = ? THEN
+            vcharDesde = "".
+        IF vcharHasta = ? THEN
+            vcharHasta = "".
+
+        poutCharFechas = vcharDesde + "#" + vcharHasta.        
         APPLY "WINDOW-CLOSE" TO FRAME Dlg_Propinas.
     END.
 END.

@@ -155,32 +155,32 @@ PROCEDURE getProporciones :
     DEFINE VARIABLE vdecCocinerosT AS DECIMAL.
     DEFINE VARIABLE vdecAdminT AS DECIMAL.
     
-    IF pinCharFechas = "#" THEN DO:
+    IF TRIM(pinCharFechas) = "#" THEN DO:
         FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0:
             FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
             poutDecTotal = poutDecTotal + COMANDA.PROPINA.
         END.
     END.
     ELSE DO:
-        IF TRIM(ENTRY(1, pinCharFechas, ":")) = "" THEN DO:
+        IF TRIM(ENTRY(1, pinCharFechas, "#")) = "" THEN DO:
             FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
-                FACTURA.FECHA <= DATE(ENTRY(2, pinCharFechas, ":")):       
+                FACTURA.FECHA <= DATE(ENTRY(2, pinCharFechas, "#")):       
                     FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
                     poutDecTotal = poutDecTotal + COMANDA.PROPINA.
             END.
         END.
         ELSE DO:
-            IF TRIM(ENTRY(2, pinCharFechas, ":")) = "" THEN DO:
+            IF TRIM(ENTRY(2, pinCharFechas, "#")) = "" THEN DO:
                 FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
-                    FACTURA.FECHA >= DATE(ENTRY(1, pinCharFechas, ":")):
+                    FACTURA.FECHA >= DATE(ENTRY(1, pinCharFechas, "#")):
                         FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
                         poutDecTotal = poutDecTotal + COMANDA.PROPINA.
                 END.
             END.
             ELSE DO:
                 FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
-                    FACTURA.FECHA >= DATE(ENTRY(1, pinCharFechas, ":")) AND
-                    FACTURA.FECHA <= DATE(ENTRY(2, pinCharFechas, ":")):       
+                    FACTURA.FECHA >= DATE(ENTRY(1, pinCharFechas, "#")) AND
+                    FACTURA.FECHA <= DATE(ENTRY(2, pinCharFechas, "#")):       
                         FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
                         poutDecTotal = poutDecTotal + COMANDA.PROPINA.
                 END.

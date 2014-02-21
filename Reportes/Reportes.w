@@ -198,7 +198,6 @@ DO:
     DEFINE VARIABLE vcharFileName AS CHARACTER.
 
     RUN menuPropinas.w(OUTPUT vcharFechas).
-    MESSAGE vcharFechas VIEW-AS ALERT-BOX.
     IF vcharFechas <> ? THEN DO:
         Edit_File:SCREEN-VALUE = "".
 

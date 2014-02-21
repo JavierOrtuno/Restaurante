@@ -139,6 +139,15 @@ DEFINE FRAME Delete-Frame
  */
 &ANALYZE-RESUME _END-PROCEDURE-SETTINGS
 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _INCLUDED-LIB Delete-Frame 
+/* ************************* Included-Libraries *********************** */
+
+{librerias/inventario.i}
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 
 
 /* ***********  Runtime Attributes and AppBuilder Settings  *********** */
@@ -197,7 +206,10 @@ vintCantidadElimin = INT(fill-in-34:SCREEN-VALUE).
    vintCantidad = vintCantidadActual - vintCantidadElimin.
    ROWID(stock).
    ASSIGN stock.cantidad = vintCantidad.
+   Insertar_Bitacora(4,1,stock.id_producto,vintCantidadElimin).
    MESSAGE "Eliminado Correctamente" VIEW-AS ALERT-BOX.
+   {&open-query-BROWSE-15}
+   APPLY "window-close" TO FRAME Delete-Frame.
   END.
 END.
 

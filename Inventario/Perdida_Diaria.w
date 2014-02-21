@@ -88,7 +88,7 @@ RECT-26
 
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON BUTTON-29 
-     LABEL "Agregar" 
+     LABEL "Quitar" 
      SIZE 15 BY 2.38.
 
 DEFINE BUTTON BUTTON-30 
@@ -181,7 +181,7 @@ ASSIGN
 "PRODUCTO.DESCRIPCION" ? ? "character" ? ? ? ? ? ? no ? no no "31.2" yes no no "U" "" ""
      _FldNameList[2]   = Restaurante.STOCK.CANTIDAD
      _FldNameList[3]   > Restaurante.STOCK.F_CADUCIDAD
-"STOCK.F_CADUCIDAD" "FECHA DE CADUCIDAD" ? "date" ? ? ? ? ? ? no ? no no "31.6" yes no no "U" "" ""
+"STOCK.F_CADUCIDAD" "FECHA DE CADUCIDAD" ? "date" ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE BROWSE-15 */
 &ANALYZE-RESUME
@@ -205,7 +205,7 @@ END.
 
 &Scoped-define SELF-NAME BUTTON-29
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-29 Perdida-Frame
-ON CHOOSE OF BUTTON-29 IN FRAME Perdida-Frame /* Agregar */
+ON CHOOSE OF BUTTON-29 IN FRAME Perdida-Frame /* Quitar */
 DO:
   RUN Eliminar_Desperdicio.w(ROWID(producto),ROWID(stock)).
   {&OPEN-query-BROWSE-15}

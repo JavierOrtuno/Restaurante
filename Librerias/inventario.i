@@ -38,7 +38,7 @@
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD DescontarExistencia Method-Library 
 FUNCTION DescontarExistencia RETURNS LOGICAL
-  ( vintproducto AS INT, vintcantidad AS INT, vinttipo AS INT  )  FORWARD.
+  ( vintproducto AS INT, vintcantidad AS INT, vinttipo AS INT, vintuser AS INT)  FORWARD.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -116,7 +116,7 @@ FUNCTION Insertar_Bitacora RETURNS LOGICAL
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION DescontarExistencia Method-Library 
 FUNCTION DescontarExistencia RETURNS LOGICAL
-  ( vintproducto AS INT, vintcantidad AS INT, vinttipo AS INT  ) :
+  ( vintproducto AS INT, vintcantidad AS INT, vinttipo AS INT, vintuser AS INT) :
 /*------------------------------------------------------------------------------
   Purpose: Descontar en el stock, los ingredientes usados ya sea en desperdicio
   o consumo
@@ -128,7 +128,7 @@ DEF VAR vinttotal  AS INT.
 vdteactual = TODAY.
 CASE vinttipo:
     WHEN 1 THEN DO:
-        Insertar_Bitacora(3,1,vintproducto,vintcantidad).
+        Insertar_Bitacora(3,vintuser,vintproducto,vintcantidad).
         FOR EACH stock WHERE stock.id_producto = vintproducto AND stock.f_caducidad > vdteactual AND stock.cantidad > 0 BY f_caducidad BY cantidad.
             IF stock.cantidad >= vintcantidad THEN DO:
                 vinttotal = stock.cantidad - vintcantidad.

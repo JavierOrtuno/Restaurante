@@ -30,8 +30,12 @@
 DEFINE INPUT PARAMETER inIntEvento AS INTEGER.
 DEFINE INPUT PARAMETER inRowId AS ROWID.
 
-/* Local Variable Definitions ---                                       */
-DEFINE VARIABLE vintIdUsuario AS INTEGER.
+DEF VAR vintIdRol AS INTEGER.
+DEF VAR vIntIdUsuario AS INT.
+DEF VAR vintIdPersona AS INT.
+
+/* Local Variable Definitions ---                                       
+DEFINE VARIABLE vintIdUsuario AS INTEGER.*/
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -48,9 +52,13 @@ DEFINE VARIABLE vintIdUsuario AS INTEGER.
 &Scoped-define FRAME-NAME Dlg_UpdateUsua
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Btn_Cancelar Fill_Usuario Fill_Contrasena ~
-Btn_Aceptar RECT-1 RECT-20 
-&Scoped-Define DISPLAYED-OBJECTS Fill_IdUser Fill_Usuario Fill_Contrasena 
+&Scoped-Define ENABLED-OBJECTS Btn_Cancelar Fill_Nombre Fill_Usuario ~
+Fill_Apat Fill_Contrasena Fill_Amat Fill_Sexo Fill_FNac Btn_Aceptar ~
+Fill_Direccion Fill_Curp Fill_RFC Fill_Correo Combo_Rol RECT-1 RECT-26 ~
+RECT-27 
+&Scoped-Define DISPLAYED-OBJECTS Fill_Nombre Fill_Usuario Fill_Apat ~
+Fill_Contrasena Fill_Amat Fill_Sexo Fill_FNac Fill_Direccion Fill_Curp ~
+Fill_RFC Fill_Correo Fill_Rol Combo_Rol 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -76,11 +84,30 @@ FUNCTION ValidarRegistroUsuario RETURNS LOGICAL
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Aceptar 
      LABEL "Aceptar" 
-     SIZE 20 BY 2.52.
+     SIZE 20 BY 2.86.
 
 DEFINE BUTTON Btn_Cancelar 
      LABEL "Salir" 
      SIZE 15 BY 1.14.
+
+DEFINE VARIABLE Combo_Rol AS CHARACTER FORMAT "X(50)":U 
+     VIEW-AS COMBO-BOX INNER-LINES 5
+     LIST-ITEM-PAIRS "SELECCIONAR","0"
+     DROP-DOWN-LIST
+     SIZE 29 BY 1
+     BGCOLOR 15  NO-UNDO.
+
+DEFINE VARIABLE Fill_Amat AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Apellido Materno" 
+     VIEW-AS FILL-IN 
+     SIZE 30.8 BY 1
+     BGCOLOR 15  NO-UNDO.
+
+DEFINE VARIABLE Fill_Apat AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Apellido Paterno" 
+     VIEW-AS FILL-IN 
+     SIZE 31 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE Fill_Contrasena AS CHARACTER FORMAT "X(100)":U 
      LABEL "Contraseña" 
@@ -88,10 +115,51 @@ DEFINE VARIABLE Fill_Contrasena AS CHARACTER FORMAT "X(100)":U
      SIZE 31 BY 1
      BGCOLOR 15  NO-UNDO.
 
-DEFINE VARIABLE Fill_IdUser AS CHARACTER FORMAT "X(10)":U 
-     LABEL "ID Usuario" 
+DEFINE VARIABLE Fill_Correo AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Correo" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1
+     SIZE 26 BY 1
+     BGCOLOR 15  NO-UNDO.
+
+DEFINE VARIABLE Fill_Curp AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Curp" 
+     VIEW-AS FILL-IN 
+     SIZE 33 BY 1
+     BGCOLOR 15  NO-UNDO.
+
+DEFINE VARIABLE Fill_Direccion AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Dirección" 
+     VIEW-AS FILL-IN 
+     SIZE 44.4 BY 1
+     BGCOLOR 15  NO-UNDO.
+
+DEFINE VARIABLE Fill_FNac AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Fecha de Nacimiento" 
+     VIEW-AS FILL-IN 
+     SIZE 27.4 BY 1
+     BGCOLOR 15  NO-UNDO.
+
+DEFINE VARIABLE Fill_Nombre AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Nombre" 
+     VIEW-AS FILL-IN 
+     SIZE 31 BY 1
+     BGCOLOR 15  NO-UNDO.
+
+DEFINE VARIABLE Fill_RFC AS CHARACTER FORMAT "X(256)":U 
+     LABEL "RFC" 
+     VIEW-AS FILL-IN 
+     SIZE 29 BY 1
+     BGCOLOR 15  NO-UNDO.
+
+DEFINE VARIABLE Fill_Rol AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Descrpcion" 
+     VIEW-AS FILL-IN 
+     SIZE 24 BY 1 NO-UNDO.
+
+DEFINE VARIABLE Fill_Sexo AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Sexo" 
+     VIEW-AS FILL-IN 
+     SIZE 16.8 BY 1
      BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE Fill_Usuario AS CHARACTER FORMAT "X(100)":U 
@@ -102,30 +170,47 @@ DEFINE VARIABLE Fill_Usuario AS CHARACTER FORMAT "X(100)":U
 
 DEFINE RECTANGLE RECT-1
      EDGE-PIXELS 8  
-     SIZE 90 BY 2.38
+     SIZE 140 BY 2.38
      BGCOLOR 8 .
 
-DEFINE RECTANGLE RECT-20
+DEFINE RECTANGLE RECT-26
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 58 BY 8.33.
+     SIZE 70 BY 15.19.
+
+DEFINE RECTANGLE RECT-27
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 47 BY 4.81.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_UpdateUsua
-     Btn_Cancelar AT ROW 1.67 COL 73.6
-     Fill_IdUser AT ROW 6.14 COL 33.2 COLON-ALIGNED
-     Fill_Usuario AT ROW 8.19 COL 33.2 COLON-ALIGNED
-     Fill_Contrasena AT ROW 10.48 COL 33.2 COLON-ALIGNED
-     Btn_Aceptar AT ROW 14 COL 36.2
+     Btn_Cancelar AT ROW 1.67 COL 123.6
+     Fill_Nombre AT ROW 6.48 COL 32.4 COLON-ALIGNED
+     Fill_Usuario AT ROW 6.76 COL 96.4 COLON-ALIGNED
+     Fill_Apat AT ROW 7.91 COL 32.4 COLON-ALIGNED
+     Fill_Contrasena AT ROW 8.67 COL 96.4 COLON-ALIGNED
+     Fill_Amat AT ROW 9.33 COL 32.6 COLON-ALIGNED
+     Fill_Sexo AT ROW 10.76 COL 32.6 COLON-ALIGNED
+     Fill_FNac AT ROW 12.14 COL 32.6 COLON-ALIGNED
+     Btn_Aceptar AT ROW 13.38 COL 101
+     Fill_Direccion AT ROW 13.52 COL 32.6 COLON-ALIGNED
+     Fill_Curp AT ROW 14.95 COL 32.8 COLON-ALIGNED
+     Fill_RFC AT ROW 16.29 COL 32.6 COLON-ALIGNED
+     Fill_Correo AT ROW 17.76 COL 32.8 COLON-ALIGNED
+     Fill_Rol AT ROW 19.24 COL 22.6 COLON-ALIGNED
+     Combo_Rol AT ROW 19.24 COL 48 COLON-ALIGNED NO-LABEL
      RECT-1 AT ROW 1 COL 1
-     RECT-20 AT ROW 4.81 COL 17
+     RECT-26 AT ROW 5.71 COL 11
+     RECT-27 AT ROW 5.71 COL 84.4
      "ACTUALIZAR USUARIOS" VIEW-AS TEXT
-          SIZE 26.8 BY 1.19 AT ROW 1.62 COL 34.8
+          SIZE 26.8 BY 1.19 AT ROW 1.62 COL 61
           BGCOLOR 8 FGCOLOR 15 FONT 12
-     "Campos Requeridos:" VIEW-AS TEXT
-          SIZE 30 BY .62 AT ROW 4.05 COL 17.4
-     SPACE(43.60) SKIP(13.46)
+     "Datos de Autenticación" VIEW-AS TEXT
+          SIZE 23 BY .62 AT ROW 5 COL 85
+     "Datos Generales" VIEW-AS TEXT
+          SIZE 19.6 BY .62 AT ROW 4.95 COL 11.4
+     SPACE(109.99) SKIP(16.42)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -153,7 +238,7 @@ ASSIGN
        FRAME Dlg_UpdateUsua:SCROLLABLE       = FALSE
        FRAME Dlg_UpdateUsua:HIDDEN           = TRUE.
 
-/* SETTINGS FOR FILL-IN Fill_IdUser IN FRAME Dlg_UpdateUsua
+/* SETTINGS FOR FILL-IN Fill_Rol IN FRAME Dlg_UpdateUsua
    NO-ENABLE                                                            */
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
@@ -179,24 +264,33 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Aceptar Dlg_UpdateUsua
 ON CHOOSE OF Btn_Aceptar IN FRAME Dlg_UpdateUsua /* Aceptar */
 DO:    
-    DEFINE VARIABLE vcharUsuario AS CHARACTER.
-    DEFINE VARIABLE vcharContrasena AS CHARACTER.
+    DEF VAR vcharUsuario AS CHAR.     DEF VAR vcharContrasena AS CHAR.    DEF VAR vCharCorreo AS CHAR.        
+    DEF VAR vCharNombre AS CHAR.      DEF VAR vCharApat AS CHAR.          DEF VAR vCharAmat AS CHAR.
+    DEF VAR vCharSexo AS CHAR.        DEF VAR vCharFecha AS CHAR.         DEF VAR vCharCurp AS CHAR.           
+    DEF VAR vCharRfc AS CHAR.         DEF VAR vCharDomicilio AS CHAR.    
 
-    vcharUsuario = Fill_Usuario:SCREEN-VALUE.
-    vcharContrasena = Fill_Contrasena:SCREEN-VALUE.
+    vcharUsuario = Fill_Usuario:SCREEN-VALUE.    vcharContrasena = Fill_Contrasena:SCREEN-VALUE.
+    vcharNombre =Fill_Nombre:SCREEN-VALUE.       vcharApat = Fill_Apat:SCREEN-VALUE.
+    vcharAmat = Fill_Amat:SCREEN-VALUE.          vcharSexo = Fill_Sexo:SCREEN-VALUE.
+    vcharFecha = Fill_FNac:SCREEN-VALUE.         vcharDomicilio = Fill_Direccion:SCREEN-VALUE.
+    vcharCurp = Fill_Curp:SCREEN-VALUE.          vcharRFC = Fill_Rfc:SCREEN-VALUE.
+    vcharCorreo = Fill_Correo:SCREEN-VALUE.
         
     IF validarRegistroUsuario(vcharUsuario, vcharContrasena) = FALSE THEN DO:
         MESSAGE "Todos los Campos son Requeridos" VIEW-AS ALERT-BOX.
         LEAVE.
     END.
     ASSIGN 
-        Fill_Usuario Fill_Contrasena.
+        Fill_Usuario Fill_Contrasena Fill_Nombre Fill_Apat Fill_Amat Fill_Sexo Fill_FNac Fill_Direccion Fill_Correo Fill_Rfc Fill_Curp.
     CASE inIntEvento:
         WHEN 1 THEN DO:
-            RUN addUsuario(vintIdUsuario, Fill_Usuario, getEncrypt(Fill_Contrasena)).
+            vintIdPersona = addPersona(Fill_Nombre, Fill_Apat, Fill_Amat, Fill_Sexo, Fill_FNac, Fill_Direccion, Fill_Correo, Fill_Rfc, Fill_Curp).
+            vintIdUsuario = addUsuario(Fill_Usuario, getEncrypt(Fill_Contrasena)).
+            RUN asignarEmpleado.
             APPLY "WINDOW-CLOSE" TO FRAME Dlg_UpdateUsua.    
         END.
         WHEN 2 THEN DO:
+            RUN updatePersona(inRowId, vintIdRol, Fill_Nombre, Fill_Apat, Fill_Amat, Fill_Sexo, Fill_FNac, Fill_Direccion, Fill_Correo, Fill_Rfc, Fill_Curp).
             RUN updateUsuario(inRowId, Fill_Usuario, getEncrypt(Fill_Contrasena)).
             APPLY "WINDOW-CLOSE" TO FRAME Dlg_UpdateUsua.
         END.
@@ -222,6 +316,18 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Combo_Rol
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Combo_Rol Dlg_UpdateUsua
+ON VALUE-CHANGED OF Combo_Rol IN FRAME Dlg_UpdateUsua /* Descripción */
+DO:  
+    vintIdRol = INTEGER(combo_rol:SCREEN-VALUE).
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Fill_Rol
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dlg_UpdateUsua 
@@ -240,7 +346,15 @@ MAIN-BLOCK:
 DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
    ON END-KEY UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK:
   RUN enable_UI.
+  DEFINE VARIABLE vcharLista AS CHARACTER.
+
+  FOR EACH Rol NO-LOCK:
+     vcharLista = vcharLista + ROL.DESCRIPCION + "," + STRING(ROL.ID_ROL) + ",".
+  END.  
+
+  ASSIGN Combo_Rol:LIST-ITEM-PAIRS = TRIM(vcharLista, ",").
   RUN setInitial.
+
   WAIT-FOR GO OF FRAME {&FRAME-NAME}.
 END.
 RUN disable_UI.
@@ -250,6 +364,26 @@ RUN disable_UI.
 
 
 /* **********************  Internal Procedures  *********************** */
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE asignarEpleado Dlg_UpdateUsua 
+PROCEDURE asignarEpleado :
+/*------------------------------------------------------------------------------
+  Purpose:     
+  Parameters:  <none>
+  Notes:       
+------------------------------------------------------------------------------*/
+CREATE EMPLEADO.
+
+    ASSIGN 
+        EMPLEADO.ID_EMPLEADO = NEXT-VALUE(SEC_EMPLEADO)                     
+        EMPLEADO.ID_PERSONA = vintIdPersona                    
+        EMPLEADO.ID_USUARIO = vintIdUsuario                           
+        EMPLEADO.ID_ROL = vintIdRol.                      
+               
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE asignarValores Dlg_UpdateUsua 
 PROCEDURE asignarValores :
@@ -262,17 +396,29 @@ PROCEDURE asignarValores :
 
     CASE inIntEvento:
         WHEN 2 THEN DO:
-            Fill_IdUser:SCREEN-VALUE IN FRAME {&FRAME-NAME} = STRING(INTEGER(USUARIO.ID_USUARIO)).
-            Fill_Usuario:SCREEN-VALUE = UPPER(USUARIO.USUARIO).
-            Fill_Contrasena:SCREEN-VALUE = UPPER(USUARIO.CONTRASENIA).
+   
+            Fill_Usuario:SCREEN-VALUE IN FRAME {&FRAME-NAME} = USUARIO.USUARIO.
+            Fill_Contrasena:SCREEN-VALUE IN FRAME {&FRAME-NAME} = USUARIO.CONTRASENIA.
+
+            FIND FIRST Empleado WHERE Empleado.id_Usuario = usuario.Id_Usuario.
+                FIND FIRST Persona WHERE Persona.Id_Persona = Empleado.Id_Persona.
+                    FIND FIRST Rol WHERE Empleado.Id_Rol = Rol.Id_Rol.
+
+            Fill_Nombre:SCREEN-VALUE = Persona.Nombre.                 Fill_Apat:SCREEN-VALUE = Persona.A_paterno.
+            Fill_Amat:SCREEN-VALUE = Persona.A_materno.                Fill_Sexo:SCREEN-VALUE = Persona.Sexo.
+            Fill_FNac:SCREEN-VALUE = STRING(Persona.F_Nacimiento).     Fill_Direccion:SCREEN-VALUE = Persona.Domicilio.
+            Fill_Curp:SCREEN-VALUE = Persona.Curp.                     Fill_Rfc:SCREEN-VALUE = Persona.Rfc.
+            Fill_Correo:SCREEN-VALUE = Persona.Correo.                 Fill_Rol:SCREEN-VALUE = Rol.Descripcion.
+
+            MESSAGE combo_rol:LIST-ITEM-PAIRS VIEW-AS ALERT-BOX.
+            ASSIGN combo_rol:SCREEN-VALUE = STRING(Rol.ID_ROL).
+
         END.
 
         WHEN 3 THEN DO: 
-            Fill_IdUser:SCREEN-VALUE IN FRAME {&FRAME-NAME} = STRING(INTEGER(USUARIO.ID_USUARIO)).
-            Fill_Usuario:SCREEN-VALUE = UPPER(USUARIO.USUARIO).
-            Fill_Contrasena:SCREEN-VALUE = UPPER(USUARIO.CONTRASENIA).
+            Fill_Usuario:SCREEN-VALUE IN FRAME {&FRAME-NAME}= USUARIO.USUARIO.
+            Fill_Contrasena:SCREEN-VALUE IN FRAME {&FRAME-NAME}= USUARIO.CONTRASENIA.
 
-            Fill_IdUser:SENSITIVE = NO.
             Fill_Usuario:SENSITIVE = NO.
             Fill_Contrasena:SENSITIVE = NO.
 
@@ -312,9 +458,13 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  DISPLAY Fill_IdUser Fill_Usuario Fill_Contrasena 
+  DISPLAY Fill_Nombre Fill_Usuario Fill_Apat Fill_Contrasena Fill_Amat Fill_Sexo 
+          Fill_FNac Fill_Direccion Fill_Curp Fill_RFC Fill_Correo Fill_Rol 
+          Combo_Rol 
       WITH FRAME Dlg_UpdateUsua.
-  ENABLE Btn_Cancelar Fill_Usuario Fill_Contrasena Btn_Aceptar RECT-1 RECT-20 
+  ENABLE Btn_Cancelar Fill_Nombre Fill_Usuario Fill_Apat Fill_Contrasena 
+         Fill_Amat Fill_Sexo Fill_FNac Btn_Aceptar Fill_Direccion Fill_Curp 
+         Fill_RFC Fill_Correo Combo_Rol RECT-1 RECT-26 RECT-27 
       WITH FRAME Dlg_UpdateUsua.
   VIEW FRAME Dlg_UpdateUsua.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_UpdateUsua}
@@ -332,8 +482,7 @@ PROCEDURE setInitial :
     ------------------------------------------------------------------------------*/
     CASE inIntEvento:
         WHEN 1 THEN DO:
-            vintIdUsuario = NEXT-VALUE(SEC_USUARIO). 
-            Fill_IdUser:SCREEN-VALUE IN FRAME {&FRAME-NAME} = STRING(vintIdUsuario).
+           
         END.
         WHEN 2 THEN DO:
             RUN asignarValores.

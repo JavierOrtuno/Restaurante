@@ -47,8 +47,8 @@ DEF INPUT PARAM inintIdRol AS INT.
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Bttn-MSalir Bttn-Alta-2 Btn-Menu Btn-Usuario ~
 Bttn-Baja-2 Btn-Productos Bttn-Editar-2 Bttn-Alta-4 Btn-Inventario ~
-Bttn-Baja-4 Bttn-Editar-4 RECT-10 RECT-18 RECT-2 RECT-3 RECT-4 RECT-5 ~
-RECT-6 RECT-7 RECT-8 RECT-9 
+Bttn-Baja-4 Btn-Desperdicio Bttn-Editar-4 RECT-10 RECT-18 RECT-2 RECT-3 ~
+RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -63,6 +63,10 @@ RECT-6 RECT-7 RECT-8 RECT-9
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
+DEFINE BUTTON Btn-Desperdicio 
+     LABEL "Desperdicio" 
+     SIZE 16 BY 1.14.
+
 DEFINE BUTTON Btn-Inventario 
      LABEL "Inventario" 
      SIZE 16 BY 1.14.
@@ -151,7 +155,7 @@ DEFINE RECTANGLE RECT-8
 
 DEFINE RECTANGLE RECT-9
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 19.4 BY 3.29.
+     SIZE 19.4 BY 4.95.
 
 
 /* ************************  Frame Definitions  *********************** */
@@ -167,6 +171,7 @@ DEFINE FRAME Dialog-Frame-Menu
      Bttn-Alta-4 AT ROW 22.71 COL 100.4
      Btn-Inventario AT ROW 22.95 COL 16.4
      Bttn-Baja-4 AT ROW 24.67 COL 100.4
+     Btn-Desperdicio AT ROW 24.71 COL 16.4
      Bttn-Editar-4 AT ROW 26.57 COL 100.4
      RECT-10 AT ROW 21.29 COL 98.8
      RECT-18 AT ROW 1.43 COL 5
@@ -181,6 +186,12 @@ DEFINE FRAME Dialog-Frame-Menu
      "MENU PRINCIPAL" VIEW-AS TEXT
           SIZE 47 BY 1.91 AT ROW 2.14 COL 66.8
           BGCOLOR 8 FGCOLOR 15 FONT 70
+     "                                                     INVENTARIO" VIEW-AS TEXT
+          SIZE 78 BY .81 AT ROW 19.52 COL 6
+          BGCOLOR 15 FGCOLOR 1 
+     "       USUARIOS" VIEW-AS TEXT
+          SIZE 19 BY .81 AT ROW 21.38 COL 99.2
+          BGCOLOR 15 FGCOLOR 1 
      "                                                      REPORTES" VIEW-AS TEXT
           SIZE 76.8 BY .81 AT ROW 19.57 COL 90.2
           BGCOLOR 15 FGCOLOR 1 
@@ -202,17 +213,11 @@ DEFINE FRAME Dialog-Frame-Menu
      "           MENU" VIEW-AS TEXT
           SIZE 19 BY .81 AT ROW 21.62 COL 15
           BGCOLOR 15 FGCOLOR 1 
-     "                                                     INVENTARIO" VIEW-AS TEXT
-          SIZE 78 BY .81 AT ROW 19.52 COL 6
-          BGCOLOR 15 FGCOLOR 1 
-     "       USUARIOS" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 21.38 COL 99.2
-          BGCOLOR 15 FGCOLOR 1 
-     SPACE(53.39) SKIP(10.90)
+     SPACE(137.59) SKIP(10.61)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS THREE-D  SCROLLABLE 
          BGCOLOR 8 
-         TITLE BGCOLOR 8 "<Principal>".
+         TITLE BGCOLOR 8 "Menu Principal".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -254,9 +259,31 @@ ASSIGN
 
 &Scoped-define SELF-NAME Dialog-Frame-Menu
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame-Menu Dialog-Frame-Menu
-ON WINDOW-CLOSE OF FRAME Dialog-Frame-Menu /* <Principal> */
+ON WINDOW-CLOSE OF FRAME Dialog-Frame-Menu /* Menu Principal */
 DO:
   APPLY "END-ERROR":U TO SELF.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Btn-Desperdicio
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Desperdicio Dialog-Frame-Menu
+ON CHOOSE OF Btn-Desperdicio IN FRAME Dialog-Frame-Menu /* Desperdicio */
+DO:
+  RUN Perdida_Diaria.w.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Btn-Inventario
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Inventario Dialog-Frame-Menu
+ON CHOOSE OF Btn-Inventario IN FRAME Dialog-Frame-Menu /* Inventario */
+DO:
+  RUN Inventario.w.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -387,9 +414,9 @@ PROCEDURE enable_UI :
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
   ENABLE Bttn-MSalir Bttn-Alta-2 Btn-Menu Btn-Usuario Bttn-Baja-2 Btn-Productos 
-         Bttn-Editar-2 Bttn-Alta-4 Btn-Inventario Bttn-Baja-4 Bttn-Editar-4 
-         RECT-10 RECT-18 RECT-2 RECT-3 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 
-         RECT-9 
+         Bttn-Editar-2 Bttn-Alta-4 Btn-Inventario Bttn-Baja-4 Btn-Desperdicio 
+         Bttn-Editar-4 RECT-10 RECT-18 RECT-2 RECT-3 RECT-4 RECT-5 RECT-6 
+         RECT-7 RECT-8 RECT-9 
       WITH FRAME Dialog-Frame-Menu.
   VIEW FRAME Dialog-Frame-Menu.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame-Menu}

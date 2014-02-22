@@ -91,7 +91,7 @@ DEFINE BUTTON Btn_Delete
 
 DEFINE BUTTON Btn_Salir 
      LABEL "Salir" 
-     SIZE 15 BY .95
+     SIZE 15 BY 1.19
      BGCOLOR 8 .
 
 DEFINE RECTANGLE RECT-18
@@ -123,7 +123,7 @@ DEFINE BROWSE Bws_Usuarios
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_MenuUsuarios
-     Btn_Salir AT ROW 1.62 COL 73
+     Btn_Salir AT ROW 1.52 COL 74.2
      Bws_Usuarios AT ROW 4.81 COL 11
      Btn_Agregar AT ROW 7.76 COL 62
      Btn_Delete AT ROW 12.14 COL 62.4

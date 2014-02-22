@@ -111,11 +111,11 @@ DEFINE FRAME Dialog-Frame-Login
      "Bienvenido al Sistema le Seminaré" VIEW-AS TEXT
           SIZE 70.2 BY 1.19 AT ROW 4.29 COL 53.2
           BGCOLOR 8 FGCOLOR 15 FONT 70
-     SPACE(49.60) SKIP(27.66)
+     SPACE(49.59) SKIP(27.65)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 15 FGCOLOR 0 
-         TITLE "<Inicio>".
+         TITLE "Login".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -152,7 +152,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Dialog-Frame-Login
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame-Login Dialog-Frame-Login
-ON 0 OF FRAME Dialog-Frame-Login /* <Inicio> */
+ON 0 OF FRAME Dialog-Frame-Login /* Login */
 OR "s" OF FRAME {&FRAME-NAME} ANYWHERE DO:
    
     CASE CHR(LASTKEY):
@@ -167,7 +167,7 @@ END.
 
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame-Login Dialog-Frame-Login
-ON RETURN OF FRAME Dialog-Frame-Login /* <Inicio> */
+ON RETURN OF FRAME Dialog-Frame-Login /* Login */
 ANYWHERE DO: 
   APPLY "CHOOSE" TO Btn_OK.
 END.
@@ -177,7 +177,7 @@ END.
 
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame-Login Dialog-Frame-Login
-ON WINDOW-CLOSE OF FRAME Dialog-Frame-Login /* <Inicio> */
+ON WINDOW-CLOSE OF FRAME Dialog-Frame-Login /* Login */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.

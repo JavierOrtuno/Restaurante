@@ -27,6 +27,7 @@
 /* Parameters Definitions ---                                           */
 
 DEF INPUT PARAM inintIdRol AS INT.
+DEF INPUT PARAM inintIdUsuario AS INT.
 
 /* Local Variable Definitions ---                                       */
 
@@ -45,10 +46,9 @@ DEF INPUT PARAM inintIdRol AS INT.
 &Scoped-define FRAME-NAME Dialog-Frame-Menu
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Bttn-MSalir Bttn-Alta-2 Btn-Menu Btn-Usuario ~
-Bttn-Baja-2 Btn-Productos Bttn-Editar-2 Bttn-Alta-4 Btn-Inventario ~
-Bttn-Baja-4 Btn-Desperdicio Bttn-Editar-4 RECT-10 RECT-18 RECT-2 RECT-3 ~
-RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
+&Scoped-Define ENABLED-OBJECTS Bttn-MSalir Btn-Menu Btn-Usuario ~
+Btn-Clientes Btn-Productos Btn-Inventario Btn-Desperdicio RECT-10 RECT-18 ~
+RECT-2 RECT-3 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -63,6 +63,10 @@ RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
+DEFINE BUTTON Btn-Clientes 
+     LABEL "Clientes" 
+     SIZE 16 BY 1.14.
+
 DEFINE BUTTON Btn-Desperdicio 
      LABEL "Desperdicio" 
      SIZE 16 BY 1.14.
@@ -81,64 +85,40 @@ DEFINE BUTTON Btn-Productos
      BGCOLOR 16 .
 
 DEFINE BUTTON Btn-Usuario 
-     LABEL "Menu Usuario" 
-     SIZE 16 BY 1.14.
-
-DEFINE BUTTON Bttn-Alta-2 
-     LABEL "Alta" 
-     SIZE 16 BY 1.14.
-
-DEFINE BUTTON Bttn-Alta-4 
-     LABEL "Alta" 
-     SIZE 16 BY 1.14.
-
-DEFINE BUTTON Bttn-Baja-2 
-     LABEL "Baja" 
-     SIZE 16 BY 1.14.
-
-DEFINE BUTTON Bttn-Baja-4 
-     LABEL "Baja" 
-     SIZE 16 BY 1.14.
-
-DEFINE BUTTON Bttn-Editar-2 
-     LABEL "Editar" 
-     SIZE 16 BY 1.14.
-
-DEFINE BUTTON Bttn-Editar-4 
-     LABEL "Editar" 
+     LABEL "Usuarios" 
      SIZE 16 BY 1.14.
 
 DEFINE BUTTON Bttn-MSalir 
      LABEL "Salir" 
-     SIZE 15 BY 1.14.
+     SIZE 15.6 BY 1.57.
 
 DEFINE RECTANGLE RECT-10
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 19.4 BY 7.1.
+     SIZE 19.4 BY 4.95.
 
 DEFINE RECTANGLE RECT-18
      EDGE-PIXELS 8  
-     SIZE 162 BY 3.33
+     SIZE 132 BY 3.33
      BGCOLOR 8 .
 
 DEFINE RECTANGLE RECT-2
      EDGE-PIXELS 8  
-     SIZE 80.2 BY 13.24
+     SIZE 54.6 BY 9.52
      BGCOLOR 8 .
 
 DEFINE RECTANGLE RECT-3
      EDGE-PIXELS 8  
-     SIZE 79 BY 13.24
+     SIZE 55 BY 9.52
      BGCOLOR 8 .
 
 DEFINE RECTANGLE RECT-4
      EDGE-PIXELS 8  
-     SIZE 80.4 BY 13.24
+     SIZE 54.4 BY 9.48
      BGCOLOR 8 .
 
 DEFINE RECTANGLE RECT-5
      EDGE-PIXELS 8  
-     SIZE 79.4 BY 13.24
+     SIZE 55 BY 9.52
      BGCOLOR 8 .
 
 DEFINE RECTANGLE RECT-6
@@ -147,73 +127,68 @@ DEFINE RECTANGLE RECT-6
 
 DEFINE RECTANGLE RECT-7
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 19.4 BY 3.14.
+     SIZE 19.4 BY 5.29.
 
 DEFINE RECTANGLE RECT-8
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 19.4 BY 8.33.
+     SIZE 19.4 BY 6.
 
 DEFINE RECTANGLE RECT-9
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 19.4 BY 4.95.
+     SIZE 19.4 BY 5.33.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame-Menu
-     Bttn-MSalir AT ROW 2.52 COL 141.4
-     Bttn-Alta-2 AT ROW 8.81 COL 100.2
-     Btn-Menu AT ROW 9.19 COL 12.2
-     Btn-Usuario AT ROW 9.24 COL 36.6
-     Bttn-Baja-2 AT ROW 10.76 COL 100.2
-     Btn-Productos AT ROW 11.1 COL 12.2
-     Bttn-Editar-2 AT ROW 12.67 COL 100.2
-     Bttn-Alta-4 AT ROW 22.71 COL 100.4
-     Btn-Inventario AT ROW 22.95 COL 16.4
-     Bttn-Baja-4 AT ROW 24.67 COL 100.4
-     Btn-Desperdicio AT ROW 24.71 COL 16.4
-     Bttn-Editar-4 AT ROW 26.57 COL 100.4
-     RECT-10 AT ROW 21.29 COL 98.8
+     Bttn-MSalir AT ROW 2.29 COL 118
+     Btn-Menu AT ROW 9.52 COL 19.2
+     Btn-Usuario AT ROW 9.52 COL 42.2
+     Btn-Clientes AT ROW 11.38 COL 42.2
+     Btn-Productos AT ROW 11.43 COL 19.2
+     Btn-Inventario AT ROW 21.38 COL 30.8
+     Btn-Desperdicio AT ROW 23.14 COL 31
+     RECT-10 AT ROW 20 COL 94.2
      RECT-18 AT ROW 1.43 COL 5
-     RECT-2 AT ROW 5.48 COL 4.8
-     RECT-3 AT ROW 5.48 COL 88.4
-     RECT-4 AT ROW 19.14 COL 4.6
-     RECT-5 AT ROW 19.19 COL 88.6
-     RECT-6 AT ROW 7.81 COL 10.4
-     RECT-7 AT ROW 7.86 COL 34.8
-     RECT-8 AT ROW 7.38 COL 98.4
-     RECT-9 AT ROW 21.52 COL 14.6
+     RECT-2 AT ROW 5.76 COL 76.4
+     RECT-3 AT ROW 5.76 COL 11
+     RECT-4 AT ROW 17.24 COL 11.2
+     RECT-5 AT ROW 17.24 COL 76.2
+     RECT-6 AT ROW 8.14 COL 17.4
+     RECT-7 AT ROW 8.14 COL 40.4
+     RECT-8 AT ROW 7.38 COL 87.2
+     RECT-9 AT ROW 19.71 COL 29
      "MENU PRINCIPAL" VIEW-AS TEXT
-          SIZE 47 BY 1.91 AT ROW 2.14 COL 66.8
+          SIZE 39.6 BY 1.91 AT ROW 2.19 COL 51.4
           BGCOLOR 8 FGCOLOR 15 FONT 70
-     "                                                     INVENTARIO" VIEW-AS TEXT
-          SIZE 78 BY .81 AT ROW 19.52 COL 6
-          BGCOLOR 15 FGCOLOR 1 
-     "       USUARIOS" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 21.38 COL 99.2
-          BGCOLOR 15 FGCOLOR 1 
-     "                                                      REPORTES" VIEW-AS TEXT
-          SIZE 76.8 BY .81 AT ROW 19.57 COL 90.2
-          BGCOLOR 15 FGCOLOR 1 
-     "     USUARIOS" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 7.48 COL 98.8
-          BGCOLOR 15 FGCOLOR 1 
-     "                                                         VENTAS" VIEW-AS TEXT
-          SIZE 76 BY .81 AT ROW 5.86 COL 90
-          BGCOLOR 15 FGCOLOR 1 
-     "                                                  ADMINISTRADOR" VIEW-AS TEXT
-          SIZE 78 BY .81 AT ROW 5.86 COL 6
-          BGCOLOR 15 FGCOLOR 1 
-     "       CATÁLOGO" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 7.91 COL 10.8
-          BGCOLOR 15 FGCOLOR 1 
-     "       USUARIOS" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 7.95 COL 35
+     "       PERSONAS" VIEW-AS TEXT
+          SIZE 19 BY .81 AT ROW 8.24 COL 40.6
           BGCOLOR 15 FGCOLOR 1 
      "           MENU" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 21.62 COL 15
+          SIZE 19 BY .81 AT ROW 19.81 COL 29.4
           BGCOLOR 15 FGCOLOR 1 
-     SPACE(137.59) SKIP(10.61)
+     "                                 INVENTARIO" VIEW-AS TEXT
+          SIZE 52 BY .81 AT ROW 17.57 COL 12.6
+          BGCOLOR 15 FGCOLOR 1 
+     "           MENU" VIEW-AS TEXT
+          SIZE 19 BY .81 AT ROW 20.1 COL 94.4
+          BGCOLOR 15 FGCOLOR 1 
+     "                                   REPORTES" VIEW-AS TEXT
+          SIZE 53.4 BY .81 AT ROW 17.62 COL 130 RIGHT-ALIGNED
+          BGCOLOR 15 FGCOLOR 1 
+     "           MENU" VIEW-AS TEXT
+          SIZE 19 BY .81 AT ROW 7.48 COL 87.6
+          BGCOLOR 15 FGCOLOR 1 
+     "                                     VENTAS" VIEW-AS TEXT
+          SIZE 52.2 BY .81 AT ROW 5.95 COL 77.8
+          BGCOLOR 15 FGCOLOR 1 
+     "                              ADMINISTRADOR" VIEW-AS TEXT
+          SIZE 52 BY .81 AT ROW 5.95 COL 12.6
+          BGCOLOR 15 FGCOLOR 1 
+     "       CATÁLOGO" VIEW-AS TEXT
+          SIZE 19 BY .81 AT ROW 8.24 COL 17.8
+          BGCOLOR 15 FGCOLOR 1 
+     SPACE(104.59) SKIP(19.18)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -248,6 +223,9 @@ ASSIGN
        RECT-5:HIDDEN IN FRAME Dialog-Frame-Menu           = TRUE
        RECT-5:SELECTABLE IN FRAME Dialog-Frame-Menu       = TRUE.
 
+/* SETTINGS FOR TEXT-LITERAL "                                   REPORTES"
+          SIZE 53.4 BY .81 AT ROW 17.62 COL 130 RIGHT-ALIGNED           */
+
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
 
@@ -268,11 +246,22 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Btn-Clientes
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Clientes Dialog-Frame-Menu
+ON CHOOSE OF Btn-Clientes IN FRAME Dialog-Frame-Menu /* Clientes */
+DO:
+  RUN MenuClientes.w.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &Scoped-define SELF-NAME Btn-Desperdicio
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Desperdicio Dialog-Frame-Menu
 ON CHOOSE OF Btn-Desperdicio IN FRAME Dialog-Frame-Menu /* Desperdicio */
 DO:
-  RUN Perdida_Diaria.w.
+  RUN Perdida_Diaria.w(inintIdUsuario).
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -283,7 +272,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Inventario Dialog-Frame-Menu
 ON CHOOSE OF Btn-Inventario IN FRAME Dialog-Frame-Menu /* Inventario */
 DO:
-  RUN Inventario.w.
+  RUN Inventario.w(inintIdUsuario).
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -314,7 +303,7 @@ END.
 
 &Scoped-define SELF-NAME Btn-Usuario
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Usuario Dialog-Frame-Menu
-ON CHOOSE OF Btn-Usuario IN FRAME Dialog-Frame-Menu /* Menu Usuario */
+ON CHOOSE OF Btn-Usuario IN FRAME Dialog-Frame-Menu /* Usuarios */
 DO:
   RUN menuUsuarios.w.
 END.
@@ -413,10 +402,9 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Bttn-MSalir Bttn-Alta-2 Btn-Menu Btn-Usuario Bttn-Baja-2 Btn-Productos 
-         Bttn-Editar-2 Bttn-Alta-4 Btn-Inventario Bttn-Baja-4 Btn-Desperdicio 
-         Bttn-Editar-4 RECT-10 RECT-18 RECT-2 RECT-3 RECT-4 RECT-5 RECT-6 
-         RECT-7 RECT-8 RECT-9 
+  ENABLE Bttn-MSalir Btn-Menu Btn-Usuario Btn-Clientes Btn-Productos 
+         Btn-Inventario Btn-Desperdicio RECT-10 RECT-18 RECT-2 RECT-3 RECT-4 
+         RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
       WITH FRAME Dialog-Frame-Menu.
   VIEW FRAME Dialog-Frame-Menu.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame-Menu}

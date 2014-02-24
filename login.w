@@ -85,7 +85,7 @@ DEFINE VARIABLE Fill-Usuario AS CHARACTER FORMAT "X(256)":U
 
 DEFINE RECTANGLE RECT-14
      EDGE-PIXELS 8  
-     SIZE 172 BY 32.14
+     SIZE 141 BY 27.14
      BGCOLOR 8 .
 
 DEFINE RECTANGLE RECT-16
@@ -101,17 +101,17 @@ DEFINE RECTANGLE RECT-17
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame-Login
-     Fill-Usuario AT ROW 14 COL 71.8 COLON-ALIGNED
-     Fill-Contrasena AT ROW 15.95 COL 71.4 COLON-ALIGNED BLANK 
-     Bttn-Salir AT ROW 20.52 COL 53.8
-     Btn_OK AT ROW 20.52 COL 105.2
+     Fill-Usuario AT ROW 14.52 COL 57.2 COLON-ALIGNED
+     Fill-Contrasena AT ROW 16.48 COL 56.8 COLON-ALIGNED BLANK 
+     Bttn-Salir AT ROW 21.05 COL 39.2
+     Btn_OK AT ROW 21.05 COL 90.6
      RECT-14 AT ROW 1 COL 1
-     RECT-16 AT ROW 10.29 COL 45.2
-     RECT-17 AT ROW 3.81 COL 49.8
+     RECT-16 AT ROW 10.81 COL 30.6
+     RECT-17 AT ROW 4.33 COL 35.2
      "Bienvenido al Sistema le Seminaré" VIEW-AS TEXT
-          SIZE 70.2 BY 1.19 AT ROW 4.29 COL 53.2
+          SIZE 70.2 BY 1.19 AT ROW 4.81 COL 38.6
           BGCOLOR 8 FGCOLOR 15 FONT 70
-     SPACE(49.59) SKIP(27.65)
+     SPACE(33.19) SKIP(22.18)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 15 FGCOLOR 0 
@@ -213,7 +213,7 @@ DO:
          vintIdRol = Rol.ID_ROL.
          HIDE ALL.
          RUN pBitacora(vintIdUsuario).
-         RUN MenuPpal.w(vintIdRol).
+         RUN MenuPpal.w(vintIdRol, vintIdUsuario).
          APPLY "WINDOW-CLOSE" TO FRAME Dialog-Frame-Login.
       END.
 

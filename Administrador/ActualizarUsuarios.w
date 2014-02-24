@@ -215,7 +215,7 @@ DEFINE FRAME Dlg_UpdateUsua
           SIZE 23 BY .62 AT ROW 5 COL 88.8
      "Datos Generales" VIEW-AS TEXT
           SIZE 19.6 BY .62 AT ROW 4.95 COL 11.4
-     SPACE(114.99) SKIP(16.42)
+     SPACE(115.00) SKIP(16.42)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -269,15 +269,15 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Aceptar Dlg_UpdateUsua
 ON CHOOSE OF Btn_Aceptar IN FRAME Dlg_UpdateUsua /* Aceptar */
 DO:    
-    DEF VAR vcharUsuario AS CHAR.              DEF VAR vcharContrasena AS CHAR.                 DEF VAR vCharCorreo AS CHAR.        
-    DEF VAR vCharNombre AS CHAR.               DEF VAR vCharApat AS CHAR.                       DEF VAR vCharAmat AS CHAR.
-    DEF VAR vCharSexo AS CHAR.                 DEF VAR vCharFecha AS CHAR INITIAL ?.                      DEF VAR vCharCurp AS CHAR.           
-    DEF VAR vCharRfc AS CHAR.                  DEF VAR vCharDomicilio AS CHAR.    
+    DEF VAR vcharUsuario AS CHAR.                  DEF VAR vcharContrasena AS CHAR.                 DEF VAR vCharCorreo AS CHAR.        
+    DEF VAR vCharNombre AS CHAR.                   DEF VAR vCharApat AS CHAR.                       DEF VAR vCharAmat AS CHAR.
+    DEF VAR vCharSexo AS CHAR.                     DEF VAR vCharFecha AS CHAR INITIAL ?.            DEF VAR vCharCurp AS CHAR.           
+    DEF VAR vCharRfc AS CHAR.                      DEF VAR vCharDomicilio AS CHAR.    
 
-    vcharUsuario = Fill_Usuario:SCREEN-VALUE.  vcharContrasena = Fill_Contrasena:SCREEN-VALUE.  vcharNombre =Fill_Nombre:SCREEN-VALUE.       
-    vcharApat = Fill_Apat:SCREEN-VALUE.        vcharAmat = Fill_Amat:SCREEN-VALUE.              vcharSexo = Fill_Sexo:SCREEN-VALUE.
-    vcharFecha = STRING(Fill_FNac:SCREEN-VALUE).       vcharDomicilio = Fill_Direccion:SCREEN-VALUE.    vcharCurp = Fill_Curp:SCREEN-VALUE.          
-    vcharRFC = Fill_Rfc:SCREEN-VALUE.          vcharCorreo = Fill_Correo:SCREEN-VALUE.
+    vcharUsuario = Fill_Usuario:SCREEN-VALUE.      vcharContrasena = Fill_Contrasena:SCREEN-VALUE.  vcharNombre =Fill_Nombre:SCREEN-VALUE.       
+    vcharApat = Fill_Apat:SCREEN-VALUE.            vcharAmat = Fill_Amat:SCREEN-VALUE.              vcharSexo = Fill_Sexo:SCREEN-VALUE.
+    vcharFecha = STRING(Fill_FNac:SCREEN-VALUE).   vcharDomicilio = Fill_Direccion:SCREEN-VALUE.    vcharCurp = Fill_Curp:SCREEN-VALUE.          
+    vcharRFC = Fill_Rfc:SCREEN-VALUE.              vcharCorreo = Fill_Correo:SCREEN-VALUE.
         
     IF validarRegistroUsuario(vcharUsuario, vcharContrasena, vCharNombre, vCharApat, vCharAmat, STRING(vintIdRol)) = FALSE THEN DO:
         MESSAGE "Los campos con (*) son obligatorios" VIEW-AS ALERT-BOX.
@@ -321,7 +321,7 @@ END.
 
 &Scoped-define SELF-NAME Combo_Rol
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Combo_Rol Dlg_UpdateUsua
-ON VALUE-CHANGED OF Combo_Rol IN FRAME Dlg_UpdateUsua /* Cambio */
+ON VALUE-CHANGED OF Combo_Rol IN FRAME Dlg_UpdateUsua
 DO:  
     vintIdRol = INTEGER(combo_rol:SCREEN-VALUE).
 END.

@@ -108,6 +108,7 @@ PROCEDURE deleteUsuario :
            FIND Persona WHERE Persona.Id_Persona = Empleado.Id_Persona.
            DELETE Persona.
            DELETE Usuario.
+           DELETE Empleado.
 
 END PROCEDURE.
 

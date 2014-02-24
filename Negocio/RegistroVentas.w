@@ -29,6 +29,8 @@
 
 /* Parameters Definitions ---                                           */
 
+DEF INPUT PARAMETER inintIDUsuario AS INT.
+
 /* Local Variable Definitions ---                                       */
 
 DEF VAR vchrDescripcion AS CHAR.
@@ -49,6 +51,14 @@ DEF VAR vintPedido AS INT.
 DEF VAR vintLongitud1 AS INT.
 DEF VAR vintLongitud2 AS INT.
 DEF VAR vdecPrecio AS DEC.
+DEF VAR vintIDProducto AS INT.
+DEF VAR vintEntradas AS INT.
+DEF VAR vintContador AS INT.
+DEF VAR vintPosicion2 AS INT INIT 2.
+DEF VAR vintIDMenu AS INT.
+DEF VAR vintDistancia AS INT. 
+DEF VAR vintDescuento AS INT.
+DEF VAR vintPosicion AS INT INIT 3.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -222,6 +232,7 @@ DEFINE VARIABLE Total AS DECIMAL FORMAT "->>,>>9.99":U INITIAL 0
 
 DEFINE VARIABLE SELECT-1 AS CHARACTER 
      VIEW-AS SELECTION-LIST SINGLE SCROLLBAR-VERTICAL 
+     LIST-ITEM-PAIRS ".","0" 
      SIZE 63 BY 5.71 NO-UNDO.
 
 /* Query definitions                                                    */
@@ -458,6 +469,22 @@ DO:
   RUN LlenarComanda(vdteFecha,vchrEntrada,vchrSalida,vdecPropina).
   RUN LlenarFactura(vdecSubtotal,vdecIVA,vdecTotal).
   RUN LlenarConsumo(vintCantidad).
+
+ vintEntradas = NUM-ENTRIES(TRIM(SELECT-1:LIST-ITEM-PAIRS,",")).
+
+ DO vintContador = 2 TO (vintEntradas / 2).
+    
+    vintCantidad = INT(ENTRY(2,ENTRY(vintPosicion,STRING(Trim(SELECT-1:LIST-ITEM-PAIRS,","))),"/")).
+    vintPosicion2 = vintPosicion2 + 2.
+    vintIDMenu = INT(ENTRY(vintPosicion2,STRING(Trim(SELECT-1:LIST-ITEM-PAIRS,",")))).
+    FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = vintIDMenu.
+        vintIDProducto = Ingrediente.ID_Producto.
+        vintDescuento = vintCantidad * Ingrediente.Cantidad.
+        DescontarExistencia(vintIDProducto,vintDescuento,1,inintIDUsuario).
+    END.
+    vintPosicion = vintPosicion + 2.
+ END.
+
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -468,6 +495,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-1 RegVenta-Frame
 ON CHOOSE OF BUTTON-1 IN FRAME RegVenta-Frame /* Agregar */
 DO:
+
   IF ValidarSalida() = TRUE THEN vlogSemaforo = ValidarFrame().
   ELSE MESSAGE "La hora de salida debe estar en formato de 24 horas" VIEW-AS ALERT-BOX.
 
@@ -605,10 +633,13 @@ PROCEDURE Platillos :
 ------------------------------------------------------------------------------*/
   DEF INPUT PARAMETER inintCantidad AS INT.
   DEF INPUT PARAMETER inchrLista AS CHAR.
+  DEF VAR vchrIDMenu AS CHAR.
 
-  IF inintCantidad <> 0 
-  THEN SELECT-1:ADD-LAST(inchrLista) IN FRAME RegVenta-Frame.
 
+  IF inintCantidad <> 0 THEN DO:
+     vchrIDMenu = STRING(MENU.ID_Menu).
+     SELECT-1:ADD-LAST(inchrLista,vchrIDMenu)IN FRAME RegVenta-Frame.
+  END.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

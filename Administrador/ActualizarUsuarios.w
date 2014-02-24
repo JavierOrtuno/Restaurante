@@ -52,10 +52,9 @@ DEFINE VARIABLE vintIdUsuario AS INTEGER.*/
 &Scoped-define FRAME-NAME Dlg_UpdateUsua
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Btn_Cancelar Fill_Nombre Fill_Usuario ~
-Fill_Apat Fill_Contrasena Fill_Amat Fill_Sexo Fill_FNac Btn_Aceptar ~
-Fill_Direccion Fill_Curp Fill_RFC Fill_Correo Combo_Rol RECT-1 RECT-26 ~
-RECT-27 
+&Scoped-Define ENABLED-OBJECTS Fill_Nombre Fill_Usuario Fill_Apat ~
+Fill_Contrasena Fill_Amat Fill_Sexo Fill_FNac Btn_Aceptar Fill_Direccion ~
+Fill_Curp Fill_RFC Fill_Correo Combo_Rol RECT-1 RECT-26 RECT-27 
 &Scoped-Define DISPLAYED-OBJECTS Fill_Nombre Fill_Usuario Fill_Apat ~
 Fill_Contrasena Fill_Amat Fill_Sexo Fill_FNac Fill_Direccion Fill_Curp ~
 Fill_RFC Fill_Correo Fill_Rol Combo_Rol 
@@ -90,10 +89,6 @@ FUNCTION ValidarRegistroUsuario RETURNS LOGICAL
 DEFINE BUTTON Btn_Aceptar 
      LABEL "Aceptar" 
      SIZE 20 BY 2.86.
-
-DEFINE BUTTON Btn_Cancelar 
-     LABEL "Salir" 
-     SIZE 15 BY 1.14.
 
 DEFINE VARIABLE Combo_Rol AS CHARACTER FORMAT "X(50)":U 
      VIEW-AS COMBO-BOX INNER-LINES 5
@@ -190,7 +185,6 @@ DEFINE RECTANGLE RECT-27
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_UpdateUsua
-     Btn_Cancelar AT ROW 1.67 COL 128.6
      Fill_Nombre AT ROW 6.48 COL 34.8 COLON-ALIGNED
      Fill_Usuario AT ROW 6.76 COL 101 COLON-ALIGNED
      Fill_Apat AT ROW 7.91 COL 34.8 COLON-ALIGNED
@@ -209,7 +203,7 @@ DEFINE FRAME Dlg_UpdateUsua
      RECT-26 AT ROW 5.71 COL 10.8
      RECT-27 AT ROW 5.71 COL 86.8
      "ACTUALIZAR USUARIOS" VIEW-AS TEXT
-          SIZE 26.8 BY 1.19 AT ROW 1.62 COL 61
+          SIZE 26.8 BY 1.19 AT ROW 1.62 COL 63
           BGCOLOR 8 FGCOLOR 15 FONT 12
      "Datos de Autenticación" VIEW-AS TEXT
           SIZE 23 BY .62 AT ROW 5 COL 88.8
@@ -302,17 +296,6 @@ DO:
             APPLY "WINDOW-CLOSE" TO FRAME Dlg_UpdateUsua. 
         END.
     END CASE.
-END.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-
-&Scoped-define SELF-NAME Btn_Cancelar
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Cancelar Dlg_UpdateUsua
-ON CHOOSE OF Btn_Cancelar IN FRAME Dlg_UpdateUsua /* Salir */
-DO:
-    APPLY "WINDOW-CLOSE" TO FRAME Dlg_UpdateUsua.    
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -476,9 +459,9 @@ PROCEDURE enable_UI :
           Fill_FNac Fill_Direccion Fill_Curp Fill_RFC Fill_Correo Fill_Rol 
           Combo_Rol 
       WITH FRAME Dlg_UpdateUsua.
-  ENABLE Btn_Cancelar Fill_Nombre Fill_Usuario Fill_Apat Fill_Contrasena 
-         Fill_Amat Fill_Sexo Fill_FNac Btn_Aceptar Fill_Direccion Fill_Curp 
-         Fill_RFC Fill_Correo Combo_Rol RECT-1 RECT-26 RECT-27 
+  ENABLE Fill_Nombre Fill_Usuario Fill_Apat Fill_Contrasena Fill_Amat Fill_Sexo 
+         Fill_FNac Btn_Aceptar Fill_Direccion Fill_Curp Fill_RFC Fill_Correo 
+         Combo_Rol RECT-1 RECT-26 RECT-27 
       WITH FRAME Dlg_UpdateUsua.
   VIEW FRAME Dlg_UpdateUsua.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_UpdateUsua}

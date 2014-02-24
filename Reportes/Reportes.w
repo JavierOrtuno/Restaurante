@@ -45,7 +45,7 @@ DEFINE STREAM outFile.
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Btn_Menu Btn_Propinas Btn_Inventario ~
-Btn_Ventas Btn_Facturas RECT-18 RECT-28 
+Btn_Ventas Btn_Facturas Btn_Pedido RECT-18 RECT-28 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -70,6 +70,10 @@ DEFINE BUTTON Btn_Inventario
 
 DEFINE BUTTON Btn_Menu 
      LABEL "Menú" 
+     SIZE 20 BY 2.52.
+
+DEFINE BUTTON Btn_Pedido 
+     LABEL "Pedido" 
      SIZE 20 BY 2.52.
 
 DEFINE BUTTON Btn_Propinas 
@@ -101,14 +105,15 @@ DEFINE FRAME Dlg_Reportes
      Btn_Propinas AT ROW 5.86 COL 46.4
      Btn_Inventario AT ROW 9.67 COL 16.4
      Btn_Ventas AT ROW 9.67 COL 46.4
-     Btn_Facturas AT ROW 13.48 COL 31.2
+     Btn_Facturas AT ROW 13.48 COL 16.2
+     Btn_Pedido AT ROW 13.48 COL 46.6
      Edit_File AT ROW 17.33 COL 35 NO-LABEL
      RECT-18 AT ROW 1 COL 1
      RECT-28 AT ROW 4.81 COL 11
      "MENU REPORTES" VIEW-AS TEXT
           SIZE 19.8 BY 1.19 AT ROW 1.52 COL 34.4
           BGCOLOR 8 FGCOLOR 15 FONT 68
-     SPACE(29.79) SKIP(16.99)
+     SPACE(29.80) SKIP(17.00)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -208,6 +213,27 @@ DO:
 
     RUN generarMenu.
     Edit_File:SAVE-FILE ( vcharFileName + ".html" ).
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Btn_Pedido
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Pedido Dlg_Reportes
+ON CHOOSE OF Btn_Pedido IN FRAME Dlg_Reportes /* Pedido */
+DO:
+    DEFINE VARIABLE vcharFileName AS CHARACTER.
+
+    Edit_File:SCREEN-VALUE = "".
+    SYSTEM-DIALOG 
+        GET-FILE vcharFileName 
+        TITLE "Guardar Archivo ..." 
+        FILTERS "Archivos (*.html)"   "*.html" 
+        SAVE-AS.
+
+    RUN generarPedido.
+    Edit_File:SAVE-FILE ( vcharFileName + ".html" ).  
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -322,8 +348,8 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Btn_Menu Btn_Propinas Btn_Inventario Btn_Ventas Btn_Facturas RECT-18 
-         RECT-28 
+  ENABLE Btn_Menu Btn_Propinas Btn_Inventario Btn_Ventas Btn_Facturas 
+         Btn_Pedido RECT-18 RECT-28 
       WITH FRAME Dlg_Reportes.
   VIEW FRAME Dlg_Reportes.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_Reportes}
@@ -395,11 +421,28 @@ END PROCEDURE.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE generarPedido Dlg_Reportes 
 PROCEDURE generarPedido :
 /*------------------------------------------------------------------------------
-  Purpose:     
-  Parameters:  <none>
-  Notes:       
-------------------------------------------------------------------------------*/
+        Purpose:     
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vintCursor AS INTEGER.
+    DEFINE VARIABLE vcharFile AS CHARACTER.
+    DEFINE VARIABLE vcharTexto AS CHARACTER.    
+    DEFINE VARIABLE vcharOut AS CHARACTER.       
 
+    vcharFile = search("pedido.html").
+    Edit_File:INSERT-FILE(vcharFile) IN FRAME Dlg_Reportes.
+    vcharTexto = Edit_File:SCREEN-VALUE.
+        
+    DO vintCursor = 1 TO NUM-ENTRIES(vcharTexto, "~n"):        
+        IF LENGTH(TRIM(ENTRY(vintCursor, vcharTexto, "~n"))) > 0 THEN DO:
+            vcharOut = vcharOut + ENTRY(vintCursor, vcharTexto, "~n") + "~n".
+        END.
+        ELSE DO:
+            vcharOut = vcharOut + getReportePedido() + "~n".
+        END.
+    END.
+    ASSIGN Edit_File:SCREEN-VALUE = vcharOut.
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */

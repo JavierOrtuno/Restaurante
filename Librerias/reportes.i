@@ -78,6 +78,17 @@ FUNCTION getReporteMenu RETURNS CHARACTER
 
 &ENDIF
 
+&IF DEFINED(EXCLUDE-getReportePedido) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getReportePedido Method-Library 
+FUNCTION getReportePedido RETURNS CHARACTER
+    ( /* parameter-definitions */ )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 &IF DEFINED(EXCLUDE-getReportePropinas) = 0 &THEN
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getReportePropinas Method-Library 
@@ -371,6 +382,41 @@ FUNCTION getReporteMenu RETURNS CHARACTER
     END.
     IF vlogPrev = TRUE THEN
         vcharReporte = vcharReporte + "</ul>~n</div>~n".
+    RETURN vcharReporte.
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
+&IF DEFINED(EXCLUDE-getReportePedido) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getReportePedido Method-Library 
+FUNCTION getReportePedido RETURNS CHARACTER
+    ( /* parameter-definitions */ ) :
+    /*------------------------------------------------------------------------------
+        Purpose:  
+        Notes:  
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vintCantidad AS INTEGER.
+    DEFINE VARIABLE vcharReporte AS CHARACTER.
+
+    FOR EACH PRODUCTO:
+        vintCantidad = 0.
+        FOR EACH STOCK WHERE STOCK.ID_PRODUCTO = PRODUCTO.ID_PRODUCTO AND 
+            STOCK.F_CADUCIDAD > TODAY:
+                vintCantidad = vintCantidad + STOCK.CANTIDAD.
+        END.
+        FIND FIRST UNIDAD_MEDIDA WHERE UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD.
+        IF PRODUCTO.CANT_MINIMA >= vintCantidad THEN DO:
+            vcharReporte = vcharReporte + "<td>" + PRODUCTO.CODIGO + "</td>~n".
+            vcharReporte = vcharReporte + "<td>" + PRODUCTO.DESCRIPCION + "</td>~n".
+            vcharReporte = vcharReporte + "<td>" + STRING(PRODUCTO.CANT_MINIMA * 2) + " " + UNIDAD_MEDIDA.DESCRIPCION + "</td>~n".
+            vcharReporte = vcharReporte + "</tr>~n".
+        END.
+    END.
+
     RETURN vcharReporte.
 END FUNCTION.
 

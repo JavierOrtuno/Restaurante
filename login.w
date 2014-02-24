@@ -248,6 +248,7 @@ DO:
  
   IF vlogOK = YES THEN DO:
     APPLY "WINDOW-CLOSE" TO FRAME Dialog-Frame-Login.
+    APPLY "END-ERROR":U TO SELF.
   END.
   
 END.

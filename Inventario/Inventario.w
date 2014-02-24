@@ -30,6 +30,7 @@
 /* Parameters Definitions ---                                           */
 
 /* Local Variable Definitions ---                                       */
+DEF INPUT PARAM viniduser AS INT.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME

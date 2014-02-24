@@ -46,9 +46,9 @@ DEF INPUT PARAM inintIdUsuario AS INT.
 &Scoped-define FRAME-NAME Dialog-Frame-Menu
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Bttn-MSalir Btn-Menu Btn-Usuario ~
-Btn-Clientes Btn-Productos Btn-Inventario Btn-Desperdicio RECT-10 RECT-18 ~
-RECT-2 RECT-3 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
+&Scoped-Define ENABLED-OBJECTS Bttn-MSalir Btn-Menu Btn-Usuario Btn-Ventas ~
+Btn-Clientes Btn-Productos Btn-Inventario Btn-Repeorte Btn-Desperdicio ~
+RECT-18 RECT-2 RECT-3 RECT-30 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -84,17 +84,21 @@ DEFINE BUTTON Btn-Productos
      SIZE 16 BY 1.14
      BGCOLOR 16 .
 
+DEFINE BUTTON Btn-Repeorte 
+     LABEL "Reportes" 
+     SIZE 16 BY 1.14.
+
 DEFINE BUTTON Btn-Usuario 
      LABEL "Usuarios" 
      SIZE 16 BY 1.14.
 
+DEFINE BUTTON Btn-Ventas 
+     LABEL "Ventas" 
+     SIZE 16.2 BY 1.14.
+
 DEFINE BUTTON Bttn-MSalir 
      LABEL "Salir" 
      SIZE 15.6 BY 1.57.
-
-DEFINE RECTANGLE RECT-10
-     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 19.4 BY 4.95.
 
 DEFINE RECTANGLE RECT-18
      EDGE-PIXELS 8  
@@ -110,6 +114,10 @@ DEFINE RECTANGLE RECT-3
      EDGE-PIXELS 8  
      SIZE 55 BY 9.52
      BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-30
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 20 BY 5.24.
 
 DEFINE RECTANGLE RECT-4
      EDGE-PIXELS 8  
@@ -131,7 +139,7 @@ DEFINE RECTANGLE RECT-7
 
 DEFINE RECTANGLE RECT-8
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 19.4 BY 6.
+     SIZE 19.4 BY 5.62.
 
 DEFINE RECTANGLE RECT-9
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
@@ -144,19 +152,21 @@ DEFINE FRAME Dialog-Frame-Menu
      Bttn-MSalir AT ROW 2.29 COL 118
      Btn-Menu AT ROW 9.52 COL 19.2
      Btn-Usuario AT ROW 9.52 COL 42.2
+     Btn-Ventas AT ROW 10.33 COL 95.6
      Btn-Clientes AT ROW 11.38 COL 42.2
      Btn-Productos AT ROW 11.43 COL 19.2
      Btn-Inventario AT ROW 21.38 COL 30.8
+     Btn-Repeorte AT ROW 22.52 COL 96.6
      Btn-Desperdicio AT ROW 23.14 COL 31
-     RECT-10 AT ROW 20 COL 94.2
      RECT-18 AT ROW 1.43 COL 5
      RECT-2 AT ROW 5.76 COL 76.4
      RECT-3 AT ROW 5.76 COL 11
+     RECT-30 AT ROW 19.81 COL 94.4
      RECT-4 AT ROW 17.24 COL 11.2
      RECT-5 AT ROW 17.24 COL 76.2
      RECT-6 AT ROW 8.14 COL 17.4
      RECT-7 AT ROW 8.14 COL 40.4
-     RECT-8 AT ROW 7.38 COL 87.2
+     RECT-8 AT ROW 7.76 COL 94
      RECT-9 AT ROW 19.71 COL 29
      "MENU PRINCIPAL" VIEW-AS TEXT
           SIZE 39.6 BY 1.91 AT ROW 2.19 COL 51.4
@@ -171,13 +181,13 @@ DEFINE FRAME Dialog-Frame-Menu
           SIZE 52 BY .81 AT ROW 17.57 COL 12.6
           BGCOLOR 15 FGCOLOR 1 
      "           MENU" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 20.1 COL 94.4
+          SIZE 19.6 BY .81 AT ROW 19.86 COL 94.8
           BGCOLOR 15 FGCOLOR 1 
      "                                   REPORTES" VIEW-AS TEXT
           SIZE 53.4 BY .81 AT ROW 17.62 COL 130 RIGHT-ALIGNED
           BGCOLOR 15 FGCOLOR 1 
      "           MENU" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 7.48 COL 87.6
+          SIZE 19 BY .81 AT ROW 7.86 COL 94.4
           BGCOLOR 15 FGCOLOR 1 
      "                                     VENTAS" VIEW-AS TEXT
           SIZE 52.2 BY .81 AT ROW 5.95 COL 77.8
@@ -239,7 +249,16 @@ ASSIGN
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame-Menu Dialog-Frame-Menu
 ON WINDOW-CLOSE OF FRAME Dialog-Frame-Menu /* Menu Principal */
 DO:
-  APPLY "END-ERROR":U TO SELF.
+  DEF VAR vlogOK AS LOG.
+
+  MESSAGE "¿REALMENTE DESEA SALIR DEL SISTEMA?" VIEW-AS ALERT-BOX BUTTONS YES-NO SET vlogOK.
+ 
+  IF vlogOK = YES THEN DO:
+    HIDE ALL.
+    RUN login.w.
+    APPLY "WINDOW-CLOSE" TO FRAME Dialog-Frame-Menu.
+    APPLY "END-ERROR":U TO SELF.
+  END.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -301,6 +320,17 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Btn-Repeorte
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Repeorte Dialog-Frame-Menu
+ON CHOOSE OF Btn-Repeorte IN FRAME Dialog-Frame-Menu /* Reportes */
+DO:
+  RUN Reportes.w.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &Scoped-define SELF-NAME Btn-Usuario
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Usuario Dialog-Frame-Menu
 ON CHOOSE OF Btn-Usuario IN FRAME Dialog-Frame-Menu /* Usuarios */
@@ -316,14 +346,15 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bttn-MSalir Dialog-Frame-Menu
 ON CHOOSE OF Bttn-MSalir IN FRAME Dialog-Frame-Menu /* Salir */
 DO:
-  DEF VAR vlogOK AS LOG.
 
+  DEF VAR vlogOK AS LOG.
   MESSAGE "¿REALMENTE DESEA SALIR DEL SISTEMA?" VIEW-AS ALERT-BOX BUTTONS YES-NO SET vlogOK.
  
   IF vlogOK = YES THEN DO:
     HIDE ALL.
-    RUN login.w.
+    RUN login.w NO-ERROR.
     APPLY "WINDOW-CLOSE" TO FRAME Dialog-Frame-Menu.
+    APPLY "END-ERROR":U TO SELF.
   END.
 
 END.
@@ -354,13 +385,32 @@ DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
   CASE inintIdRol:
 
       WHEN 1 THEN DO:
-        
+          MESSAGE "BIENVENIDO ADMINISTRADOR" VIEW-AS ALERT-BOX.
       END.
 
       WHEN 2 THEN DO:
            Btn-Menu:SENSITIVE = NO.
            Btn-Productos:SENSITIVE = NO.
            Btn-Usuario:SENSITIVE = NO.
+           Btn-Clientes:SENSITIVE = NO.
+           Btn-Inventario:SENSITIVE = NO.
+           Btn-Desperdicio:SENSITIVE = NO.
+           Btn-Ventas:SENSITIVE = NO.
+      END.
+
+      WHEN 3 THEN DO:
+           Btn-Menu:SENSITIVE = NO.
+           Btn-Productos:SENSITIVE = NO.
+           Btn-Usuario:SENSITIVE = NO.
+           Btn-Clientes:SENSITIVE = NO.
+      END.
+
+      WHEN 4 THEN DO:
+           Btn-Menu:SENSITIVE = NO.
+           Btn-Productos:SENSITIVE = NO.
+           Btn-Usuario:SENSITIVE = NO.
+           Btn-Clientes:SENSITIVE = NO.
+           Btn-Ventas:SENSITIVE = NO.
       END.
 
   END CASE.
@@ -402,9 +452,9 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Bttn-MSalir Btn-Menu Btn-Usuario Btn-Clientes Btn-Productos 
-         Btn-Inventario Btn-Desperdicio RECT-10 RECT-18 RECT-2 RECT-3 RECT-4 
-         RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
+  ENABLE Bttn-MSalir Btn-Menu Btn-Usuario Btn-Ventas Btn-Clientes Btn-Productos 
+         Btn-Inventario Btn-Repeorte Btn-Desperdicio RECT-18 RECT-2 RECT-3 
+         RECT-30 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
       WITH FRAME Dialog-Frame-Menu.
   VIEW FRAME Dialog-Frame-Menu.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame-Menu}

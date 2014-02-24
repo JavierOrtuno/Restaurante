@@ -36,15 +36,11 @@
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD addPersona Include 
 FUNCTION addPersona RETURNS INTEGER
-  ( INPUT inCharNombre AS CHARACTER,
-    INPUT inCharApat AS CHARACTER,
-    INPUT inCharAmat AS CHARACTER,
-    INPUT inCharSexo AS CHARACTER,
-    INPUT inCharFecha AS CHARACTER,
-    INPUT inCharCurp AS CHARACTER,
-    INPUT inCharRfc AS CHARACTER,
-    INPUT inCharDomicilio AS CHARACTER,
-    INPUT inCharCorreo AS CHARACTER
+  ( INPUT inCharNombre AS CHAR,  INPUT inCharApat AS CHAR,
+    INPUT inCharAmat AS CHAR,    INPUT inCharSexo AS CHAR,
+    INPUT inCharFecha AS CHAR,   INPUT inCharCurp AS CHAR,
+    INPUT inCharRfc AS CHAR,     INPUT inCharDomicilio AS CHAR,
+    INPUT inCharCorreo AS CHAR
      )  FORWARD.
 
 /* _UIB-CODE-BLOCK-END */
@@ -96,59 +92,6 @@ FUNCTION addUsuario RETURNS INTEGER
 
 /* **********************  Internal Procedures  *********************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE addPersona1 Include 
-PROCEDURE addPersona1 :
-/*------------------------------------------------------------------------------
-        Purpose:     
-        Parameters:  <none>
-        Notes:       
-    ------------------------------------------------------------------------------*/
-    DEFINE INPUT PARAMETER inCharNombre AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharApat AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharAmat AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharSexo AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharFecha AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharCurp AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharRfc AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharDomicilio AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharCorreo AS CHARACTER.
-
-    CREATE PERSONA.
-    ASSIGN 
-        PERSONA.ID_PERSONA = NEXT-VALUE(SEC_PERSONA)          PERSONA.NOMBRE = inCharNombre
-        PERSONA.A_PATERNO = inCharApat                        PERSONA.A_MATERNO = inCharAmat
-        PERSONA.SEXO = inCharSexo                             PERSONA.F_NACIMIENTO = DATE(inCharFecha)
-        PERSONA.CURP = inCharCurp                             PERSONA.RFC = inCharRfc
-        PERSONA.DOMICILIO = inCharDomicilio                   PERSONA.CORREO = inCharCorreo.
-
-    
-
-END PROCEDURE.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE addUsuario1 Include 
-PROCEDURE addUsuario1 :
-/*------------------------------------------------------------------------------
-        Purpose:     
-        Parameters:  <none>
-        Notes:       
-    ------------------------------------------------------------------------------*/
-    DEFINE INPUT PARAMETER inCharUsuario AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharContrasena AS CHARACTER.
-    
-    CREATE USUARIO.
-    ASSIGN 
-        USUARIO.ID_USUARIO = NEXT-VALUE(SEC_USUARIO)
-        USUARIO.USUARIO = inCharUsuario
-        USUARIO.CONTRASENIA = inCharContrasena.
-   
-END PROCEDURE.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE deleteUsuario Include 
 PROCEDURE deleteUsuario :
 /*------------------------------------------------------------------------------
@@ -161,7 +104,10 @@ PROCEDURE deleteUsuario :
     DEFINE INPUT PARAMETER inCharContra AS CHARACTER.*/
     
     FIND USUARIO WHERE ROWID(USUARIO) = inIntRowId.
-    DELETE Usuario.
+       FIND Empleado WHERE Empleado.id_Usuario = usuario.Id_Usuario.
+           FIND Persona WHERE Persona.Id_Persona = Empleado.Id_Persona.
+           DELETE Persona.
+           DELETE Usuario.
 
 END PROCEDURE.
 
@@ -175,18 +121,13 @@ PROCEDURE updatePersona :
         Parameters:  <none>
         Notes:       
     ------------------------------------------------------------------------------*/
-    DEFINE INPUT PARAMETER inIntRowId AS ROWID.
-    DEFINE INPUT PARAMETER inintIdRol AS INT.
-    DEFINE INPUT PARAMETER inCharNombre AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharApat AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharAmat AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharSexo AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharFecha AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharCurp AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharRfc AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharDomicilio AS CHARACTER.
+    DEFINE INPUT PARAMETER inIntRowId AS ROWID.          DEFINE INPUT PARAMETER inintIdRol AS INT.
+    DEFINE INPUT PARAMETER inCharNombre AS CHARACTER.    DEFINE INPUT PARAMETER inCharApat AS CHARACTER.
+    DEFINE INPUT PARAMETER inCharAmat AS CHARACTER.      DEFINE INPUT PARAMETER inCharSexo AS CHARACTER.
+    DEFINE INPUT PARAMETER inCharFecha AS CHARACTER.     DEFINE INPUT PARAMETER inCharCurp AS CHARACTER.
+    DEFINE INPUT PARAMETER inCharRfc AS CHARACTER.       DEFINE INPUT PARAMETER inCharDomicilio AS CHARACTER.
     DEFINE INPUT PARAMETER inCharCorreo AS CHARACTER.
-    MESSAGE inintIdRol VIEW-AS ALERT-BOX.
+
     FIND USUARIO WHERE ROWID(USUARIO) = inIntRowId.
        FIND FIRST Empleado WHERE Empleado.id_Usuario = usuario.Id_Usuario.
        ASSIGN
@@ -230,15 +171,11 @@ END PROCEDURE.
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION addPersona Include 
 FUNCTION addPersona RETURNS INTEGER
-  ( INPUT inCharNombre AS CHARACTER,
-    INPUT inCharApat AS CHARACTER,
-    INPUT inCharAmat AS CHARACTER,
-    INPUT inCharSexo AS CHARACTER,
-    INPUT inCharFecha AS CHARACTER,
-    INPUT inCharCurp AS CHARACTER,
-    INPUT inCharRfc AS CHARACTER,
-    INPUT inCharDomicilio AS CHARACTER,
-    INPUT inCharCorreo AS CHARACTER
+  ( INPUT inCharNombre AS CHAR,  INPUT inCharApat AS CHAR,
+    INPUT inCharAmat AS CHAR,    INPUT inCharSexo AS CHAR,
+    INPUT inCharFecha AS CHAR,   INPUT inCharCurp AS CHAR,
+    INPUT inCharRfc AS CHAR,     INPUT inCharDomicilio AS CHAR,
+    INPUT inCharCorreo AS CHAR
      ) :
 /*------------------------------------------------------------------------------
   Purpose:  
@@ -247,6 +184,7 @@ FUNCTION addPersona RETURNS INTEGER
     DEFINE VARIABLE vintpersona AS INT.
 
     vintpersona = NEXT-VALUE(SEC_PERSONA).
+
     CREATE PERSONA.
     ASSIGN 
         PERSONA.ID_PERSONA = vintpersona                      PERSONA.NOMBRE = inCharNombre
@@ -272,6 +210,7 @@ FUNCTION addUsuario RETURNS INTEGER
 DEF VAR vintIdUsuario AS INT.
 
   vintIdUsuario = NEXT-VALUE(SEC_USUARIO).
+
   CREATE USUARIO.
     ASSIGN 
         USUARIO.ID_USUARIO = vintIdUsuario.

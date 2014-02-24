@@ -89,6 +89,17 @@ FUNCTION getReportePropinas RETURNS CHARACTER
 
 &ENDIF
 
+&IF DEFINED(EXCLUDE-getReporteVentas) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getReporteVentas Method-Library 
+FUNCTION getReporteVentas RETURNS CHARACTER
+    ( INPUT vcharFechas AS CHARACTER )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 
 /* *********************** Procedure Settings ************************ */
 
@@ -416,6 +427,102 @@ FUNCTION getReportePropinas RETURNS CHARACTER
     vcharReporte = vcharReporte + "<tr class='sub-th'>~n".
     vcharReporte = vcharReporte + "<td colspan='2' class='left'>TOTAL</td>~n</tr>~n".
     vcharReporte = vcharReporte + "<tr>~n<td></td>~n<td>$" + STRING(vdecTotal) + "</td>~n</tr>~n".
+    RETURN vcharReporte.
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
+&IF DEFINED(EXCLUDE-getReporteVentas) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getReporteVentas Method-Library 
+FUNCTION getReporteVentas RETURNS CHARACTER
+    ( INPUT vcharFechas AS CHARACTER ) :
+    /*------------------------------------------------------------------------------
+        Purpose:  
+        Notes:  
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vcharReporte AS CHARACTER.
+
+    IF TRIM(vcharFechas) = "#" THEN DO:
+        FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0:
+            FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
+            FIND FIRST ESTATUS WHERE ESTATUS.ID_ESTATUS = FACTURA.ID_ESTATUS.
+            FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA.
+            FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO.
+            FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+                vcharReporte = vcharReporte + "<tr>~n".
+                vcharReporte = vcharReporte + "<td>" + FACTURA.FOLIO + "</td>~n".
+                vcharReporte = vcharReporte + "<td>" + MESA.DESCRIPCION + "</td>~n".
+                vcharReporte = vcharReporte + "<td>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
+                vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.FECHA) + "</td>~n".
+                vcharReporte = vcharReporte + "<td>" + ESTATUS.DESCRIPCION + "</td>~n".
+                vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.TOTAL) + "</td>~n".
+                vcharReporte = vcharReporte + "</tr>~n".    
+        END.
+    END.
+    ELSE DO:
+        IF TRIM(ENTRY(1, vcharFechas, "#")) = "" THEN DO:
+            FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
+                FACTURA.FECHA <= DATE(ENTRY(2, vcharFechas, "#")):       
+                    FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
+                    FIND FIRST ESTATUS WHERE ESTATUS.ID_ESTATUS = FACTURA.ID_ESTATUS.
+                    FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA.
+                    FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO.
+                    FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+                        vcharReporte = vcharReporte + "<tr>~n".
+                        vcharReporte = vcharReporte + "<td>" + FACTURA.FOLIO + "</td>~n".
+                        vcharReporte = vcharReporte + "<td>" + MESA.DESCRIPCION + "</td>~n".
+                        vcharReporte = vcharReporte + "<td>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
+                        vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.FECHA) + "</td>~n".
+                        vcharReporte = vcharReporte + "<td>" + ESTATUS.DESCRIPCION + "</td>~n".
+                        vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.TOTAL) + "</td>~n".
+                        vcharReporte = vcharReporte + "</tr>~n".
+            END.
+        END.
+        ELSE DO:
+            IF TRIM(ENTRY(2, vcharFechas, "#")) = "" THEN DO:
+                FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
+                    FACTURA.FECHA >= DATE(ENTRY(1, vcharFechas, "#")):
+                        FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
+                        FIND FIRST ESTATUS WHERE ESTATUS.ID_ESTATUS = FACTURA.ID_ESTATUS.
+                        FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA.
+                        FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO.
+                        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+                            vcharReporte = vcharReporte + "<tr>~n".
+                            vcharReporte = vcharReporte + "<td>" + FACTURA.FOLIO + "</td>~n".
+                            vcharReporte = vcharReporte + "<td>" + MESA.DESCRIPCION + "</td>~n".
+                            vcharReporte = vcharReporte + "<td>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
+                            vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.FECHA) + "</td>~n".
+                            vcharReporte = vcharReporte + "<td>" + ESTATUS.DESCRIPCION + "</td>~n".
+                            vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.TOTAL) + "</td>~n".
+                            vcharReporte = vcharReporte + "</tr>~n".
+                END.
+            END.
+            ELSE DO:
+                FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
+                    FACTURA.FECHA >= DATE(ENTRY(1, vcharFechas, "#")) AND
+                    FACTURA.FECHA <= DATE(ENTRY(2, vcharFechas, "#")):       
+                        FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
+                        FIND FIRST ESTATUS WHERE ESTATUS.ID_ESTATUS = FACTURA.ID_ESTATUS.
+                        FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA.
+                        FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO.
+                        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+                            vcharReporte = vcharReporte + "<tr>~n".
+                            vcharReporte = vcharReporte + "<td>" + FACTURA.FOLIO + "</td>~n".
+                            vcharReporte = vcharReporte + "<td>" + MESA.DESCRIPCION + "</td>~n".
+                            vcharReporte = vcharReporte + "<td>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
+                            vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.FECHA) + "</td>~n".
+                            vcharReporte = vcharReporte + "<td>" + ESTATUS.DESCRIPCION + "</td>~n".
+                            vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.TOTAL) + "</td>~n".
+                            vcharReporte = vcharReporte + "</tr>~n".
+                END.
+            END.
+        END.        
+    END.
+
     RETURN vcharReporte.
 END FUNCTION.
 

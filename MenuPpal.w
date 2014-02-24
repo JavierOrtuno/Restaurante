@@ -46,10 +46,10 @@ DEF INPUT PARAM inintIdUsuario AS INT.
 &Scoped-define FRAME-NAME Dialog-Frame-Menu
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Bttn-MSalir Btn-Menu Btn-Usuario Btn-Ventas ~
-Btn-Clientes Btn-Productos Btn-Inventario Btn-Repeorte Btn-Desperdicio ~
-RECT-10 RECT-18 RECT-2 RECT-3 RECT-30 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 ~
-RECT-9 
+&Scoped-Define ENABLED-OBJECTS Bttn-MSalir Btn-Ventas Btn-Menu Btn-Usuario ~
+Btn-Clientes Btn-Facturas Btn-Productos Btn-Inventario Btn-Repeorte ~
+Btn-Desperdicio RECT-10 RECT-18 RECT-2 RECT-3 RECT-30 RECT-4 RECT-5 RECT-6 ~
+RECT-7 RECT-8 RECT-9 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -71,6 +71,10 @@ DEFINE BUTTON Btn-Clientes
 DEFINE BUTTON Btn-Desperdicio 
      LABEL "Desperdicio" 
      SIZE 16 BY 1.14.
+
+DEFINE BUTTON Btn-Facturas 
+     LABEL "Facturas" 
+     SIZE 16.6 BY 1.14.
 
 DEFINE BUTTON Btn-Inventario 
      LABEL "Inventario" 
@@ -155,10 +159,11 @@ DEFINE RECTANGLE RECT-9
 
 DEFINE FRAME Dialog-Frame-Menu
      Bttn-MSalir AT ROW 2.29 COL 118
+     Btn-Ventas AT ROW 9.33 COL 95.6
      Btn-Menu AT ROW 9.52 COL 19.2
      Btn-Usuario AT ROW 9.52 COL 42.2
-     Btn-Ventas AT ROW 10.33 COL 95.6
      Btn-Clientes AT ROW 11.38 COL 42.2
+     Btn-Facturas AT ROW 11.38 COL 95.8
      Btn-Productos AT ROW 11.43 COL 19.2
      Btn-Inventario AT ROW 21.38 COL 30.8
      Btn-Repeorte AT ROW 22.38 COL 96.6
@@ -177,6 +182,9 @@ DEFINE FRAME Dialog-Frame-Menu
      "MENU PRINCIPAL" VIEW-AS TEXT
           SIZE 39.6 BY 1.91 AT ROW 2.19 COL 51.4
           BGCOLOR 8 FGCOLOR 15 FONT 70
+     "                              ADMINISTRADOR" VIEW-AS TEXT
+          SIZE 52 BY .81 AT ROW 5.95 COL 12.6
+          BGCOLOR 15 FGCOLOR 1 
      "       CATÁLOGO" VIEW-AS TEXT
           SIZE 19 BY .81 AT ROW 8.24 COL 17.8
           BGCOLOR 15 FGCOLOR 1 
@@ -201,10 +209,7 @@ DEFINE FRAME Dialog-Frame-Menu
      "                                     VENTAS" VIEW-AS TEXT
           SIZE 52.2 BY .81 AT ROW 5.95 COL 77.8
           BGCOLOR 15 FGCOLOR 1 
-     "                              ADMINISTRADOR" VIEW-AS TEXT
-          SIZE 52 BY .81 AT ROW 5.95 COL 12.6
-          BGCOLOR 15 FGCOLOR 1 
-     SPACE(76.79) SKIP(21.47)
+     SPACE(11.39) SKIP(21.47)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -284,6 +289,17 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Btn-Facturas
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Facturas Dialog-Frame-Menu
+ON CHOOSE OF Btn-Facturas IN FRAME Dialog-Frame-Menu /* Facturas */
+DO:
+  RUN MenuFactura.w.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &Scoped-define SELF-NAME Btn-Inventario
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Inventario Dialog-Frame-Menu
 ON CHOOSE OF Btn-Inventario IN FRAME Dialog-Frame-Menu /* Inventario */
@@ -333,6 +349,17 @@ END.
 ON CHOOSE OF Btn-Usuario IN FRAME Dialog-Frame-Menu /* Usuarios */
 DO:
   RUN menuUsuarios.w.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Btn-Ventas
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Ventas Dialog-Frame-Menu
+ON CHOOSE OF Btn-Ventas IN FRAME Dialog-Frame-Menu /* Ventas */
+DO:
+  RUN RegistroVentas.w(inintIdUsuario).
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -449,9 +476,10 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Bttn-MSalir Btn-Menu Btn-Usuario Btn-Ventas Btn-Clientes Btn-Productos 
-         Btn-Inventario Btn-Repeorte Btn-Desperdicio RECT-10 RECT-18 RECT-2 
-         RECT-3 RECT-30 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
+  ENABLE Bttn-MSalir Btn-Ventas Btn-Menu Btn-Usuario Btn-Clientes Btn-Facturas 
+         Btn-Productos Btn-Inventario Btn-Repeorte Btn-Desperdicio RECT-10 
+         RECT-18 RECT-2 RECT-3 RECT-30 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 
+         RECT-9 
       WITH FRAME Dialog-Frame-Menu.
   VIEW FRAME Dialog-Frame-Menu.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame-Menu}

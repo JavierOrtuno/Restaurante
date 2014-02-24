@@ -28,6 +28,7 @@
 /* ***************************  Definitions  ************************** */
 
 /* Parameters Definitions ---                                           */
+DEF INPUT PARAM inintIdUsuario AS INT.
 
 /* Local Variable Definitions ---                                       */
 
@@ -134,7 +135,6 @@ DEFINE BROWSE BROWSE-20
       FACTURA.TOTAL COLUMN-LABEL "Total" FORMAT "->>,>>9.99":U
       FORMA_PAGO.DESCRIPCION COLUMN-LABEL "Forma de Pago" FORMAT "X(15)":U
       COMANDA.PROPINA COLUMN-LABEL "Propina" FORMAT "->>,>>9.99":U
-            WIDTH 18.6
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
     WITH NO-ROW-MARKERS SEPARATORS SIZE 173 BY 7.38 EXPANDABLE.
@@ -212,7 +212,7 @@ ASSIGN
      _FldNameList[11]   > Restaurante.FORMA_PAGO.DESCRIPCION
 "FORMA_PAGO.DESCRIPCION" "Forma de Pago" "X(15)" "character" ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
      _FldNameList[12]   > Restaurante.COMANDA.PROPINA
-"COMANDA.PROPINA" "Propina" ? "decimal" ? ? ? ? ? ? no ? no no "18.6" yes no no "U" "" ""
+"COMANDA.PROPINA" "Propina" ? "decimal" ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE BROWSE-20 */
 &ANALYZE-RESUME
@@ -238,7 +238,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-30 Dialog-Frame
 ON CHOOSE OF BUTTON-30 IN FRAME Dialog-Frame /* Registrar */
 DO:
-  RUN RegistroVentas.w.
+  RUN RegistroVentas.w(inintIdUsuario).
 END.
 
 /* _UIB-CODE-BLOCK-END */

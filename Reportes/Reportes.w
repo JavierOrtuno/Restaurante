@@ -273,7 +273,7 @@ DO:
     DEFINE VARIABLE vcharFechas AS CHARACTER INITIAL ?.
     DEFINE VARIABLE vcharFileName AS CHARACTER.
 
-    RUN menuVentas.w(OUTPUT vcharFechas).
+    RUN menuVentasR.w(OUTPUT vcharFechas).
     IF vcharFechas <> ? THEN DO:
         Edit_File:SCREEN-VALUE = "".
 

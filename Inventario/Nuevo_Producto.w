@@ -30,6 +30,7 @@
 /* Parameters Definitions ---                                           */
 
 /* Local Variable Definitions ---                                       */
+DEF INPUT PARAM viniduser AS INT.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -205,7 +206,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-26 Product-Frame
 ON CHOOSE OF BUTTON-26 IN FRAME Product-Frame /* Agregar */
 DO:
-  RUN Insertar_Stock.w(ROWID(Producto)).
+  RUN Insertar_Stock.w(ROWID(Producto),viniduser).
 END.
 
 /* _UIB-CODE-BLOCK-END */

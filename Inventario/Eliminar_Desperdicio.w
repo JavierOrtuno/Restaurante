@@ -30,6 +30,7 @@
 
 DEF INPUT PARAM inrowReg  AS ROWID.
 DEF INPUT PARAM inrowReg2 AS ROWID.
+DEF INPUT PARAM viniduser AS INT.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -206,7 +207,7 @@ vintCantidadElimin = INT(fill-in-34:SCREEN-VALUE).
    vintCantidad = vintCantidadActual - vintCantidadElimin.
    FIND stock WHERE ROWID(stock) = inrowReg2.
    ASSIGN stock.cantidad = vintCantidad.
-   insertar_bitacora(4,1,stock.id_stock,vintCantidadElimin).
+   insertar_bitacora(4,viniduser,stock.id_stock,vintCantidadElimin).
   END.
  APPLY "window-close" TO FRAME Delete-Frame.
 END.

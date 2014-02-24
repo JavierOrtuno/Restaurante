@@ -208,7 +208,7 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-29 Perdida-Frame
 ON CHOOSE OF BUTTON-29 IN FRAME Perdida-Frame /* Quitar */
 DO:
-  RUN Eliminar_Desperdicio.w(ROWID(producto),ROWID(stock)).
+  RUN Eliminar_Desperdicio.w(ROWID(producto),ROWID(stock),viniduser).
   {&OPEN-query-BROWSE-15}
 END.
 

@@ -162,3 +162,10 @@
 13:12:29 Inicio de la Fase de Physical Redo en 0 . (5326)
 13:12:29 Fase Física del "Redo" Terminada en blq 42 off 5437 act 0. (7161)
 14:36:53 Fin de sesión Single-user. (334)
+
+                Mon Feb 24 09:45:31 2014
+09:45:31 Single-user comienza sesión userpc en CON:. (451)
+09:45:31 Error en el Registry 5: No se pudo crear la llave 'RESTAURANTE_PROGRESS' para el Visualizador de Evento. (5175)
+09:45:31 Inicio de la Fase de Physical Redo en 0 . (5326)
+09:45:32 Fase Física del "Redo" Terminada en blq 43 off 5996 act 0. (7161)
+10:19:45 Fin de sesión Single-user. (334)

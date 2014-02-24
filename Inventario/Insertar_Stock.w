@@ -28,6 +28,7 @@
 
 /* Local Variable Definitions ---                                       */
   DEF INPUT PARAM inrowReg AS ROWID.
+  DEF INPUT PARAM viniduser AS INT.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -222,7 +223,7 @@ DO:
                  stock.f_ingreso = vdteactual
                  stock.f_caducidad = INPUT FILL-in-30
                  stock.id_producto = producto.id_producto.
-          Insertar_Bitacora(1,1,stock.id_stock,stock.cantidad).
+          Insertar_Bitacora(1,viniduser,stock.id_stock,stock.cantidad).
           MESSAGE "Registro insertado correctamente" VIEW-AS ALERT-BOX.
       END.
     END.

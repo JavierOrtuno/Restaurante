@@ -377,12 +377,14 @@ FUNCTION HoraEntrada RETURNS CHARACTER
   
   /* minutes till next midnight */
   minute = timeleft MOD 60.
+
       
   /* hours till next midnight */
       hour = (timeleft - minute) / 60. 
-  IF minute > 9 
-      THEN vchrHora = STRING(23 - hour) + ":" + STRING(59 - minute).
-  ELSE vchrHora = STRING(23 - hour) + ":" + "0" + STRING(59 - minute).
+
+  IF (59 - minute) < 10 
+      THEN vchrHora = STRING(23 - hour) + ":" + "0" + STRING(59 - minute).
+  ELSE vchrHora = STRING(23 - hour) + ":" + STRING(59 - minute).
 
   RETURN vchrHora.   /* Function return value. */
 

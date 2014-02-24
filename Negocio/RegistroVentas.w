@@ -31,7 +31,7 @@
 
 /* Local Variable Definitions ---                                       */
 
-DEF VAR vintProducto AS INT.
+DEF VAR vchrDescripcion AS CHAR.
 DEF VAR vintCantidad AS INT.
 DEF VAR vchrFolio AS CHAR.
 DEF VAR vdteFecha AS DATE.
@@ -42,10 +42,13 @@ DEF VAR vdecSubtotal AS DEC.
 DEF VAR vdecIVA AS DEC.
 DEF VAR vdecTotal AS DEC.
 DEF VAR vdecCuenta AS DEC.
-DEF VAR vintStock AS INT.
 DEF VAR vlogBandera AS LOG.
 DEF VAR vintTotal AS INT.
 DEF VAR vlogSemaforo AS LOG.
+DEF VAR vintPedido AS INT.
+DEF VAR vintLongitud1 AS INT.
+DEF VAR vintLongitud2 AS INT.
+DEF VAR vdecPrecio AS DEC.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -128,11 +131,11 @@ MESA
     ~{&OPEN-QUERY-BROWSE-9}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS HoraEntrada HoraSalida BROWSE-20 BROWSE-9 ~
-BROWSE-2 BROWSE-11 Cantidad BUTTON-1 Subtotal BROWSE-3 IVA SELECT-1 Total ~
-Propina BtnOK BtnCancel 
+&Scoped-Define ENABLED-OBJECTS HoraSalida BROWSE-20 BROWSE-9 BROWSE-2 ~
+BROWSE-11 Cantidad BUTTON-1 Subtotal BROWSE-3 IVA SELECT-1 Propina Total ~
+BtnOK BtnCancel 
 &Scoped-Define DISPLAYED-OBJECTS Fecha HoraEntrada HoraSalida Cantidad ~
-Subtotal IVA SELECT-1 Total Propina 
+Subtotal IVA SELECT-1 Propina Total 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -219,7 +222,7 @@ DEFINE VARIABLE Total AS DECIMAL FORMAT "->>,>>9.99":U INITIAL 0
 
 DEFINE VARIABLE SELECT-1 AS CHARACTER 
      VIEW-AS SELECTION-LIST SINGLE SCROLLBAR-VERTICAL 
-     SIZE 63 BY 4.52 NO-UNDO.
+     SIZE 63 BY 5.71 NO-UNDO.
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -300,11 +303,11 @@ DEFINE FRAME RegVenta-Frame
      BROWSE-3 AT ROW 9.57 COL 9
      IVA AT ROW 9.57 COL 76 COLON-ALIGNED
      SELECT-1 AT ROW 9.57 COL 121 NO-LABEL
-     Total AT ROW 11.48 COL 50 COLON-ALIGNED
-     Propina AT ROW 11.48 COL 76 COLON-ALIGNED
+     Propina AT ROW 11.24 COL 51 COLON-ALIGNED
+     Total AT ROW 11.24 COL 76 COLON-ALIGNED
      BtnOK AT ROW 14.1 COL 9
      BtnCancel AT ROW 14.1 COL 25
-     SPACE(151.99) SKIP(1.04)
+     SPACE(151.99) SKIP(1.08)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Registro de Venta"
@@ -352,6 +355,8 @@ ASSIGN
 ASSIGN 
        Fecha:READ-ONLY IN FRAME RegVenta-Frame        = TRUE.
 
+/* SETTINGS FOR FILL-IN HoraEntrada IN FRAME RegVenta-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        HoraEntrada:READ-ONLY IN FRAME RegVenta-Frame        = TRUE.
 
@@ -463,29 +468,55 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-1 RegVenta-Frame
 ON CHOOSE OF BUTTON-1 IN FRAME RegVenta-Frame /* Agregar */
 DO:
-  IF ValidarSalida() = TRUE 
-      THEN vlogSemaforo = ValidarFrame().
-  ELSE 
-      MESSAGE "La hora de salida debe estar en formato de 24 horas" VIEW-AS ALERT-BOX.
+  IF ValidarSalida() = TRUE THEN vlogSemaforo = ValidarFrame().
+  ELSE MESSAGE "La hora de salida debe estar en formato de 24 horas" VIEW-AS ALERT-BOX.
 
   IF vlogSemaforo = TRUE THEN DO:
-  ASSIGN vintCantidad = INT(Cantidad:SCREEN-VALUE).
-  vdecSubtotal = vdecSubtotal + CalcularSubtotal(vintCantidad).
+        ASSIGN vintCantidad = INT(Cantidad:SCREEN-VALUE).
+        vdecSubtotal = vdecSubtotal + CalcularSubtotal(vintCantidad).
+        vdecIVA = CalcularIVA(vdecSubtotal).
+        vdecTotal = CalcularTotal(vdecSubtotal,vdecIVA) + DEC(Propina:SCREEN-VALUE).
+
+        vlogBandera = DescontarInventario(vintCantidad).
+        IF vlogBandera = FALSE THEN DO:
+                vchrDescripcion = MENU.Descripcion.
+                ASSIGN Subtotal:SCREEN-VALUE = STRING(vdecSubtotal)
+                IVA:SCREEN-VALUE = STRING(vdecIVA)
+                TOTAL:SCREEN-VALUE = STRING(vdecTotal).
+                RUN Platillos(vintCantidad,vchrDescripcion + "/" + STRING(vintCantidad) + "/" + "$" + STRING(MENU.precio)).
+        END.
+        ELSE DO:
+            MESSAGE "No te puedo vender esa cantidad" VIEW-AS ALERT-BOX.
+            ASSIGN vintCantidad = 0.
+            ASSIGN vdecSubtotal = 0.
+        END.
+  END.
+  ELSE MESSAGE "Venta no registrada" VIEW-AS ALERT-BOX.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME SELECT-1
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL SELECT-1 RegVenta-Frame
+ON LEFT-MOUSE-DBLCLICK OF SELECT-1 IN FRAME RegVenta-Frame
+DO:
+  vintLongitud1 = LENGTH(ENTRY(1,SELECT-1:SCREEN-VALUE,"/")).
+  vintLongitud2 = LENGTH(ENTRY(1,SELECT-1:SCREEN-VALUE,"$")).
+  vintPedido = INT(SUBSTR(SELECT-1:SCREEN-VALUE,vintLongitud1 + 2,vintLongitud2 - vintLongitud1 - 2)).
+  vdecPrecio = DEC(SUBSTR(SELECT-1:SCREEN-VALUE,vintLongitud2 + 2)).
+
+  vdecSubtotal = DEC(Subtotal:SCREEN-VALUE) - (vintPedido * vdecPrecio).
   vdecIVA = CalcularIVA(vdecSubtotal).
   vdecTotal = CalcularTotal(vdecSubtotal,vdecIVA) + DEC(Propina:SCREEN-VALUE).
 
-  vlogBandera = DescontarInventario(vintCantidad).
-  IF vlogBandera = FALSE THEN DO:
-      ASSIGN Subtotal:SCREEN-VALUE = STRING(vdecSubtotal)
-             IVA:SCREEN-VALUE = STRING(vdecIVA)
-              TOTAL:SCREEN-VALUE = STRING(vdecTotal).
-      RUN Platillos(vintCantidad).
-  END.
-  ELSE
-      MESSAGE "No te puedo vender esa cantidad" VIEW-AS ALERT-BOX.
-  END.
-  ELSE
-      MESSAGE "Venta no registrada" VIEW-AS ALERT-BOX.
+  IF INT(Subtotal:SCREEN-VALUE) > 0 THEN
+        ASSIGN Subtotal:SCREEN-VALUE = STRING(vdecSubtotal)
+            IVA:SCREEN-VALUE = STRING(vdecIVA)
+            TOTAL:SCREEN-VALUE = STRING(vdecTotal).
+
+  SELECT-1:DELETE(SELECT-1:SCREEN-VALUE).
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -552,11 +583,11 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  DISPLAY Fecha HoraEntrada HoraSalida Cantidad Subtotal IVA SELECT-1 Total 
-          Propina 
+  DISPLAY Fecha HoraEntrada HoraSalida Cantidad Subtotal IVA SELECT-1 Propina 
+          Total 
       WITH FRAME RegVenta-Frame.
-  ENABLE HoraEntrada HoraSalida BROWSE-20 BROWSE-9 BROWSE-2 BROWSE-11 Cantidad 
-         BUTTON-1 Subtotal BROWSE-3 IVA SELECT-1 Total Propina BtnOK BtnCancel 
+  ENABLE HoraSalida BROWSE-20 BROWSE-9 BROWSE-2 BROWSE-11 Cantidad BUTTON-1 
+         Subtotal BROWSE-3 IVA SELECT-1 Propina Total BtnOK BtnCancel 
       WITH FRAME RegVenta-Frame.
   VIEW FRAME RegVenta-Frame.
   {&OPEN-BROWSERS-IN-QUERY-RegVenta-Frame}
@@ -572,17 +603,11 @@ PROCEDURE Platillos :
   Parameters:  <none>
   Notes:       
 ------------------------------------------------------------------------------*/
-
   DEF INPUT PARAMETER inintCantidad AS INT.
-  DEF VAR vchrList1 AS CHAR.
-  DEF VAR vchrList2 AS CHAR.
+  DEF INPUT PARAMETER inchrLista AS CHAR.
 
   IF inintCantidad <> 0 
-      THEN DO:
-            ASSIGN vchrList1 = STRING(MENU.Descripcion).
-            SELECT-1:LIST-ITEM-PAIRS IN FRAME RegVenta-Frame = vchrList1 + ",Menu.ID".
-            SELECT-1:SCREEN-VALUE.
-  END.
+  THEN SELECT-1:ADD-LAST(inchrLista) IN FRAME RegVenta-Frame.
 
 END PROCEDURE.
 

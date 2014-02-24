@@ -111,7 +111,7 @@ DEFINE FRAME Dialog-Frame-Login
      "Bienvenido al Sistema le Seminaré" VIEW-AS TEXT
           SIZE 70.2 BY 1.19 AT ROW 4.81 COL 38.6
           BGCOLOR 8 FGCOLOR 15 FONT 70
-     SPACE(33.20) SKIP(22.18)
+     SPACE(33.19) SKIP(22.18)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 15 FGCOLOR 0 
@@ -151,21 +151,6 @@ ASSIGN
 /* ************************  Control Triggers  ************************ */
 
 &Scoped-define SELF-NAME Dialog-Frame-Login
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame-Login Dialog-Frame-Login
-ON 0 OF FRAME Dialog-Frame-Login /* Login */
-OR "s" OF FRAME {&FRAME-NAME} ANYWHERE DO:
-   
-    CASE CHR(LASTKEY):
-        
-        WHEN "s" THEN APPLY "CHOOSE" TO Bttn-Salir.
-
-    END CASE.
-END.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame-Login Dialog-Frame-Login
 ON RETURN OF FRAME Dialog-Frame-Login /* Login */
 ANYWHERE DO: 

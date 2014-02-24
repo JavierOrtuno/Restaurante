@@ -45,8 +45,8 @@ DEF INPUT PARAMETER crowid AS ROWID.
 &Scoped-define FRAME-NAME Actualiza-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS FILL-IN-21 FILL-IN-22 FILL-IN-23 FILL-IN-24 ~
-FILL-IN-25 FILL-IN-26 Btn_OK Btn_Cancel 
+&Scoped-Define ENABLED-OBJECTS Btn_Cancel FILL-IN-21 FILL-IN-22 FILL-IN-23 ~
+FILL-IN-24 FILL-IN-25 FILL-IN-26 Btn_OK RECT-18 RECT-25 
 &Scoped-Define DISPLAYED-OBJECTS FILL-IN-21 FILL-IN-22 FILL-IN-23 ~
 FILL-IN-24 FILL-IN-25 FILL-IN-26 
 
@@ -73,61 +73,84 @@ FUNCTION Actualizar RETURNS CHARACTER
 
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_Cancel AUTO-END-KEY 
-     LABEL "Cancel" 
-     SIZE 15 BY 1.14
+     LABEL "Salir" 
+     SIZE 13 BY .95
      BGCOLOR 8 .
 
 DEFINE BUTTON Btn_OK AUTO-GO 
-     LABEL "OK" 
-     SIZE 15 BY 1.14
+     LABEL "Actualizar" 
+     SIZE 20 BY 1.91
      BGCOLOR 8 .
 
 DEFINE VARIABLE FILL-IN-21 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Nombre" 
      VIEW-AS FILL-IN 
-     SIZE 27 BY 1 NO-UNDO.
+     SIZE 27 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-22 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Apellido Psterno" 
      VIEW-AS FILL-IN 
-     SIZE 28 BY 1 NO-UNDO.
+     SIZE 28 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-23 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Apellido Materno" 
      VIEW-AS FILL-IN 
-     SIZE 28 BY 1 NO-UNDO.
+     SIZE 28 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-24 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Domicilio" 
      VIEW-AS FILL-IN 
-     SIZE 40 BY 1 NO-UNDO.
+     SIZE 40 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-25 AS DATE FORMAT "99/99/99":U 
      LABEL "Fecha Nacimiento" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 14 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-26 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Correo Electrónico" 
      VIEW-AS FILL-IN 
-     SIZE 40 BY 1 NO-UNDO.
+     SIZE 40 BY 1
+     BGCOLOR 15  NO-UNDO.
+
+DEFINE RECTANGLE RECT-18
+     EDGE-PIXELS 8  
+     SIZE 80 BY 2.1
+     BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-25
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 70 BY 9.62.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Actualiza-Frame
-     FILL-IN-21 AT ROW 1.95 COL 20 COLON-ALIGNED
-     FILL-IN-22 AT ROW 3.38 COL 20 COLON-ALIGNED
-     FILL-IN-23 AT ROW 4.81 COL 20 COLON-ALIGNED
-     FILL-IN-24 AT ROW 6.24 COL 20 COLON-ALIGNED
-     FILL-IN-25 AT ROW 7.67 COL 20 COLON-ALIGNED
-     FILL-IN-26 AT ROW 9.1 COL 20 COLON-ALIGNED
-     Btn_OK AT ROW 10.76 COL 22
-     Btn_Cancel AT ROW 10.76 COL 40
-     SPACE(15.59) SKIP(1.23)
+     Btn_Cancel AT ROW 1.62 COL 65.8
+     FILL-IN-21 AT ROW 5.43 COL 28.2 COLON-ALIGNED
+     FILL-IN-22 AT ROW 6.86 COL 28.2 COLON-ALIGNED
+     FILL-IN-23 AT ROW 8.29 COL 28.2 COLON-ALIGNED
+     FILL-IN-24 AT ROW 9.71 COL 28.2 COLON-ALIGNED
+     FILL-IN-25 AT ROW 11.14 COL 28.2 COLON-ALIGNED
+     FILL-IN-26 AT ROW 12.57 COL 28.2 COLON-ALIGNED
+     Btn_OK AT ROW 15.29 COL 31
+     RECT-18 AT ROW 1 COL 1
+     RECT-25 AT ROW 4.67 COL 6
+     "ACTUALIZAR CLIENTE" VIEW-AS TEXT
+          SIZE 25 BY .62 AT ROW 1.76 COL 28.8
+          FGCOLOR 15 
+     "Campos Requeridos:" VIEW-AS TEXT
+          SIZE 23 BY .62 AT ROW 3.86 COL 6.4
+     SPACE(51.59) SKIP(13.70)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "Actualiza Cliente"
+         BGCOLOR 8 
+         TITLE "Actualizar"
          DEFAULT-BUTTON Btn_OK CANCEL-BUTTON Btn_Cancel.
 
 
@@ -163,7 +186,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Actualiza-Frame
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Actualiza-Frame Actualiza-Frame
-ON WINDOW-CLOSE OF FRAME Actualiza-Frame /* Actualiza Cliente */
+ON WINDOW-CLOSE OF FRAME Actualiza-Frame /* Actualizar */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -174,7 +197,7 @@ END.
 
 &Scoped-define SELF-NAME Btn_OK
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_OK Actualiza-Frame
-ON CHOOSE OF Btn_OK IN FRAME Actualiza-Frame /* OK */
+ON CHOOSE OF Btn_OK IN FRAME Actualiza-Frame /* Actualizar */
 DO:
     Actualizar().
 END.
@@ -262,8 +285,8 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY FILL-IN-21 FILL-IN-22 FILL-IN-23 FILL-IN-24 FILL-IN-25 FILL-IN-26 
       WITH FRAME Actualiza-Frame.
-  ENABLE FILL-IN-21 FILL-IN-22 FILL-IN-23 FILL-IN-24 FILL-IN-25 FILL-IN-26 
-         Btn_OK Btn_Cancel 
+  ENABLE Btn_Cancel FILL-IN-21 FILL-IN-22 FILL-IN-23 FILL-IN-24 FILL-IN-25 
+         FILL-IN-26 Btn_OK RECT-18 RECT-25 
       WITH FRAME Actualiza-Frame.
   VIEW FRAME Actualiza-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Actualiza-Frame}

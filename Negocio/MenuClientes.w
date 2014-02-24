@@ -70,7 +70,8 @@ PERSONA.A_MATERNO PERSONA.DOMICILIO PERSONA.F_NACIMIENTO PERSONA.CORREO
     ~{&OPEN-QUERY-BROWSE-2}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BROWSE-2 BUTTON-1 BUTTON-2 BUTTON-3 BUTTON-4 
+&Scoped-Define ENABLED-OBJECTS BUTTON-4 BROWSE-2 BUTTON-1 BUTTON-3 BUTTON-2 ~
+RECT-18 RECT-28 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -86,20 +87,29 @@ PERSONA.A_MATERNO PERSONA.DOMICILIO PERSONA.F_NACIMIENTO PERSONA.CORREO
 
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON BUTTON-1 
-     LABEL "Insertar" 
-     SIZE 15 BY 1.14.
+     LABEL "Agregar" 
+     SIZE 16 BY 1.86.
 
 DEFINE BUTTON BUTTON-2 
      LABEL "Eliminar" 
-     SIZE 15 BY 1.14.
+     SIZE 16 BY 1.91.
 
 DEFINE BUTTON BUTTON-3 
      LABEL "Actualizar" 
-     SIZE 15 BY 1.14.
+     SIZE 16 BY 1.86.
 
 DEFINE BUTTON BUTTON-4 
      LABEL "Salir" 
-     SIZE 15 BY 1.14.
+     SIZE 15 BY .95.
+
+DEFINE RECTANGLE RECT-18
+     EDGE-PIXELS 8  
+     SIZE 220 BY 2.1
+     BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-28
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 20 BY 7.86.
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -120,21 +130,28 @@ DEFINE BROWSE BROWSE-2
       PERSONA.CORREO FORMAT "X(50)":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 202 BY 4.52 EXPANDABLE.
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 183.2 BY 10.81
+         BGCOLOR 15  ROW-HEIGHT-CHARS .62 EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame
-     BROWSE-2 AT ROW 2.43 COL 10
-     BUTTON-1 AT ROW 8.62 COL 7
-     BUTTON-2 AT ROW 8.62 COL 29
-     BUTTON-3 AT ROW 8.62 COL 51
-     BUTTON-4 AT ROW 8.62 COL 214
-     SPACE(7.99) SKIP(2.33)
+     BUTTON-4 AT ROW 1.62 COL 203.8
+     BROWSE-2 AT ROW 4.24 COL 10.8
+     BUTTON-1 AT ROW 5.14 COL 200.4
+     BUTTON-3 AT ROW 7.57 COL 200.4
+     BUTTON-2 AT ROW 10 COL 200.6
+     RECT-18 AT ROW 1 COL 1
+     RECT-28 AT ROW 4.57 COL 198.2
+     "MENU CLIENTES PREFERENTES" VIEW-AS TEXT
+          SIZE 35 BY .62 AT ROW 1.76 COL 104
+          FGCOLOR 15 
+     SPACE(81.99) SKIP(13.56)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "Menu Clientes Preferentes".
+         BGCOLOR 8 
+         TITLE "Menu".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -154,7 +171,7 @@ DEFINE FRAME Dialog-Frame
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR DIALOG-BOX Dialog-Frame
                                                                         */
-/* BROWSE-TAB BROWSE-2 1 Dialog-Frame */
+/* BROWSE-TAB BROWSE-2 BUTTON-4 Dialog-Frame */
 ASSIGN 
        FRAME Dialog-Frame:SCROLLABLE       = FALSE
        FRAME Dialog-Frame:HIDDEN           = TRUE.
@@ -188,7 +205,7 @@ ASSIGN
 
 &Scoped-define SELF-NAME Dialog-Frame
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame Dialog-Frame
-ON WINDOW-CLOSE OF FRAME Dialog-Frame /* Menu Clientes Preferentes */
+ON WINDOW-CLOSE OF FRAME Dialog-Frame /* Menu */
 DO:
   APPLY "END-ERROR":U TO SELF.
 END.
@@ -199,7 +216,7 @@ END.
 
 &Scoped-define SELF-NAME BUTTON-1
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-1 Dialog-Frame
-ON CHOOSE OF BUTTON-1 IN FRAME Dialog-Frame /* Insertar */
+ON CHOOSE OF BUTTON-1 IN FRAME Dialog-Frame /* Agregar */
 DO:
 
   RUN InsertarClientes.w.
@@ -311,7 +328,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE BROWSE-2 BUTTON-1 BUTTON-2 BUTTON-3 BUTTON-4 
+  ENABLE BUTTON-4 BROWSE-2 BUTTON-1 BUTTON-3 BUTTON-2 RECT-18 RECT-28 
       WITH FRAME Dialog-Frame.
   VIEW FRAME Dialog-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame}

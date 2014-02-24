@@ -45,7 +45,7 @@ DEFINE STREAM outFile.
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Btn_Menu Btn_Propinas Btn_Inventario ~
-Btn_Ventas Btn_Facturas 
+Btn_Ventas Btn_Facturas RECT-18 RECT-28 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -78,25 +78,40 @@ DEFINE BUTTON Btn_Propinas
 
 DEFINE BUTTON Btn_Ventas 
      LABEL "Ventas" 
-     SIZE 20 BY 2.5.
+     SIZE 20 BY 2.52.
 
 DEFINE VARIABLE Edit_File AS CHARACTER 
      VIEW-AS EDITOR NO-WORD-WRAP SCROLLBAR-HORIZONTAL SCROLLBAR-VERTICAL
      SIZE 11 BY 2.38 NO-UNDO.
 
+DEFINE RECTANGLE RECT-18
+     EDGE-PIXELS 8  
+     SIZE 83 BY 2.19
+     BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-28
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 61 BY 12.38.
+
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_Reportes
-     Edit_File AT ROW 2.19 COL 5 NO-LABEL
-     Btn_Menu AT ROW 4.81 COL 5
-     Btn_Propinas AT ROW 4.81 COL 31
-     Btn_Inventario AT ROW 7.67 COL 5
-     Btn_Ventas AT ROW 7.67 COL 31
-     Btn_Facturas AT ROW 10.52 COL 5
-     SPACE(30.79) SKIP(0.81)
+     Btn_Menu AT ROW 5.81 COL 16.4
+     Btn_Propinas AT ROW 5.86 COL 46.4
+     Btn_Inventario AT ROW 9.67 COL 16.4
+     Btn_Ventas AT ROW 9.67 COL 46.4
+     Btn_Facturas AT ROW 13.48 COL 31.2
+     Edit_File AT ROW 17.33 COL 35 NO-LABEL
+     RECT-18 AT ROW 1 COL 1
+     RECT-28 AT ROW 4.81 COL 11
+     "MENU REPORTES" VIEW-AS TEXT
+          SIZE 19.8 BY 1.19 AT ROW 1.52 COL 34.4
+          BGCOLOR 8 FGCOLOR 15 FONT 68
+     SPACE(29.79) SKIP(16.99)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
+         BGCOLOR 8 
          TITLE "Reportes".
 
 
@@ -307,7 +322,8 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Btn_Menu Btn_Propinas Btn_Inventario Btn_Ventas Btn_Facturas 
+  ENABLE Btn_Menu Btn_Propinas Btn_Inventario Btn_Ventas Btn_Facturas RECT-18 
+         RECT-28 
       WITH FRAME Dlg_Reportes.
   VIEW FRAME Dlg_Reportes.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_Reportes}

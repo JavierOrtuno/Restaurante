@@ -43,7 +43,8 @@ DEFINE OUTPUT PARAMETER poutCharFechas AS CHARACTER.
 &Scoped-define FRAME-NAME DlgVentas
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Fill_Desde Fill_Hasta Btn_Aceptar 
+&Scoped-Define ENABLED-OBJECTS Fill_Desde Fill_Hasta Btn_Aceptar RECT-18 ~
+RECT-29 
 &Scoped-Define DISPLAYED-OBJECTS Fill_Desde Fill_Hasta 
 
 /* Custom List Definitions                                              */
@@ -66,23 +67,42 @@ DEFINE BUTTON Btn_Aceptar
 DEFINE VARIABLE Fill_Desde AS DATE FORMAT "99/99/99":U 
      LABEL "Desde" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 14 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE Fill_Hasta AS DATE FORMAT "99/99/99":U 
      LABEL "Hasta" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 14 BY 1
+     BGCOLOR 15  NO-UNDO.
+
+DEFINE RECTANGLE RECT-18
+     EDGE-PIXELS 8  
+     SIZE 60.4 BY 2.19
+     BGCOLOR 8 .
+
+DEFINE RECTANGLE RECT-29
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 41 BY 4.76.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME DlgVentas
-     Fill_Desde AT ROW 3.76 COL 9 COLON-ALIGNED
-     Fill_Hasta AT ROW 3.76 COL 39 COLON-ALIGNED
-     Btn_Aceptar AT ROW 6.24 COL 21.2
-     SPACE(17.19) SKIP(1.09)
+     Fill_Desde AT ROW 5.67 COL 25.8 COLON-ALIGNED
+     Fill_Hasta AT ROW 7.67 COL 25.8 COLON-ALIGNED
+     Btn_Aceptar AT ROW 10.62 COL 21
+     RECT-18 AT ROW 1 COL 1
+     RECT-29 AT ROW 4.81 COL 11
+     "VENTAS" VIEW-AS TEXT
+          SIZE 19.8 BY 1.19 AT ROW 1.52 COL 26.6
+          BGCOLOR 8 FGCOLOR 15 FONT 68
+     "Campos Requeridos:" VIEW-AS TEXT
+          SIZE 40 BY .62 AT ROW 4.1 COL 11.2
+     SPACE(10.19) SKIP(9.65)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
+         BGCOLOR 8 
          TITLE "Reportes de Ventas".
 
 
@@ -217,7 +237,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY Fill_Desde Fill_Hasta 
       WITH FRAME DlgVentas.
-  ENABLE Fill_Desde Fill_Hasta Btn_Aceptar 
+  ENABLE Fill_Desde Fill_Hasta Btn_Aceptar RECT-18 RECT-29 
       WITH FRAME DlgVentas.
   VIEW FRAME DlgVentas.
   {&OPEN-BROWSERS-IN-QUERY-DlgVentas}

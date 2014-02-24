@@ -44,9 +44,8 @@ DEFINE STREAM outFile.
 &Scoped-define FRAME-NAME Dlg_Reportes
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Edit_File Btn_Menu Btn_Inventario ~
-Btn_Facturas Btn_Propinas Btn_Ventas 
-&Scoped-Define DISPLAYED-OBJECTS Edit_File 
+&Scoped-Define ENABLED-OBJECTS Btn_Menu Btn_Propinas Btn_Inventario ~
+Btn_Ventas Btn_Facturas 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -83,19 +82,19 @@ DEFINE BUTTON Btn_Ventas
 
 DEFINE VARIABLE Edit_File AS CHARACTER 
      VIEW-AS EDITOR NO-WORD-WRAP SCROLLBAR-HORIZONTAL SCROLLBAR-VERTICAL
-     SIZE 62 BY 20.95 NO-UNDO.
+     SIZE 11 BY 2.38 NO-UNDO.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dlg_Reportes
      Edit_File AT ROW 2.19 COL 5 NO-LABEL
-     Btn_Menu AT ROW 3.86 COL 81
-     Btn_Inventario AT ROW 6.71 COL 81
-     Btn_Facturas AT ROW 9.57 COL 81
-     Btn_Propinas AT ROW 12.43 COL 81
-     Btn_Ventas AT ROW 15.29 COL 81
-     SPACE(85.79) SKIP(8.53)
+     Btn_Menu AT ROW 4.81 COL 5
+     Btn_Propinas AT ROW 4.81 COL 31
+     Btn_Inventario AT ROW 7.67 COL 5
+     Btn_Ventas AT ROW 7.67 COL 31
+     Btn_Facturas AT ROW 10.52 COL 5
+     SPACE(30.79) SKIP(0.81)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Reportes".
@@ -121,6 +120,11 @@ DEFINE FRAME Dlg_Reportes
 ASSIGN 
        FRAME Dlg_Reportes:SCROLLABLE       = FALSE
        FRAME Dlg_Reportes:HIDDEN           = TRUE.
+
+/* SETTINGS FOR EDITOR Edit_File IN FRAME Dlg_Reportes
+   NO-DISPLAY NO-ENABLE                                                 */
+ASSIGN 
+       Edit_File:HIDDEN IN FRAME Dlg_Reportes           = TRUE.
 
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
@@ -303,9 +307,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  DISPLAY Edit_File 
-      WITH FRAME Dlg_Reportes.
-  ENABLE Edit_File Btn_Menu Btn_Inventario Btn_Facturas Btn_Propinas Btn_Ventas 
+  ENABLE Btn_Menu Btn_Propinas Btn_Inventario Btn_Ventas Btn_Facturas 
       WITH FRAME Dlg_Reportes.
   VIEW FRAME Dlg_Reportes.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_Reportes}

@@ -32,33 +32,32 @@
 DEF INPUT PARAMETER inintIDUsuario AS INT.
 
 /* Local Variable Definitions ---                                       */
-
-DEF VAR vchrDescripcion AS CHAR.
+DEF VAR vlogBandera AS LOG.
+DEF VAR vlogSemaforo AS LOG.
 DEF VAR vintCantidad AS INT.
-DEF VAR vchrFolio AS CHAR.
-DEF VAR vdteFecha AS DATE.
-DEF VAR vchrEntrada AS CHAR.
-DEF VAR vchrSalida AS CHAR.
+DEF VAR vintTotal AS INT.
+DEF VAR vintIDProducto AS INT.
+DEF VAR vintEntradas AS INT.
+DEF VAR vintContador AS INT.
+DEF VAR vintPedido AS INT.
+DEF VAR vintLongitud1 AS INT.
+DEF VAR vintLongitud2 AS INT.
+DEF VAR vintIDMenu AS INT.
+DEF VAR vintDistancia AS INT. 
+DEF VAR vintDescuento AS INT.
+DEF VAR vintPosicion2 AS INT INIT 2.
+DEF VAR vintPosicion AS INT INIT 3.
 DEF VAR vdecPropina AS DEC.
 DEF VAR vdecSubtotal AS DEC.
 DEF VAR vdecIVA AS DEC.
 DEF VAR vdecTotal AS DEC.
 DEF VAR vdecCuenta AS DEC.
-DEF VAR vlogBandera AS LOG.
-DEF VAR vintTotal AS INT.
-DEF VAR vlogSemaforo AS LOG.
-DEF VAR vintPedido AS INT.
-DEF VAR vintLongitud1 AS INT.
-DEF VAR vintLongitud2 AS INT.
 DEF VAR vdecPrecio AS DEC.
-DEF VAR vintIDProducto AS INT.
-DEF VAR vintEntradas AS INT.
-DEF VAR vintContador AS INT.
-DEF VAR vintPosicion2 AS INT INIT 2.
-DEF VAR vintIDMenu AS INT.
-DEF VAR vintDistancia AS INT. 
-DEF VAR vintDescuento AS INT.
-DEF VAR vintPosicion AS INT INIT 3.
+DEF VAR vchrEntrada AS CHAR.
+DEF VAR vchrSalida AS CHAR.
+DEF VAR vchrFolio AS CHAR.
+DEF VAR vchrDescripcion AS CHAR.
+DEF VAR vdteFecha AS DATE.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME

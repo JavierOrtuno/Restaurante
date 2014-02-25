@@ -30,9 +30,8 @@
 /* Parameters Definitions ---                                           */
 
 /* Local Variable Definitions ---                                       */
-
-DEF VAR crowid AS ROWID.
 DEF VAR vlogOK AS LOG.
+DEF VAR crowid AS ROWID.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -147,7 +146,7 @@ DEFINE FRAME Dialog-Frame
      "MENU CLIENTES PREFERENTES" VIEW-AS TEXT
           SIZE 35 BY .62 AT ROW 1.76 COL 104
           FGCOLOR 15 
-     SPACE(81.99) SKIP(13.56)
+     SPACE(82.00) SKIP(13.56)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -220,7 +219,6 @@ ON CHOOSE OF BUTTON-1 IN FRAME Dialog-Frame /* Agregar */
 DO:
 
   RUN InsertarClientes.w.
-  /*FRAME Insertar-Frame:VISIBLE = TRUE.*/
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -232,13 +230,11 @@ END.
 ON CHOOSE OF BUTTON-2 IN FRAME Dialog-Frame /* Eliminar */
 DO:
     FIND CURRENT Persona.
-
     IF Cliente.ID_Persona = Persona.ID_Persona
-        THEN DO TRANSACTION:
+    THEN DO TRANSACTION:
             DELETE Cliente.
             DELETE Persona.
-        END. 
-
+         END. 
 END.
 
 /* _UIB-CODE-BLOCK-END */

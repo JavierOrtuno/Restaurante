@@ -29,7 +29,7 @@
 
 /* Parameters Definitions ---                                           */
 
-/*DEF INPUT PARAMETER inintIDUsuario AS INT.*/
+DEF INPUT PARAMETER inintIDUsuario AS INT.
 
 /* Local Variable Definitions ---                                       */
 
@@ -466,16 +466,11 @@ DO:
   vchrSalida = HoraSalida:SCREEN-VALUE.
   vdecPropina = DEC(Propina:SCREEN-VALUE).
 
-  MESSAGE vdecSubtotal VIEW-AS ALERT-BOX.
-  MESSAGE vdecIVA VIEW-AS ALERT-BOX.
-  MESSAGE vdecTotal VIEW-AS ALERT-BOX.
-
   IF vdecSubtotal <> 0 AND vdecIVA <> 0 AND vdecTotal <> 0 
   THEN DO:
 
   RUN LlenarComanda(vdteFecha,vchrEntrada,vchrSalida,vdecPropina).
   RUN LlenarFactura(vdecSubtotal,vdecIVA,vdecTotal).
-  RUN LlenarConsumo(vintCantidad).
 
  vintEntradas = NUM-ENTRIES(TRIM(SELECT-1:LIST-ITEM-PAIRS,",")).
 
@@ -484,6 +479,7 @@ DO:
     vintCantidad = INT(ENTRY(2,ENTRY(vintPosicion,STRING(Trim(SELECT-1:LIST-ITEM-PAIRS,","))),"/")).
     vintPosicion2 = vintPosicion2 + 2.
     vintIDMenu = INT(ENTRY(vintPosicion2,STRING(Trim(SELECT-1:LIST-ITEM-PAIRS,",")))).
+    RUN LlenarConsumo(vintCantidad,vintIDMenu).
     FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = vintIDMenu.
         vintIDProducto = Ingrediente.ID_Producto.
         vintDescuento = vintCantidad * Ingrediente.Cantidad.

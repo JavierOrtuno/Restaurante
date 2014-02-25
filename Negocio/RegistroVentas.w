@@ -29,7 +29,7 @@
 
 /* Parameters Definitions ---                                           */
 
-DEF INPUT PARAMETER inintIDUsuario AS INT.
+/*DEF INPUT PARAMETER inintIDUsuario AS INT.*/
 
 /* Local Variable Definitions ---                                       */
 
@@ -466,6 +466,13 @@ DO:
   vchrSalida = HoraSalida:SCREEN-VALUE.
   vdecPropina = DEC(Propina:SCREEN-VALUE).
 
+  MESSAGE vdecSubtotal VIEW-AS ALERT-BOX.
+  MESSAGE vdecIVA VIEW-AS ALERT-BOX.
+  MESSAGE vdecTotal VIEW-AS ALERT-BOX.
+
+  IF vdecSubtotal <> 0 AND vdecIVA <> 0 AND vdecTotal <> 0 
+  THEN DO:
+
   RUN LlenarComanda(vdteFecha,vchrEntrada,vchrSalida,vdecPropina).
   RUN LlenarFactura(vdecSubtotal,vdecIVA,vdecTotal).
   RUN LlenarConsumo(vintCantidad).
@@ -480,11 +487,12 @@ DO:
     FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = vintIDMenu.
         vintIDProducto = Ingrediente.ID_Producto.
         vintDescuento = vintCantidad * Ingrediente.Cantidad.
-        DescontarExistencia(vintIDProducto,vintDescuento,1,inintIDUsuario).
+        DescontarExistencia(vintIDProducto,vintDescuento,1).
     END.
     vintPosicion = vintPosicion + 2.
  END.
-
+  END.
+  ELSE MESSAGE "No se pueden hacer facturas con venta nula" VIEW-AS ALERT-BOX.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -544,10 +552,6 @@ ON LEFT-MOUSE-DBLCLICK OF SELECT-1 IN FRAME RegVenta-Frame
 DO:
   vintPedido = INT(ENTRY(2,SELECT-1:LIST-ITEM-PAIRS,"/")).
   vdecPrecio = DEC(ENTRY(1,TRIM(ENTRY(3,SELECT-1:LIST-ITEM-PAIRS,"/"),"$"),",")).
-
-
-  MESSAGE vintPedido VIEW-AS ALERT-BOX.
-  MESSAGE vdecPrecio VIEW-AS ALERT-BOX.
 
   vdecSubtotal = DEC(Subtotal:SCREEN-VALUE) - (vintPedido * vdecPrecio).
   vdecIVA = CalcularIVA(vdecSubtotal).

@@ -45,8 +45,8 @@
 &Scoped-define FRAME-NAME Dialog-Frame-Login
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Fill-Usuario Fill-Contrasena Bttn-Salir ~
-Btn_OK RECT-16 RECT-17 
+&Scoped-Define ENABLED-OBJECTS Fill-Usuario Fill-Contrasena Btn_OK ~
+Bttn-Salir IMAGE-1 RECT-18 
 &Scoped-Define DISPLAYED-OBJECTS Fill-Usuario Fill-Contrasena 
 
 /* Custom List Definitions                                              */
@@ -64,12 +64,12 @@ Btn_OK RECT-16 RECT-17
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn_OK AUTO-GO 
      LABEL "Ingresar" 
-     SIZE 15 BY 1.14
+     SIZE 15 BY 1.86
      BGCOLOR 8 .
 
 DEFINE BUTTON Bttn-Salir 
      LABEL "&Salir" 
-     SIZE 15 BY 1.14.
+     SIZE 15 BY 1.81.
 
 DEFINE VARIABLE Fill-Contrasena AS CHARACTER FORMAT "X(256)":U 
      LABEL "Contraseña" 
@@ -83,35 +83,25 @@ DEFINE VARIABLE Fill-Usuario AS CHARACTER FORMAT "X(256)":U
      SIZE 40 BY 1
      BGCOLOR 15 FGCOLOR 0  NO-UNDO.
 
-DEFINE RECTANGLE RECT-14
-     EDGE-PIXELS 8  
-     SIZE 141 BY 27.14
-     BGCOLOR 8 .
+DEFINE IMAGE IMAGE-1
+     FILENAME "Imagenes/le_seminare.gif":U
+     SIZE 140 BY 27.14.
 
-DEFINE RECTANGLE RECT-16
+DEFINE RECTANGLE RECT-18
      EDGE-PIXELS 2 GRAPHIC-EDGE  
-     SIZE 83 BY 12.62.
-
-DEFINE RECTANGLE RECT-17
-     EDGE-PIXELS 8  
-     SIZE 75.6 BY 2.14
-     BGCOLOR 8 .
+     SIZE 70 BY 9.14.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Dialog-Frame-Login
-     Fill-Usuario AT ROW 14.52 COL 57.2 COLON-ALIGNED
-     Fill-Contrasena AT ROW 16.48 COL 56.8 COLON-ALIGNED BLANK 
-     Bttn-Salir AT ROW 21.05 COL 39.2
-     Btn_OK AT ROW 21.05 COL 90.6
-     RECT-14 AT ROW 1 COL 1
-     RECT-16 AT ROW 10.81 COL 30.6
-     RECT-17 AT ROW 4.33 COL 35.2
-     "Bienvenido al Sistema le Seminaré" VIEW-AS TEXT
-          SIZE 70.2 BY 1.19 AT ROW 4.81 COL 38.6
-          BGCOLOR 8 FGCOLOR 15 FONT 70
-     SPACE(33.20) SKIP(22.18)
+     Fill-Usuario AT ROW 14.29 COL 57.2 COLON-ALIGNED
+     Fill-Contrasena AT ROW 16.19 COL 56.8 COLON-ALIGNED BLANK 
+     Btn_OK AT ROW 19 COL 89.6
+     Bttn-Salir AT ROW 19.05 COL 40.8
+     IMAGE-1 AT ROW 1 COL 1
+     RECT-18 AT ROW 12.52 COL 37.6
+     SPACE(33.39) SKIP(6.52)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 15 FGCOLOR 0 
@@ -139,8 +129,6 @@ ASSIGN
        FRAME Dialog-Frame-Login:SCROLLABLE       = FALSE
        FRAME Dialog-Frame-Login:HIDDEN           = TRUE.
 
-/* SETTINGS FOR RECTANGLE RECT-14 IN FRAME Dialog-Frame-Login
-   NO-ENABLE                                                            */
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
 
@@ -300,7 +288,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY Fill-Usuario Fill-Contrasena 
       WITH FRAME Dialog-Frame-Login.
-  ENABLE Fill-Usuario Fill-Contrasena Bttn-Salir Btn_OK RECT-16 RECT-17 
+  ENABLE Fill-Usuario Fill-Contrasena Btn_OK Bttn-Salir IMAGE-1 RECT-18 
       WITH FRAME Dialog-Frame-Login.
   VIEW FRAME Dialog-Frame-Login.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame-Login}

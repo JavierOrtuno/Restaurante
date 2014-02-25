@@ -394,7 +394,6 @@ PROCEDURE asignarValores :
             Fill_FNac:SCREEN-VALUE = STRING(Persona.F_Nacimiento).     Fill_Direccion:SCREEN-VALUE = Persona.Domicilio.
             Fill_Curp:SCREEN-VALUE = Persona.Curp.                     Fill_Rfc:SCREEN-VALUE = Persona.Rfc.
             Fill_Correo:SCREEN-VALUE = Persona.Correo.                 Fill_Rol:SCREEN-VALUE = Rol.Descripcion.
-            ASSIGN combo_rol:SCREEN-VALUE = STRING(Rol.ID_ROL).
         END.
         WHEN 3 THEN DO: 
             Fill_Usuario:SCREEN-VALUE IN FRAME {&FRAME-NAME}= USUARIO.USUARIO.

@@ -78,13 +78,6 @@ FUNCTION HoraEntrada RETURNS CHARACTER
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD ListarMenu Include 
-FUNCTION ListarMenu RETURNS CHARACTER
-  ( /* parameter-definitions */ )  FORWARD.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD ValidarFrame Include 
 FUNCTION ValidarFrame RETURNS LOGICAL
   ( /* parameter-definitions */ )  FORWARD.
@@ -170,6 +163,7 @@ PROCEDURE LlenarConsumo :
   Notes:       
 ------------------------------------------------------------------------------*/
 DEF INPUT PARAMETER inintCantidad AS INT.
+DEF INPUT PARAMETER inintIDMenu AS INT.
     
 DO TRANSACTION:
     CREATE Consumo.
@@ -177,9 +171,7 @@ DO TRANSACTION:
     Consumo.ID_Consumo = NEXT-VALUE(SEC_CONSUMO).
 
     Consumo.Cantidad = inintCantidad.
-    
-    FIND CURRENT MENU.
-    Consumo.ID_Menu = MENU.ID_Menu.
+    Consumo.ID_Menu = inintIDMenu.
 
     FIND CURRENT Comanda.
     Consumo.ID_Comanda = Comanda.ID_Comanda.
@@ -387,34 +379,6 @@ FUNCTION HoraEntrada RETURNS CHARACTER
   ELSE vchrHora = STRING(23 - hour) + ":" + STRING(59 - minute).
 
   RETURN vchrHora.   /* Function return value. */
-
-END FUNCTION.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION ListarMenu Include 
-FUNCTION ListarMenu RETURNS CHARACTER
-  ( /* parameter-definitions */ ) :
-/*------------------------------------------------------------------------------
-  Purpose:  
-    Notes:  
-------------------------------------------------------------------------------*/
-  DEF VAR vchrLista AS CHAR.
-  DEF VAR vintCantidad AS INT.
-
-  FOR EACH MENU:
-      FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = MENU.ID_Menu:
-          vintCantidad = Ingrediente.Cantidad.
-          FOR EACH Producto:
-              FOR EACH Stock WHERE Stock.ID_Producto = Producto.ID_Producto.
-                  vchrLista = vchrLista + string(MENU.Descripcion) + " " + STRING(MENU.Precio).
-              END.
-          END.
-      END.
-  END.
-
-  RETURN vchrLista.   /* Function return value. */
 
 END FUNCTION.
 

@@ -29,7 +29,7 @@
 
 /* Parameters Definitions ---                                           */
 
-DEF INPUT PARAM inintIdUsuario AS INT.
+/*DEF INPUT PARAMETER inintIDUsuario AS INT.*/
 
 /* Local Variable Definitions ---                                       */
 
@@ -480,7 +480,7 @@ DO:
     FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = vintIDMenu.
         vintIDProducto = Ingrediente.ID_Producto.
         vintDescuento = vintCantidad * Ingrediente.Cantidad.
-        DescontarExistencia(vintIDProducto,vintDescuento,1,inintIdUsuario).
+        DescontarExistencia(vintIDProducto,vintDescuento,1).
     END.
     vintPosicion = vintPosicion + 2.
  END.
@@ -526,14 +526,28 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Propina
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Propina RegVenta-Frame
+ON VALUE-CHANGED OF Propina IN FRAME RegVenta-Frame /* Propina */
+DO:
+    vdecTotal = CalcularTotal(vdecSubtotal,vdecIVA) + DEC(Propina:SCREEN-VALUE).
+    TOTAL:SCREEN-VALUE = STRING(vdecTotal).
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &Scoped-define SELF-NAME SELECT-1
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL SELECT-1 RegVenta-Frame
 ON LEFT-MOUSE-DBLCLICK OF SELECT-1 IN FRAME RegVenta-Frame
 DO:
-  vintLongitud1 = LENGTH(ENTRY(1,SELECT-1:SCREEN-VALUE,"/")).
-  vintLongitud2 = LENGTH(ENTRY(1,SELECT-1:SCREEN-VALUE,"$")).
-  vintPedido = INT(SUBSTR(SELECT-1:SCREEN-VALUE,vintLongitud1 + 2,vintLongitud2 - vintLongitud1 - 2)).
-  vdecPrecio = DEC(SUBSTR(SELECT-1:SCREEN-VALUE,vintLongitud2 + 2)).
+  vintPedido = INT(ENTRY(2,SELECT-1:LIST-ITEM-PAIRS,"/")).
+  vdecPrecio = DEC(ENTRY(1,TRIM(ENTRY(3,SELECT-1:LIST-ITEM-PAIRS,"/"),"$"),",")).
+
+
+  MESSAGE vintPedido VIEW-AS ALERT-BOX.
+  MESSAGE vdecPrecio VIEW-AS ALERT-BOX.
 
   vdecSubtotal = DEC(Subtotal:SCREEN-VALUE) - (vintPedido * vdecPrecio).
   vdecIVA = CalcularIVA(vdecSubtotal).

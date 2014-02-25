@@ -111,6 +111,17 @@ FUNCTION getReporteVentas RETURNS CHARACTER
 
 &ENDIF
 
+&IF DEFINED(EXCLUDE-hayIngredientes) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD hayIngredientes Method-Library 
+FUNCTION hayIngredientes RETURNS LOGICAL
+    ( INPUT vintIdMenu AS INTEGER )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 
 /* *********************** Procedure Settings ************************ */
 
@@ -365,20 +376,22 @@ FUNCTION getReporteMenu RETURNS CHARACTER
     DEFINE VARIABLE vlogPrev AS LOGICAL.
     
     FOR EACH MENU BY MENU.ID_CLASIFICACION:
-        IF vintBandera <> MENU.ID_CLASIFICACION THEN DO:
-            IF vlogPrev = TRUE THEN DO:
-                vcharReporte = vcharReporte + "</ul>~n</div>~n".
-                vlogPrev = FALSE.
+        IF hayIngredientes(MENU.ID_MENU) THEN DO:       
+            IF vintBandera <> MENU.ID_CLASIFICACION THEN DO:
+                IF vlogPrev = TRUE THEN DO:
+                    vcharReporte = vcharReporte + "</ul>~n</div>~n".
+                    vlogPrev = FALSE.
+                END.
+                vcharReporte = vcharReporte + "<div class='clasificacion shadow'>~n".
+                vcharReporte = vcharReporte + "<div class='titulo text-shadow'>" + getDescClasificacion(MENU.ID_CLASIFICACION) + "</div>~n".
+                vcharReporte = vcharReporte + "<ul>~n".
+                vcharReporte = vcharReporte + "<li>" + MENU.DESCRIPCION + "<div>$" + STRING(MENU.PRECIO) + "</div></li>~n".
+                vlogPrev = TRUE.
             END.
-            vcharReporte = vcharReporte + "<div class='clasificacion shadow'>~n".
-            vcharReporte = vcharReporte + "<div class='titulo text-shadow'>" + getDescClasificacion(MENU.ID_CLASIFICACION) + "</div>~n".
-            vcharReporte = vcharReporte + "<ul>~n".
-            vcharReporte = vcharReporte + "<li>" + MENU.DESCRIPCION + "<div>$" + STRING(MENU.PRECIO) + "</div></li>~n".
-            vlogPrev = TRUE.
+            ELSE
+                vcharReporte = vcharReporte + "<li>" + MENU.DESCRIPCION + "<div>$" + STRING(MENU.PRECIO) + "</div></li>~n".
+            vintBandera = MENU.ID_CLASIFICACION.
         END.
-        ELSE
-            vcharReporte = vcharReporte + "<li>" + MENU.DESCRIPCION + "<div>$" + STRING(MENU.PRECIO) + "</div></li>~n".
-        vintBandera = MENU.ID_CLASIFICACION.
     END.
     IF vlogPrev = TRUE THEN
         vcharReporte = vcharReporte + "</ul>~n</div>~n".
@@ -570,6 +583,38 @@ FUNCTION getReporteVentas RETURNS CHARACTER
     END.
 
     RETURN vcharReporte.
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
+&IF DEFINED(EXCLUDE-hayIngredientes) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION hayIngredientes Method-Library 
+FUNCTION hayIngredientes RETURNS LOGICAL
+    ( INPUT vintIdMenu AS INTEGER ) :
+    /*------------------------------------------------------------------------------
+        Purpose:  
+        Notes:  
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vintCantidad AS INTEGER.
+    DEFINE VARIABLE vlogResponse AS LOGICAL INITIAL TRUE.
+    
+    FOR EACH INGREDIENTE WHERE INGREDIENTE.ID_MENU = vintIdMenu:
+        vintCantidad = 0.
+        FOR EACH STOCK WHERE STOCK.ID_PRODUCTO = INGREDIENTE.ID_PRODUCTO AND 
+            STOCK.F_CADUCIDAD > TODAY AND STOCK.CANTIDAD > 0:
+            vintCantidad = vintCantidad + STOCK.CANTIDAD.            
+        END.
+        IF INGREDIENTE.CANTIDAD > vintCantidad THEN DO:
+            vlogResponse = FALSE.
+            LEAVE.
+        END.
+    END.
+
+    RETURN vlogResponse.
 END FUNCTION.
 
 /* _UIB-CODE-BLOCK-END */

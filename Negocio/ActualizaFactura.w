@@ -46,9 +46,9 @@ DEF INPUT PARAMETER crowid AS ROWID.
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS FILL-IN-14 FILL-IN-15 FILL-IN-17 FILL-IN-18 ~
-FILL-IN-19 COMBO-BOX-2 COMBO-BOX-1 Btn_OK Btn_Cancel 
+FILL-IN-19 COMBO-BOX-2 COMBO-BOX-1 FILL-IN-21 Btn_OK Btn_Cancel 
 &Scoped-Define DISPLAYED-OBJECTS FILL-IN-14 FILL-IN-15 FILL-IN-17 ~
-FILL-IN-18 FILL-IN-19 COMBO-BOX-2 COMBO-BOX-1 
+FILL-IN-18 FILL-IN-19 COMBO-BOX-2 COMBO-BOX-1 FILL-IN-21 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -116,6 +116,11 @@ DEFINE VARIABLE FILL-IN-19 AS CHARACTER FORMAT "X(8)":U
      VIEW-AS FILL-IN 
      SIZE 14 BY 1 NO-UNDO.
 
+DEFINE VARIABLE FILL-IN-21 AS CHARACTER FORMAT "99:99":U 
+     LABEL "Hora Salida" 
+     VIEW-AS FILL-IN 
+     SIZE 14 BY 1 NO-UNDO.
+
 
 /* ************************  Frame Definitions  *********************** */
 
@@ -127,9 +132,10 @@ DEFINE FRAME Actualiza-Frame
      FILL-IN-19 AT ROW 7.91 COL 23 COLON-ALIGNED
      COMBO-BOX-2 AT ROW 9.57 COL 23 COLON-ALIGNED
      COMBO-BOX-1 AT ROW 11 COL 23 COLON-ALIGNED
-     Btn_OK AT ROW 13.14 COL 12
-     Btn_Cancel AT ROW 13.14 COL 33
-     SPACE(8.39) SKIP(0.95)
+     FILL-IN-21 AT ROW 12.91 COL 22 COLON-ALIGNED
+     Btn_OK AT ROW 14.81 COL 11
+     Btn_Cancel AT ROW 14.81 COL 28
+     SPACE(13.39) SKIP(1.23)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          TITLE "Actualiza Factura"
@@ -200,6 +206,10 @@ DO:
     ASSIGN 
         Factura.ID_Estatus = INT(COMBO-BOX-1:SCREEN-VALUE).
         Factura.ID_Pago = INT(COMBO-BOX-2:SCREEN-VALUE).
+
+   FIND Comanda WHERE Factura.ID_Comanda = Comanda.ID_Comanda.
+   ASSIGN
+       Comanda.Hora_Salida = FILL-IN-21:SCREEN-VALUE.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -283,10 +293,10 @@ PROCEDURE enable_UI :
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
   DISPLAY FILL-IN-14 FILL-IN-15 FILL-IN-17 FILL-IN-18 FILL-IN-19 COMBO-BOX-2 
-          COMBO-BOX-1 
+          COMBO-BOX-1 FILL-IN-21 
       WITH FRAME Actualiza-Frame.
   ENABLE FILL-IN-14 FILL-IN-15 FILL-IN-17 FILL-IN-18 FILL-IN-19 COMBO-BOX-2 
-         COMBO-BOX-1 Btn_OK Btn_Cancel 
+         COMBO-BOX-1 FILL-IN-21 Btn_OK Btn_Cancel 
       WITH FRAME Actualiza-Frame.
   VIEW FRAME Actualiza-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Actualiza-Frame}

@@ -208,6 +208,7 @@ DO:
   FIND CURRENT Factura.
   crowid = ROWID(Factura).
   RUN ActualizaFactura.w(crowid).
+  {&OPEN-query-BROWSE-21}
 END.
 
 /* _UIB-CODE-BLOCK-END */

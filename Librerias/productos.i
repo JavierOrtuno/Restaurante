@@ -189,7 +189,7 @@ PROCEDURE updateProducto :
     DEFINE INPUT PARAMETER pinIntCantidad AS INTEGER.
     DEFINE INPUT PARAMETER pinIntUnidad AS INTEGER.
     
-    FIND PRODUCTO WHERE ROWID(PRODUCTO) = pinIntRowId.
+    FIND PRODUCTO WHERE ROWID(PRODUCTO) = pinIntRowId NO-ERROR.
     ASSIGN 
         PRODUCTO.CODIGO = TRIM(pinCharCodigo)
         PRODUCTO.DESCRIPCION = TRIM(pinCharDescripcion)
@@ -294,7 +294,7 @@ FUNCTION getDescProducto RETURNS CHARACTER
         Purpose:  Obtener la Descripción de un Producto
         Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
-    FIND FIRST PRODUCTO WHERE ID_PRODUCTO = vintIdProducto.
+    FIND FIRST PRODUCTO WHERE ID_PRODUCTO = vintIdProducto NO-ERROR.
 
     RETURN PRODUCTO.DESCRIPCION.
 END FUNCTION.
@@ -316,7 +316,7 @@ FUNCTION getUnidadMedida RETURNS CHARACTER
     DEFINE VARIABLE vcharUnidadMedida AS CHARACTER INITIAL "".
 
     FIND FIRST UNIDAD_MEDIDA 
-        WHERE UNIDAD_MEDIDA.ID_UNIDAD = vintIdUnidad NO-LOCK.    
+        WHERE UNIDAD_MEDIDA.ID_UNIDAD = vintIdUnidad NO-LOCK NO-ERROR.
     vcharUnidadMedida = UNIDAD_MEDIDA.DESCRIPCION.
 
     RETURN vcharUnidadMedida.

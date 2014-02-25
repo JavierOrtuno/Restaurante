@@ -195,7 +195,7 @@ PROCEDURE getProporciones :
     
     IF TRIM(pinCharFechas) = "#" THEN DO:
         FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0:
-            FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
+            FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA NO-ERROR.
             poutDecTotal = poutDecTotal + COMANDA.PROPINA.
         END.
     END.
@@ -203,7 +203,7 @@ PROCEDURE getProporciones :
         IF TRIM(ENTRY(1, pinCharFechas, "#")) = "" THEN DO:
             FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
                 FACTURA.FECHA <= DATE(ENTRY(2, pinCharFechas, "#")):       
-                    FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
+                    FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA NO-ERROR.
                     poutDecTotal = poutDecTotal + COMANDA.PROPINA.
             END.
         END.
@@ -211,7 +211,7 @@ PROCEDURE getProporciones :
             IF TRIM(ENTRY(2, pinCharFechas, "#")) = "" THEN DO:
                 FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
                     FACTURA.FECHA >= DATE(ENTRY(1, pinCharFechas, "#")):
-                        FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
+                        FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA NO-ERROR.
                         poutDecTotal = poutDecTotal + COMANDA.PROPINA.
                 END.
             END.
@@ -219,7 +219,7 @@ PROCEDURE getProporciones :
                 FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
                     FACTURA.FECHA >= DATE(ENTRY(1, pinCharFechas, "#")) AND
                     FACTURA.FECHA <= DATE(ENTRY(2, pinCharFechas, "#")):       
-                        FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
+                        FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA NO-ERROR.
                         poutDecTotal = poutDecTotal + COMANDA.PROPINA.
                 END.
             END.
@@ -262,7 +262,7 @@ FUNCTION getDescClasificacion RETURNS CHARACTER
         Purpose: Obtener la Descripción de Una Clasificación. 
         Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
-    FIND FIRST CLASIFICACION WHERE CLASIFICACION.ID_CLASIFICACION = vintIdClasificacion.
+    FIND FIRST CLASIFICACION WHERE CLASIFICACION.ID_CLASIFICACION = vintIdClasificacion NO-ERROR.
 
     RETURN CLASIFICACION.DESCRIPCION.
 END FUNCTION.
@@ -283,12 +283,12 @@ FUNCTION getReporteFactura RETURNS CHARACTER
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vcharReporte AS CHARACTER.
 
-    FIND FIRST FACTURA WHERE FACTURA.ID_FACTURA = vintFactura.
-    FIND FIRST FORMA_PAGO WHERE FORMA_PAGO.ID_PAGO = FACTURA.ID_PAGO.
-    FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
-    FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA.
-    FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO.
-    FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+    FIND FIRST FACTURA WHERE FACTURA.ID_FACTURA = vintFactura NO-ERROR.
+    FIND FIRST FORMA_PAGO WHERE FORMA_PAGO.ID_PAGO = FACTURA.ID_PAGO NO-ERROR.
+    FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA NO-ERROR.
+    FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA NO-ERROR.
+    FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO NO-ERROR.
+    FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA NO-ERROR.
 
     vcharReporte = vcharReporte + "<thead>~n<tr>~n".
     vcharReporte = vcharReporte + "<th colspan='2'>Folio: " + FACTURA.FOLIO + "</th>~n".
@@ -299,7 +299,7 @@ FUNCTION getReporteFactura RETURNS CHARACTER
     
     vcharReporte = vcharReporte + "<tbody>~n".
     FOR EACH CONSUMO WHERE CONSUMO.ID_COMANDA = COMANDA.ID_COMANDA:
-        FIND FIRST MENU WHERE MENU.ID_MENU = CONSUMO.ID_MENU.
+        FIND FIRST MENU WHERE MENU.ID_MENU = CONSUMO.ID_MENU NO-ERROR.
         vcharReporte = vcharReporte + "<tr>~n".
         vcharReporte = vcharReporte + "<td style='width: 5%'>" + STRING(CONSUMO.CANTIDAD) + "</td>~n".
         vcharReporte = vcharReporte + "<td style='width: 65%'>" + MENU.DESCRIPCION + "</td>~n".
@@ -344,8 +344,8 @@ FUNCTION getReporteInventario RETURNS CHARACTER
     DEFINE VARIABLE vcharReporte AS CHARACTER.
 
     FOR EACH STOCK BY STOCK.CANTIDAD DESC:
-        FIND FIRST PRODUCTO WHERE PRODUCTO.ID_PRODUCTO = STOCK.ID_PRODUCTO.
-        FIND FIRST UNIDAD_MEDIDA WHERE UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD.
+        FIND FIRST PRODUCTO WHERE PRODUCTO.ID_PRODUCTO = STOCK.ID_PRODUCTO NO-ERROR.
+        FIND FIRST UNIDAD_MEDIDA WHERE UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD NO-ERROR.
         IF STOCK.CANTIDAD <= 0 OR STOCK.F_CADUCIDAD <= TODAY THEN
             vcharReporte = vcharReporte + "<tr class='alta'>~n".
         ELSE
@@ -426,7 +426,7 @@ FUNCTION getReportePedido RETURNS CHARACTER
             STOCK.F_CADUCIDAD > TODAY:
                 vintCantidad = vintCantidad + STOCK.CANTIDAD.
         END.
-        FIND FIRST UNIDAD_MEDIDA WHERE UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD.
+        FIND FIRST UNIDAD_MEDIDA WHERE UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD NO-ERROR.
         IF PRODUCTO.CANT_MINIMA >= vintCantidad THEN DO:
             vcharReporte = vcharReporte + "<td>" + PRODUCTO.CODIGO + "</td>~n".
             vcharReporte = vcharReporte + "<td>" + PRODUCTO.DESCRIPCION + "</td>~n".
@@ -465,7 +465,7 @@ FUNCTION getReportePropinas RETURNS CHARACTER
     vcharReporte = vcharReporte + "<td colspan='2' class='left'>MESEROS</td>~n</tr>~n".
 
     FOR EACH EMPLEADO WHERE EMPLEADO.ID_ROL = 2:
-        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA NO-ERROR.
         vcharReporte = vcharReporte + "<tr>~n<td class='right'>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
         vcharReporte = vcharReporte + "<td>$" + STRING(vdecSubMe) + "</td>~n</tr>~n".
     END.
@@ -474,7 +474,7 @@ FUNCTION getReportePropinas RETURNS CHARACTER
     vcharReporte = vcharReporte + "<td colspan='2' class='left'>COCINEROS</td>~n</tr>~n".
 
     FOR EACH EMPLEADO WHERE EMPLEADO.ID_ROL = 4:
-        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA NO-ERROR.
         vcharReporte = vcharReporte + "<tr>~n<td class='right'>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
         vcharReporte = vcharReporte + "<td>$" + STRING(vdecSubCo) + "</td>~n</tr>~n".
     END.
@@ -483,7 +483,7 @@ FUNCTION getReportePropinas RETURNS CHARACTER
     vcharReporte = vcharReporte + "<td colspan='2' class='left'>ADMIN</td>~n</tr>~n".
 
     FOR EACH EMPLEADO WHERE EMPLEADO.ID_ROL = 1:
-        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA NO-ERROR.
         vcharReporte = vcharReporte + "<tr>~n<td class='right'>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
         vcharReporte = vcharReporte + "<td>$" + STRING(vdecSubAd) + "</td>~n</tr>~n".
     END.
@@ -512,11 +512,11 @@ FUNCTION getReporteVentas RETURNS CHARACTER
 
     IF TRIM(vcharFechas) = "#" THEN DO:
         FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0:
-            FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
-            FIND FIRST ESTATUS WHERE ESTATUS.ID_ESTATUS = FACTURA.ID_ESTATUS.
-            FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA.
-            FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO.
-            FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+            FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA NO-ERROR.
+            FIND FIRST ESTATUS WHERE ESTATUS.ID_ESTATUS = FACTURA.ID_ESTATUS NO-ERROR.
+            FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA NO-ERROR.
+            FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO NO-ERROR.
+            FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA NO-ERROR.
                 vcharReporte = vcharReporte + "<tr>~n".
                 vcharReporte = vcharReporte + "<td>" + FACTURA.FOLIO + "</td>~n".
                 vcharReporte = vcharReporte + "<td>" + MESA.DESCRIPCION + "</td>~n".
@@ -531,11 +531,11 @@ FUNCTION getReporteVentas RETURNS CHARACTER
         IF TRIM(ENTRY(1, vcharFechas, "#")) = "" THEN DO:
             FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
                 FACTURA.FECHA <= DATE(ENTRY(2, vcharFechas, "#")):       
-                    FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
-                    FIND FIRST ESTATUS WHERE ESTATUS.ID_ESTATUS = FACTURA.ID_ESTATUS.
-                    FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA.
-                    FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO.
-                    FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+                    FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA NO-ERROR.
+                    FIND FIRST ESTATUS WHERE ESTATUS.ID_ESTATUS = FACTURA.ID_ESTATUS NO-ERROR.
+                    FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA NO-ERROR.
+                    FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO NO-ERROR.
+                    FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA NO-ERROR.
                         vcharReporte = vcharReporte + "<tr>~n".
                         vcharReporte = vcharReporte + "<td>" + FACTURA.FOLIO + "</td>~n".
                         vcharReporte = vcharReporte + "<td>" + MESA.DESCRIPCION + "</td>~n".
@@ -550,11 +550,11 @@ FUNCTION getReporteVentas RETURNS CHARACTER
             IF TRIM(ENTRY(2, vcharFechas, "#")) = "" THEN DO:
                 FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
                     FACTURA.FECHA >= DATE(ENTRY(1, vcharFechas, "#")):
-                        FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
-                        FIND FIRST ESTATUS WHERE ESTATUS.ID_ESTATUS = FACTURA.ID_ESTATUS.
-                        FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA.
-                        FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO.
-                        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+                        FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA NO-ERROR.
+                        FIND FIRST ESTATUS WHERE ESTATUS.ID_ESTATUS = FACTURA.ID_ESTATUS NO-ERROR.
+                        FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA NO-ERROR.
+                        FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO NO-ERROR.
+                        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA NO-ERROR.
                             vcharReporte = vcharReporte + "<tr>~n".
                             vcharReporte = vcharReporte + "<td>" + FACTURA.FOLIO + "</td>~n".
                             vcharReporte = vcharReporte + "<td>" + MESA.DESCRIPCION + "</td>~n".
@@ -569,11 +569,11 @@ FUNCTION getReporteVentas RETURNS CHARACTER
                 FOR EACH FACTURA WHERE FACTURA.ID_COMANDA > 0 AND
                     FACTURA.FECHA >= DATE(ENTRY(1, vcharFechas, "#")) AND
                     FACTURA.FECHA <= DATE(ENTRY(2, vcharFechas, "#")):       
-                        FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA.
-                        FIND FIRST ESTATUS WHERE ESTATUS.ID_ESTATUS = FACTURA.ID_ESTATUS.
-                        FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA.
-                        FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO.
-                        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA.
+                        FIND FIRST COMANDA WHERE COMANDA.ID_COMANDA = FACTURA.ID_COMANDA NO-ERROR.
+                        FIND FIRST ESTATUS WHERE ESTATUS.ID_ESTATUS = FACTURA.ID_ESTATUS NO-ERROR.
+                        FIND FIRST MESA WHERE MESA.ID_MESA = COMANDA.ID_MESA NO-ERROR.
+                        FIND FIRST EMPLEADO WHERE EMPLEADO.ID_EMPLEADO = COMANDA.ID_EMPLEADO NO-ERROR.
+                        FIND FIRST PERSONA WHERE PERSONA.ID_PERSONA = EMPLEADO.ID_PERSONA NO-ERROR.
                             vcharReporte = vcharReporte + "<tr>~n".
                             vcharReporte = vcharReporte + "<td>" + FACTURA.FOLIO + "</td>~n".
                             vcharReporte = vcharReporte + "<td>" + MESA.DESCRIPCION + "</td>~n".

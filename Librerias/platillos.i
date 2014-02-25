@@ -235,7 +235,7 @@ FUNCTION getClasificacion RETURNS CHARACTER
         Purpose: Obtener descripción de una Clasificación
         Author: I.S.C. Fco. Javier Ortuño Colchado    
     ------------------------------------------------------------------------------*/
-    FIND FIRST CLASIFICACION WHERE CLASIFICACION.ID_CLASIFICACION = vintIdClasificacion.
+    FIND FIRST CLASIFICACION WHERE CLASIFICACION.ID_CLASIFICACION = vintIdClasificacion NO-ERROR.
 
     RETURN CLASIFICACION.DESCRIPCION.
 END FUNCTION.

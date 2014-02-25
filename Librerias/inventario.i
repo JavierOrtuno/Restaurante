@@ -122,8 +122,8 @@ FUNCTION DescontarExistencia RETURNS LOGICAL
   o consumo
     Notes:  El parametro vintipo es 1- consumo, 2- desperdicio
 ------------------------------------------------------------------------------*/
-DEF VAR vdteactual AS DATE.
 DEF VAR vinttotal  AS INT.
+DEF VAR vdteactual AS DATE.
 
 vdteactual = TODAY.
 CASE vinttipo:
@@ -176,14 +176,14 @@ END FUNCTION.
 FUNCTION Genera_Lote RETURNS CHARACTER
       ( vdtefecha AS DATE ) :
     /*------------------------------------------------------------------------------
-      Purpose:  
+      Purpose:  Genera el numero de lote para el ingreso de un producto en el stock
         Notes:  
     ------------------------------------------------------------------------------*/
+    DEF VAR vintnumlote AS INT.
     DEF VAR vchrlote    AS CHAR.
     DEF VAR vchrmes     AS CHAR.
     DEF VAR vchrdia     AS CHAR.
     DEF VAR vchrano     AS CHAR.
-    DEF VAR vintnumlote AS INT.
     DEF VAR vdteactual  AS DATE.
 
     vdteactual = TODAY.
@@ -246,7 +246,7 @@ END FUNCTION.
 FUNCTION Insertar_Bitacora RETURNS LOGICAL
   ( vintmov AS INT, vintuser AS INT, vintstock AS INT, vintcant AS INT /* parameter-definitions */ ) :
 /*------------------------------------------------------------------------------
-  Purpose:  
+  Purpose:  Inserta el tipo de movimiento en el bitacora
     Notes:  
 ------------------------------------------------------------------------------*/
 DEF VAR vdteactual AS DATE.

@@ -27,8 +27,9 @@
 /* Parameters Definitions ---                                           */
 
 /* Local Variable Definitions ---                                       */
-  DEF INPUT PARAM inrowReg AS ROWID.
-  DEF INPUT PARAM viniduser AS INT.
+
+DEF INPUT PARAM viniduser AS INT.
+DEF INPUT PARAM inrowReg AS ROWID.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -200,8 +201,8 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_OK Insert-Frame
 ON CHOOSE OF Btn_OK IN FRAME Insert-Frame /* Agregar */
 DO:
-    DEF VAR vdteactual AS DATE.
     DEF VAR vchrlote AS CHAR.
+    DEF VAR vdteactual AS DATE.
 
     vdteactual = TODAY.
     IF int(FILL-IN-29:SCREEN-VALUE) <= 0 THEN DO:
@@ -321,6 +322,7 @@ PROCEDURE Nuevo_Stock :
   Notes:       
 ------------------------------------------------------------------------------*/
 DEF INPUT PARAM inrowRec AS ROWID.
+
  FIND Producto WHERE ROWID(Producto) = inrowRec.
   FILL-in-26:SCREEN-VALUE IN FRAME Insert-Frame = Producto.codigo.
   FILL-in-27:SCREEN-VALUE = Producto.descripcion.

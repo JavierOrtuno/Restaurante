@@ -275,8 +275,8 @@ PROCEDURE Modificar_Stock :
   Parameters:  <none>
   Notes:       
 ------------------------------------------------------------------------------*/
-DEF INPUT PARAM inrowRec AS ROWID.
 DEF VAR vintregpro AS INT.
+DEF INPUT PARAM inrowRec AS ROWID.
 
  FIND Stock WHERE ROWID(Stock) = inrowRec.
   FILL-in-31:SCREEN-VALUE IN FRAME Modificar-Frame = string(stock.f_caducidad).

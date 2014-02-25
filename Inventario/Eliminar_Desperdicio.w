@@ -27,10 +27,9 @@
 /* Parameters Definitions ---                                           */
 
 /* Local Variable Definitions ---                                       */
-
+DEF INPUT PARAM viniduser AS INT.
 DEF INPUT PARAM inrowReg  AS ROWID.
 DEF INPUT PARAM inrowReg2 AS ROWID.
-DEF INPUT PARAM viniduser AS INT.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME

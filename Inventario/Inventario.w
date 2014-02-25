@@ -258,6 +258,7 @@ END.
 ON CHOOSE OF BUTTON-20 IN FRAME Inventario-Frame /* Borrar */
 DO:
    DEF VAR vlogborrar AS LOG.
+
    MESSAGE "Esta seguro de borrar este registro" VIEW-AS ALERT-BOX BUTTONS YES-NO SET vlogborrar.
    IF vlogborrar = TRUE THEN DO:
        ROWID(stock).

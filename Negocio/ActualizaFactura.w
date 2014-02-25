@@ -46,7 +46,7 @@ DEF INPUT PARAMETER crowid AS ROWID.
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS FILL-IN-14 FILL-IN-15 FILL-IN-17 FILL-IN-18 ~
-FILL-IN-19 COMBO-BOX-2 COMBO-BOX-1 FILL-IN-21 Btn_OK Btn_Cancel 
+FILL-IN-19 COMBO-BOX-2 COMBO-BOX-1 FILL-IN-21 BUTTON-3 BUTTON-4 
 &Scoped-Define DISPLAYED-OBJECTS FILL-IN-14 FILL-IN-15 FILL-IN-17 ~
 FILL-IN-18 FILL-IN-19 COMBO-BOX-2 COMBO-BOX-1 FILL-IN-21 
 
@@ -63,33 +63,27 @@ FILL-IN-18 FILL-IN-19 COMBO-BOX-2 COMBO-BOX-1 FILL-IN-21
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
-DEFINE BUTTON Btn_Cancel AUTO-END-KEY 
-     LABEL "Cancel" 
-     SIZE 15 BY 1.14
-     BGCOLOR 8 .
-
-DEFINE BUTTON Btn_OK AUTO-GO 
+DEFINE BUTTON BUTTON-3 AUTO-GO 
      LABEL "OK" 
-     SIZE 15 BY 1.14
-     BGCOLOR 8 .
+     SIZE 15 BY 1.14.
+
+DEFINE BUTTON BUTTON-4 
+     LABEL "Cancel" 
+     SIZE 15 BY 1.14.
 
 DEFINE VARIABLE COMBO-BOX-1 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Estatus" 
      VIEW-AS COMBO-BOX INNER-LINES 5
-     LIST-ITEM-PAIRS "Generada","1",
-                     "Cancelada","2",
-                     "Pagada","3"
+     LIST-ITEM-PAIRS "SELECCIONAR","0"
      DROP-DOWN-LIST
-     SIZE 16 BY 1 NO-UNDO.
+     SIZE 20 BY 1 NO-UNDO.
 
 DEFINE VARIABLE COMBO-BOX-2 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Forma de Pago" 
      VIEW-AS COMBO-BOX INNER-LINES 5
-     LIST-ITEM-PAIRS "Efectivo","1",
-                     "Tarjeta","2",
-                     "Vales","3"
+     LIST-ITEM-PAIRS "SELECCIONAR","0"
      DROP-DOWN-LIST
-     SIZE 16 BY 1 NO-UNDO.
+     SIZE 20 BY 1 NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-14 AS CHARACTER FORMAT "X(8)":U 
      LABEL "Folio" 
@@ -119,7 +113,7 @@ DEFINE VARIABLE FILL-IN-19 AS CHARACTER FORMAT "X(8)":U
 DEFINE VARIABLE FILL-IN-21 AS CHARACTER FORMAT "99:99":U 
      LABEL "Hora Salida" 
      VIEW-AS FILL-IN 
-     SIZE 14 BY 1 NO-UNDO.
+     SIZE 11 BY 1 NO-UNDO.
 
 
 /* ************************  Frame Definitions  *********************** */
@@ -133,13 +127,12 @@ DEFINE FRAME Actualiza-Frame
      COMBO-BOX-2 AT ROW 9.57 COL 23 COLON-ALIGNED
      COMBO-BOX-1 AT ROW 11 COL 23 COLON-ALIGNED
      FILL-IN-21 AT ROW 12.91 COL 22 COLON-ALIGNED
-     Btn_OK AT ROW 14.81 COL 11
-     Btn_Cancel AT ROW 14.81 COL 28
-     SPACE(13.39) SKIP(1.23)
+     BUTTON-3 AT ROW 14.57 COL 12
+     BUTTON-4 AT ROW 14.57 COL 30
+     SPACE(11.39) SKIP(1.47)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         TITLE "Actualiza Factura"
-         DEFAULT-BUTTON Btn_OK CANCEL-BUTTON Btn_Cancel.
+         TITLE "Actualiza Factura".
 
 
 /* *********************** Procedure Settings ************************ */
@@ -198,11 +191,11 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME Btn_OK
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_OK Actualiza-Frame
-ON CHOOSE OF Btn_OK IN FRAME Actualiza-Frame /* OK */
+&Scoped-define SELF-NAME BUTTON-3
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-3 Actualiza-Frame
+ON CHOOSE OF BUTTON-3 IN FRAME Actualiza-Frame /* OK */
 DO:
-  FIND Factura WHERE ROWID(Factura) = crowid.
+    FIND Factura WHERE ROWID(Factura) = crowid.
     ASSIGN 
         Factura.ID_Estatus = INT(COMBO-BOX-1:SCREEN-VALUE).
         Factura.ID_Pago = INT(COMBO-BOX-2:SCREEN-VALUE).
@@ -210,6 +203,17 @@ DO:
    FIND Comanda WHERE Factura.ID_Comanda = Comanda.ID_Comanda.
    ASSIGN
        Comanda.Hora_Salida = FILL-IN-21:SCREEN-VALUE.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME BUTTON-4
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-4 Actualiza-Frame
+ON CHOOSE OF BUTTON-4 IN FRAME Actualiza-Frame /* Cancel */
+DO:
+  APPLY "window-close" TO FRAME Actualiza-Frame.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -252,13 +256,31 @@ PROCEDURE Desplegar :
   Parameters:  <none>
   Notes:       
 ------------------------------------------------------------------------------*/
+  DEF VAR vchrLista1 AS CHAR.
+  DEF VAR vchrLista2 AS CHAR.
+
+  
   FIND Factura WHERE ROWID(Factura) = crowid.
   ASSIGN
            FILL-IN-14:SCREEN-VALUE IN FRAME Actualiza-Frame = Factura.Folio 
-           FILL-IN-15:SCREEN-VALUE IN FRAME Actualiza-Frame = string(Factura.Fecha)   
-           FILL-IN-17:SCREEN-VALUE IN FRAME Actualiza-Frame = STRING(Factura.Subtotal) 
-           FILL-IN-18:SCREEN-VALUE IN FRAME Actualiza-Frame = STRING(Factura.IVA)  
-           FILL-IN-19:SCREEN-VALUE IN FRAME Actualiza-Frame = STRING(Factura.TOTAL).   
+           FILL-IN-15:SCREEN-VALUE = string(Factura.Fecha)   
+           FILL-IN-17:SCREEN-VALUE = STRING(Factura.Subtotal) 
+           FILL-IN-18:SCREEN-VALUE = STRING(Factura.IVA)  
+           FILL-IN-19:SCREEN-VALUE = STRING(Factura.TOTAL).
+
+  FOR EACH FORMA_Pago NO-LOCK:
+      vchrLista1 = vchrLista1 + FORMA_pago.Descripcion + "," + string(FORMA_pago.ID_Pago) + ",".
+  END.
+  ASSIGN COMBO-BOX-2:LIST-ITEM-PAIRS = vchrLista1 + ",".
+  FIND FORMA_Pago WHERE FORMA_pago.ID_Pago = Factura.ID_Pago.
+  ASSIGN COMBO-BOX-2:SCREEN-VALUE = STRING(FORMA_pago.ID_Pago).
+
+  FOR EACH Estatus NO-LOCK:
+      vchrLista2 = vchrLista2 + Estatus.Descripcion + "," + string(Estatus.ID_Estatus) + ",".
+  END.
+  ASSIGN COMBO-BOX-1:LIST-ITEM-PAIRS = vchrLista2 + ",".
+  FIND Estatus WHERE Estatus.ID_Estatus = Factura.ID_Estatus.
+  ASSIGN COMBO-BOX-1:SCREEN-VALUE = STRING(Factura.ID_Estatus).
  END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
@@ -296,7 +318,7 @@ PROCEDURE enable_UI :
           COMBO-BOX-1 FILL-IN-21 
       WITH FRAME Actualiza-Frame.
   ENABLE FILL-IN-14 FILL-IN-15 FILL-IN-17 FILL-IN-18 FILL-IN-19 COMBO-BOX-2 
-         COMBO-BOX-1 FILL-IN-21 Btn_OK Btn_Cancel 
+         COMBO-BOX-1 FILL-IN-21 BUTTON-3 BUTTON-4 
       WITH FRAME Actualiza-Frame.
   VIEW FRAME Actualiza-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Actualiza-Frame}

@@ -74,14 +74,14 @@ DEFINE BUTTON BUTTON-4
 DEFINE VARIABLE COMBO-BOX-1 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Estatus" 
      VIEW-AS COMBO-BOX INNER-LINES 5
-     LIST-ITEM-PAIRS "SELECCIONAR","0"
+     LIST-ITEM-PAIRS "0","0"
      DROP-DOWN-LIST
      SIZE 20 BY 1 NO-UNDO.
 
 DEFINE VARIABLE COMBO-BOX-2 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Forma de Pago" 
      VIEW-AS COMBO-BOX INNER-LINES 5
-     LIST-ITEM-PAIRS "SELECCIONAR","0"
+     LIST-ITEM-PAIRS "0","0"
      DROP-DOWN-LIST
      SIZE 20 BY 1 NO-UNDO.
 
@@ -271,14 +271,14 @@ PROCEDURE Desplegar :
   FOR EACH FORMA_Pago NO-LOCK:
       vchrLista1 = vchrLista1 + FORMA_pago.Descripcion + "," + string(FORMA_pago.ID_Pago) + ",".
   END.
-  ASSIGN COMBO-BOX-2:LIST-ITEM-PAIRS = vchrLista1 + ",".
+  ASSIGN COMBO-BOX-2:LIST-ITEM-PAIRS = TRIM(vchrLista1 + ",").
   FIND FORMA_Pago WHERE FORMA_pago.ID_Pago = Factura.ID_Pago.
   ASSIGN COMBO-BOX-2:SCREEN-VALUE = STRING(FORMA_pago.ID_Pago).
 
   FOR EACH Estatus NO-LOCK:
       vchrLista2 = vchrLista2 + Estatus.Descripcion + "," + string(Estatus.ID_Estatus) + ",".
   END.
-  ASSIGN COMBO-BOX-1:LIST-ITEM-PAIRS = vchrLista2 + ",".
+  ASSIGN COMBO-BOX-1:LIST-ITEM-PAIRS = TRIM(vchrLista2 + ",").
   FIND Estatus WHERE Estatus.ID_Estatus = Factura.ID_Estatus.
   ASSIGN COMBO-BOX-1:SCREEN-VALUE = STRING(Factura.ID_Estatus).
  END PROCEDURE.

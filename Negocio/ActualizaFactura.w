@@ -119,7 +119,7 @@ DEFINE VARIABLE FILL-IN-19 AS CHARACTER FORMAT "X(8)":U
 DEFINE VARIABLE FILL-IN-21 AS CHARACTER FORMAT "99:99":U 
      LABEL "Hora Salida" 
      VIEW-AS FILL-IN 
-     SIZE 11 BY 1 NO-UNDO.
+     SIZE 14 BY 1 NO-UNDO.
 
 
 /* ************************  Frame Definitions  *********************** */

@@ -100,8 +100,6 @@ PROCEDURE deleteUsuario :
         Notes:       
     ------------------------------------------------------------------------------*/
     DEFINE INPUT PARAMETER inIntRowId AS ROWID.
-  /*  DEFINE INPUT PARAMETER inCharUsuario AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharContra AS CHARACTER.*/
     
     FIND USUARIO WHERE ROWID(USUARIO) = inIntRowId.
        FIND Empleado WHERE Empleado.id_Usuario = usuario.Id_Usuario.
@@ -122,12 +120,13 @@ PROCEDURE updatePersona :
         Parameters:  <none>
         Notes:       
     ------------------------------------------------------------------------------*/
-    DEFINE INPUT PARAMETER inIntRowId AS ROWID.          DEFINE INPUT PARAMETER inintIdRol AS INT.
-    DEFINE INPUT PARAMETER inCharNombre AS CHARACTER.    DEFINE INPUT PARAMETER inCharApat AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharAmat AS CHARACTER.      DEFINE INPUT PARAMETER inCharSexo AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharFecha AS CHARACTER.     DEFINE INPUT PARAMETER inCharCurp AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharRfc AS CHARACTER.       DEFINE INPUT PARAMETER inCharDomicilio AS CHARACTER.
+    DEFINE INPUT PARAMETER inIntRowId AS ROWID.          DEFINE INPUT PARAMETER inintIdRol AS INT.            
+    DEFINE INPUT PARAMETER inCharNombre AS CHARACTER.    DEFINE INPUT PARAMETER inCharApat AS CHARACTER.      
+    DEFINE INPUT PARAMETER inCharAmat AS CHARACTER.      DEFINE INPUT PARAMETER inCharSexo AS CHARACTER.      
+    DEFINE INPUT PARAMETER inCharFecha AS CHARACTER.     DEFINE INPUT PARAMETER inCharCurp AS CHARACTER.      
+    DEFINE INPUT PARAMETER inCharRfc AS CHARACTER.       DEFINE INPUT PARAMETER inCharDomicilio AS CHARACTER. 
     DEFINE INPUT PARAMETER inCharCorreo AS CHARACTER.
+            
 
     FIND USUARIO WHERE ROWID(USUARIO) = inIntRowId.
        FIND FIRST Empleado WHERE Empleado.id_Usuario = usuario.Id_Usuario.
@@ -155,14 +154,15 @@ PROCEDURE updateUsuario :
         Notes:       
     ------------------------------------------------------------------------------*/
     DEFINE INPUT PARAMETER inIntRowId AS ROWID.
-    DEFINE INPUT PARAMETER inCharUsuario AS CHARACTER.
-    DEFINE INPUT PARAMETER inCharContra AS CHARACTER.
+    DEFINE INPUT PARAMETER inCharUsuario AS CHAR.
+    DEFINE INPUT PARAMETER inCharContra AS CHAR.
     
     FIND USUARIO WHERE ROWID(USUARIO) = inIntRowId.
+
     ASSIGN 
         USUARIO.USUARIO = inCharUsuario.
         USUARIO.CONTRASENIA = inCharContra.
-
+       
 END PROCEDURE.
 
 /* _UIB-CODE-BLOCK-END */
@@ -208,7 +208,7 @@ FUNCTION addUsuario RETURNS INTEGER
   Purpose:  
     Notes:  
 ------------------------------------------------------------------------------*/
-DEF VAR vintIdUsuario AS INT.
+  DEF VAR vintIdUsuario AS INT.
 
   vintIdUsuario = NEXT-VALUE(SEC_USUARIO).
 

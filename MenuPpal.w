@@ -48,8 +48,8 @@ DEF INPUT PARAM inintIdUsuario AS INT.
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Bttn-MSalir Btn-Ventas Btn-Menu Btn-Usuario ~
 Btn-Clientes Btn-Facturas Btn-Productos Btn-Inventario Btn-Repeorte ~
-Btn-Desperdicio RECT-10 RECT-18 RECT-2 RECT-3 RECT-30 RECT-4 RECT-5 RECT-6 ~
-RECT-7 RECT-8 RECT-9 
+Btn-Desperdicio RECT-18 RECT-2 RECT-3 RECT-31 RECT-4 RECT-5 RECT-6 RECT-7 ~
+RECT-8 RECT-9 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -105,10 +105,6 @@ DEFINE BUTTON Bttn-MSalir
      LABEL "Salir" 
      SIZE 15.6 BY 1.57.
 
-DEFINE RECTANGLE RECT-10
-     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 19.4 BY 5.33.
-
 DEFINE RECTANGLE RECT-18
      EDGE-PIXELS 8  
      SIZE 132 BY 3.33
@@ -124,9 +120,9 @@ DEFINE RECTANGLE RECT-3
      SIZE 55 BY 9.52
      BGCOLOR 8 .
 
-DEFINE RECTANGLE RECT-30
+DEFINE RECTANGLE RECT-31
      EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 20 BY 5.24.
+     SIZE 20 BY 5.48.
 
 DEFINE RECTANGLE RECT-4
      EDGE-PIXELS 8  
@@ -168,13 +164,12 @@ DEFINE FRAME Dialog-Frame-Menu
      Btn-Inventario AT ROW 21.38 COL 30.8
      Btn-Repeorte AT ROW 22.38 COL 96.6
      Btn-Desperdicio AT ROW 23.14 COL 31
-     RECT-10 AT ROW 19.71 COL 95
      RECT-18 AT ROW 1.43 COL 5
      RECT-2 AT ROW 5.76 COL 76.4
      RECT-3 AT ROW 5.76 COL 11
-     RECT-30 AT ROW 19.81 COL 94.4
+     RECT-31 AT ROW 19.71 COL 94.6
      RECT-4 AT ROW 17.24 COL 11.2
-     RECT-5 AT ROW 17.24 COL 76.2
+     RECT-5 AT ROW 17.24 COL 76
      RECT-6 AT ROW 8.14 COL 17.4
      RECT-7 AT ROW 8.14 COL 40.4
      RECT-8 AT ROW 7.76 COL 94
@@ -182,6 +177,9 @@ DEFINE FRAME Dialog-Frame-Menu
      "MENU PRINCIPAL" VIEW-AS TEXT
           SIZE 39.6 BY 1.91 AT ROW 2.19 COL 51.4
           BGCOLOR 8 FGCOLOR 15 FONT 70
+     "                                     VENTAS" VIEW-AS TEXT
+          SIZE 52.2 BY .81 AT ROW 5.95 COL 77.8
+          BGCOLOR 15 FGCOLOR 1 
      "                              ADMINISTRADOR" VIEW-AS TEXT
           SIZE 52 BY .81 AT ROW 5.95 COL 12.6
           BGCOLOR 15 FGCOLOR 1 
@@ -206,10 +204,7 @@ DEFINE FRAME Dialog-Frame-Menu
      "           MENU" VIEW-AS TEXT
           SIZE 19 BY .81 AT ROW 7.86 COL 94.4
           BGCOLOR 15 FGCOLOR 1 
-     "                                     VENTAS" VIEW-AS TEXT
-          SIZE 52.2 BY .81 AT ROW 5.95 COL 77.8
-          BGCOLOR 15 FGCOLOR 1 
-     SPACE(11.39) SKIP(21.47)
+     SPACE(27.99) SKIP(19.56)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -477,9 +472,8 @@ PROCEDURE enable_UI :
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
   ENABLE Bttn-MSalir Btn-Ventas Btn-Menu Btn-Usuario Btn-Clientes Btn-Facturas 
-         Btn-Productos Btn-Inventario Btn-Repeorte Btn-Desperdicio RECT-10 
-         RECT-18 RECT-2 RECT-3 RECT-30 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 
-         RECT-9 
+         Btn-Productos Btn-Inventario Btn-Repeorte Btn-Desperdicio RECT-18 
+         RECT-2 RECT-3 RECT-31 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
       WITH FRAME Dialog-Frame-Menu.
   VIEW FRAME Dialog-Frame-Menu.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame-Menu}

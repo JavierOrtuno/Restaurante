@@ -389,11 +389,11 @@ PROCEDURE asignarValores :
                 FIND FIRST Persona WHERE Persona.Id_Persona = Empleado.Id_Persona.
                     FIND FIRST Rol WHERE Empleado.Id_Rol = Rol.Id_Rol.
 
-            Fill_Nombre:SCREEN-VALUE = Persona.Nombre.                 Fill_Apat:SCREEN-VALUE = Persona.A_paterno.
-            Fill_Amat:SCREEN-VALUE = Persona.A_materno.                Fill_Sexo:SCREEN-VALUE = Persona.Sexo.
-            Fill_FNac:SCREEN-VALUE = STRING(Persona.F_Nacimiento).     Fill_Direccion:SCREEN-VALUE = Persona.Domicilio.
-            Fill_Curp:SCREEN-VALUE = Persona.Curp.                     Fill_Rfc:SCREEN-VALUE = Persona.Rfc.
-            Fill_Correo:SCREEN-VALUE = Persona.Correo.                 Fill_Rol:SCREEN-VALUE = Rol.Descripcion.
+            Fill_Nombre:SCREEN-VALUE = Persona.Nombre.               Fill_Apat:SCREEN-VALUE = Persona.A_paterno.       Fill_Amat:SCREEN-VALUE = Persona.A_materno.     Fill_Sexo:SCREEN-VALUE = Persona.Sexo.   
+            Fill_FNac:SCREEN-VALUE = STRING(Persona.F_Nacimiento).   Fill_Direccion:SCREEN-VALUE = Persona.Domicilio.  Fill_Curp:SCREEN-VALUE = Persona.Curp.          Fill_Rfc:SCREEN-VALUE = Persona.Rfc.             
+            Fill_Correo:SCREEN-VALUE = Persona.Correo.               Fill_Rol:SCREEN-VALUE = Rol.Descripcion.
+            ASSIGN Combo_Rol:SCREEN-VALUE = STRING(Rol.Id_Rol)
+                   vintIdRol = INTEGER(combo_rol:SCREEN-VALUE).
         END.
         WHEN 3 THEN DO: 
             Fill_Usuario:SCREEN-VALUE IN FRAME {&FRAME-NAME}= USUARIO.USUARIO.
@@ -403,22 +403,16 @@ PROCEDURE asignarValores :
                 FIND FIRST Persona WHERE Persona.Id_Persona = Empleado.Id_Persona.
                     FIND FIRST Rol WHERE Empleado.Id_Rol = Rol.Id_Rol.
 
-            Fill_Nombre:SCREEN-VALUE = Persona.Nombre.                 Fill_Apat:SCREEN-VALUE = Persona.A_paterno.
-            Fill_Amat:SCREEN-VALUE = Persona.A_materno.                Fill_Sexo:SCREEN-VALUE = Persona.Sexo.
-            Fill_FNac:SCREEN-VALUE = STRING(Persona.F_Nacimiento).     Fill_Direccion:SCREEN-VALUE = Persona.Domicilio.
-            Fill_Curp:SCREEN-VALUE = Persona.Curp.                     Fill_Rfc:SCREEN-VALUE = Persona.Rfc.
+            Fill_Nombre:SCREEN-VALUE = Persona.Nombre.                 Fill_Apat:SCREEN-VALUE = Persona.A_paterno.        Fill_Amat:SCREEN-VALUE = Persona.A_materno.   Fill_Sexo:SCREEN-VALUE = Persona.Sexo.
+            Fill_FNac:SCREEN-VALUE = STRING(Persona.F_Nacimiento).     Fill_Direccion:SCREEN-VALUE = Persona.Domicilio.   Fill_Curp:SCREEN-VALUE = Persona.Curp.        Fill_Rfc:SCREEN-VALUE = Persona.Rfc.
             Fill_Correo:SCREEN-VALUE = Persona.Correo.                 Fill_Rol:SCREEN-VALUE = Rol.Descripcion.
             ASSIGN combo_rol:SCREEN-VALUE = STRING(Rol.ID_ROL).
+                   vintIdRol = INTEGER(combo_rol:SCREEN-VALUE).
 
-            Fill_Usuario:SENSITIVE = NO.
-            Fill_Contrasena:SENSITIVE = NO.
-
-            Fill_Nombre:SENSITIVE = NO.          Fill_Apat:SENSITIVE = NO.
-            Fill_Amat:SENSITIVE = NO.            Fill_Sexo:SENSITIVE = NO.
-            Fill_FNac:SENSITIVE = NO.            Fill_Direccion:SENSITIVE = NO.
-            Fill_Curp:SENSITIVE = NO.            Fill_Rfc:SENSITIVE = NO.
-            Fill_Correo:SENSITIVE = NO.          Fill_Rol:SENSITIVE = NO.
-            ASSIGN combo_rol:SENSITIVE = NO.
+            Fill_Usuario:SENSITIVE = NO.       Fill_Contrasena:SENSITIVE = NO.       Fill_Nombre:SENSITIVE = NO.          Fill_Apat:SENSITIVE = NO.
+            Fill_Amat:SENSITIVE = NO.            Fill_Sexo:SENSITIVE = NO.           Fill_FNac:SENSITIVE = NO.            Fill_Direccion:SENSITIVE = NO.
+            Fill_Curp:SENSITIVE = NO.            Fill_Rfc:SENSITIVE = NO.            Fill_Correo:SENSITIVE = NO.          Fill_Rol:SENSITIVE = NO.
+            combo_rol:SENSITIVE = NO.
         END.
     END CASE.
 END PROCEDURE.

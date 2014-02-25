@@ -240,6 +240,21 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Sel_Ingredientes
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Sel_Ingredientes Dlg_CreacionP
+ON DELETE-CHARACTER OF Sel_Ingredientes IN FRAME Dlg_CreacionP
+DO:
+    MESSAGE Sel_Ingredientes:SCREEN-VALUE VIEW-AS ALERT-BOX.
+    IF Sel_Ingredientes:SCREEN-VALUE <> "" AND 
+       Sel_Ingredientes:SCREEN-VALUE <> "0" AND 
+       Sel_Ingredientes:SCREEN-VALUE <> ? THEN
+            Sel_Ingredientes:DELETE ( Sel_Ingredientes:SCREEN-VALUE ).
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &Scoped-define SELF-NAME Sel_Productos
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Sel_Productos Dlg_CreacionP
 ON MOUSE-SELECT-DBLCLICK OF Sel_Productos IN FRAME Dlg_CreacionP

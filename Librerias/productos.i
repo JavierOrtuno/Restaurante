@@ -139,9 +139,14 @@ FUNCTION getUnidadMedida RETURNS CHARACTER
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE addProducto Method-Library 
 PROCEDURE addProducto :
 /*------------------------------------------------------------------------------
-        Purpose:     
-        Parameters:  <none>
-        Notes:       
+        Purpose: Agregar un Producto a Base de Datos     
+        Parameters:  
+            INPUT pinIntIdProducto (ID PRODUCTO)
+            INPUT pinCharCodigo (CODIGO DE PRODUCTO)
+            INPUT pinCharDescripcion (DESC DE PRODUCTO)
+            INPUT pinIntCantidad (CANTIDAD MINIMA)
+            INPUT pinIntUnidad (UNIDAD MEDIDA)
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE INPUT PARAMETER pinIntIdProducto AS INTEGER.
     DEFINE INPUT PARAMETER pinCharCodigo AS CHARACTER.
@@ -169,9 +174,14 @@ END PROCEDURE.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE updateProducto Method-Library 
 PROCEDURE updateProducto :
 /*------------------------------------------------------------------------------
-        Purpose:
-        Parameters:  <none>
-        Notes:       
+        Purpose: Actualizar un Producto a Base de Datos     
+        Parameters:  
+            INPUT pinIntRowId (ROWID dDE PRODUCTO)
+            INPUT pinCharCodigo (CODIGO DE PRODUCTO)
+            INPUT pinCharDescripcion (DESC DE PRODUCTO)
+            INPUT pinIntCantidad (CANTIDAD MINIMA)
+            INPUT pinIntUnidad (UNIDAD MEDIDA)
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE INPUT PARAMETER pinIntRowId AS ROWID.
     DEFINE INPUT PARAMETER pinCharCodigo AS CHARACTER.
@@ -201,8 +211,8 @@ END PROCEDURE.
 FUNCTION getCatProducto RETURNS CHARACTER
     ( /* parameter-definitions */ ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose:  Obtener Catálogo de Productos        
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vcharCatalogo AS CHARACTER.
 
@@ -253,8 +263,7 @@ END FUNCTION.
 FUNCTION getCodProducto RETURNS CHARACTER
     ( INPUT vintIdProducto AS INTEGER ) :
     /*------------------------------------------------------------------------------
-        Purpose: Función para Generar el Siguiente Código del Producto en DB
-        Notes:  
+        Purpose: Función para Generar el Siguiente Código del Producto en DB        
         Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vintCount AS INTEGER.
@@ -282,8 +291,8 @@ END FUNCTION.
 FUNCTION getDescProducto RETURNS CHARACTER
     ( INPUT vintIdProducto AS INTEGER ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose:  Obtener la Descripción de un Producto
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     FIND FIRST PRODUCTO WHERE ID_PRODUCTO = vintIdProducto.
 
@@ -301,8 +310,7 @@ END FUNCTION.
 FUNCTION getUnidadMedida RETURNS CHARACTER
     ( INPUT vintIdUnidad AS INTEGER ) :
     /*------------------------------------------------------------------------------
-        Purpose: Obtener la Descripción de la Unidad de Medida por ID
-        Notes: 
+        Purpose: Obtener la Descripción de la Unidad de Medida por ID        
         Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vcharUnidadMedida AS CHARACTER INITIAL "".

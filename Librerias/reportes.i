@@ -172,9 +172,14 @@ FUNCTION hayIngredientes RETURNS LOGICAL
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE getProporciones Method-Library 
 PROCEDURE getProporciones :
 /*------------------------------------------------------------------------------
-        Purpose:     
+        Purpose: Calcular las Proporciones de Propinas Para Cada Trabajador en Base a su Rol     
         Parameters:  <none>
-        Notes:       
+            INPUT pinCharFechas (Rango de Fechas)
+            OUTPU poutDecTotal (Total de Propina)
+            OUTPU poutDecMe (Porcentaje para Cada Mesero)
+            OUTPU poutDecCo (Porcentaje para Cada Cocinero)
+            OUTPU poutDecAd (Porcentaje para Cada Administrador)
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE INPUT PARAMETER pinCharFechas AS CHARACTER.
     DEFINE OUTPUT PARAMETER poutDecTotal AS DECIMAL.    
@@ -254,8 +259,8 @@ END PROCEDURE.
 FUNCTION getDescClasificacion RETURNS CHARACTER
   ( INPUT vintIdClasificacion AS INTEGER ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose: Obtener la Descripción de Una Clasificación. 
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     FIND FIRST CLASIFICACION WHERE CLASIFICACION.ID_CLASIFICACION = vintIdClasificacion.
 
@@ -273,8 +278,8 @@ END FUNCTION.
 FUNCTION getReporteFactura RETURNS CHARACTER
     ( INPUT vintFactura AS INTEGER ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose: Generar HTML de Una Factura en Particular.
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vcharReporte AS CHARACTER.
 
@@ -298,20 +303,20 @@ FUNCTION getReporteFactura RETURNS CHARACTER
         vcharReporte = vcharReporte + "<tr>~n".
         vcharReporte = vcharReporte + "<td style='width: 5%'>" + STRING(CONSUMO.CANTIDAD) + "</td>~n".
         vcharReporte = vcharReporte + "<td style='width: 65%'>" + MENU.DESCRIPCION + "</td>~n".
-        vcharReporte = vcharReporte + "<td style='width: 30%'>" + STRING(CONSUMO.CANTIDAD * MENU.PRECIO) + "</td>~n".
+        vcharReporte = vcharReporte + "<td style='width: 30%'>$" + STRING(CONSUMO.CANTIDAD * MENU.PRECIO) + "</td>~n".
         vcharReporte = vcharReporte + "</tr>~n".
     END.
 
     vcharReporte = vcharReporte + "<tr>~n<td></td>~n".
     vcharReporte = vcharReporte + "<td class='right'>SUBTOTAL</td>~n".
-    vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.SUBTOTAL) + "</td>~n</tr>~n<tr>~n<td></td>~n".
+    vcharReporte = vcharReporte + "<td>$" + STRING(FACTURA.SUBTOTAL) + "</td>~n</tr>~n<tr>~n<td></td>~n".
     vcharReporte = vcharReporte + "<td class='right'>IVA</td>~n".
-    vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.IVA) + "</td>~n".
+    vcharReporte = vcharReporte + "<td>$" + STRING(FACTURA.IVA) + "</td>~n".
     vcharReporte = vcharReporte + "</tr>~n<tr>~n<td></td>~n".
     vcharReporte = vcharReporte + "<td class='right'>PROPINA</td>~n".
-    vcharReporte = vcharReporte + "<td>" + STRING(COMANDA.PROPINA) + "</td>~n</tr>~n<tr>~n<td></td>~n".
+    vcharReporte = vcharReporte + "<td>$" + STRING(COMANDA.PROPINA) + "</td>~n</tr>~n<tr>~n<td></td>~n".
     vcharReporte = vcharReporte + "<td class='right'>TOTAL</td>~n".
-    vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.TOTAL) + "</td>~n</tr>~n".
+    vcharReporte = vcharReporte + "<td>$" + STRING(FACTURA.TOTAL) + "</td>~n</tr>~n".
     vcharReporte = vcharReporte + "<tr>~n".
     vcharReporte = vcharReporte + "<td colspan='3' class='center'>" + "Forma de Pago: " + FORMA_PAGO.DESCRIPCION + "</td>~n".
     vcharReporte = vcharReporte + "</tr>~n<tr>~n".
@@ -333,8 +338,8 @@ END FUNCTION.
 FUNCTION getReporteInventario RETURNS CHARACTER
     ( /* parameter-definitions */ ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose: Generar HTML para el Reporte de Inventario  
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vcharReporte AS CHARACTER.
 
@@ -368,12 +373,12 @@ END FUNCTION.
 FUNCTION getReporteMenu RETURNS CHARACTER
     ( /* parameter-definitions */ ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose: Generar HTML para el Reporte de MENU
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
-    DEFINE VARIABLE vcharReporte AS CHARACTER.
-    DEFINE VARIABLE vintBandera AS INTEGER.
     DEFINE VARIABLE vlogPrev AS LOGICAL.
+    DEFINE VARIABLE vintBandera AS INTEGER.
+    DEFINE VARIABLE vcharReporte AS CHARACTER.
     
     FOR EACH MENU BY MENU.ID_CLASIFICACION:
         IF hayIngredientes(MENU.ID_MENU) THEN DO:       
@@ -409,8 +414,8 @@ END FUNCTION.
 FUNCTION getReportePedido RETURNS CHARACTER
     ( /* parameter-definitions */ ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose: Generar HTML para el Reporte de Pedido        
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vintCantidad AS INTEGER.
     DEFINE VARIABLE vcharReporte AS CHARACTER.
@@ -444,8 +449,8 @@ END FUNCTION.
 FUNCTION getReportePropinas RETURNS CHARACTER
     ( INPUT vcharFechas AS CHARACTER ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose: Generar HTML para el Reporte de Propinas por Trabajador
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vdecTotal AS DECIMAL.    
     DEFINE VARIABLE vdecSubMe AS DECIMAL.
@@ -500,8 +505,8 @@ END FUNCTION.
 FUNCTION getReporteVentas RETURNS CHARACTER
     ( INPUT vcharFechas AS CHARACTER ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose: Generar HTML del Reporte de Ventas
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vcharReporte AS CHARACTER.
 
@@ -518,7 +523,7 @@ FUNCTION getReporteVentas RETURNS CHARACTER
                 vcharReporte = vcharReporte + "<td>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
                 vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.FECHA) + "</td>~n".
                 vcharReporte = vcharReporte + "<td>" + ESTATUS.DESCRIPCION + "</td>~n".
-                vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.TOTAL) + "</td>~n".
+                vcharReporte = vcharReporte + "<td>$" + STRING(FACTURA.TOTAL) + "</td>~n".
                 vcharReporte = vcharReporte + "</tr>~n".    
         END.
     END.
@@ -537,7 +542,7 @@ FUNCTION getReporteVentas RETURNS CHARACTER
                         vcharReporte = vcharReporte + "<td>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
                         vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.FECHA) + "</td>~n".
                         vcharReporte = vcharReporte + "<td>" + ESTATUS.DESCRIPCION + "</td>~n".
-                        vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.TOTAL) + "</td>~n".
+                        vcharReporte = vcharReporte + "<td>$" + STRING(FACTURA.TOTAL) + "</td>~n".
                         vcharReporte = vcharReporte + "</tr>~n".
             END.
         END.
@@ -556,7 +561,7 @@ FUNCTION getReporteVentas RETURNS CHARACTER
                             vcharReporte = vcharReporte + "<td>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
                             vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.FECHA) + "</td>~n".
                             vcharReporte = vcharReporte + "<td>" + ESTATUS.DESCRIPCION + "</td>~n".
-                            vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.TOTAL) + "</td>~n".
+                            vcharReporte = vcharReporte + "<td>$" + STRING(FACTURA.TOTAL) + "</td>~n".
                             vcharReporte = vcharReporte + "</tr>~n".
                 END.
             END.
@@ -575,7 +580,7 @@ FUNCTION getReporteVentas RETURNS CHARACTER
                             vcharReporte = vcharReporte + "<td>" + PERSONA.NOMBRE + " " + PERSONA.A_PATERNO + " " + PERSONA.A_MATERNO + "</td>~n".
                             vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.FECHA) + "</td>~n".
                             vcharReporte = vcharReporte + "<td>" + ESTATUS.DESCRIPCION + "</td>~n".
-                            vcharReporte = vcharReporte + "<td>" + STRING(FACTURA.TOTAL) + "</td>~n".
+                            vcharReporte = vcharReporte + "<td>$" + STRING(FACTURA.TOTAL) + "</td>~n".
                             vcharReporte = vcharReporte + "</tr>~n".
                 END.
             END.
@@ -596,11 +601,11 @@ END FUNCTION.
 FUNCTION hayIngredientes RETURNS LOGICAL
     ( INPUT vintIdMenu AS INTEGER ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose: Verificar si un Platillo cuenta con los Ingredientes Necesarios en el STOCK
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
-    DEFINE VARIABLE vintCantidad AS INTEGER.
     DEFINE VARIABLE vlogResponse AS LOGICAL INITIAL TRUE.
+    DEFINE VARIABLE vintCantidad AS INTEGER.    
     
     FOR EACH INGREDIENTE WHERE INGREDIENTE.ID_MENU = vintIdMenu:
         vintCantidad = 0.

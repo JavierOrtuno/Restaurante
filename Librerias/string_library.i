@@ -132,6 +132,7 @@ FUNCTION fillLeft RETURNS CHARACTER
             vcharString: Cadena a Validar
             vcharFill: Caracter para Rellenar
             vintPosition: Posiciones desadas en la salida
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vintSize AS INTEGER.
     DEFINE VARIABLE vintCount AS INTEGER.
@@ -184,7 +185,7 @@ FUNCTION isLetter RETURNS LOGICAL
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vlogResponse AS LOGICAL INITIAL TRUE.
     DEFINE VARIABLE vintCont AS INTEGER.
-    DEFINE VARIABLE vintSizeCadena AS INTEGER.
+    DEFINE VARIABLE vintSizeCadena AS INTEGER.    
 
     vintSizeCadena = LENGTH(vcharCadena).
 

@@ -119,9 +119,11 @@ FUNCTION getCodigoPlatillo RETURNS CHARACTER
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE addIngredientes Method-Library 
 PROCEDURE addIngredientes :
 /*------------------------------------------------------------------------------
-        Purpose:     
-        Parameters:  <none>
-        Notes:       
+        Purpose: Agregar Ingredientes a un Platillo
+        Parameters:  
+            INPUT pinIntMenu (ID DE MENU)
+            INPUT pinCharIngredientes (LISTA DE INGREDIENTES)
+        Author: I.S.C. Fco. Javier Ortuño Colchado  
     ------------------------------------------------------------------------------*/
     DEFINE INPUT PARAMETER pinIntMenu AS INTEGER.
     DEFINE INPUT PARAMETER pinCharIngredientes AS CHARACTER.
@@ -162,9 +164,13 @@ END PROCEDURE.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE addPlatillo Method-Library 
 PROCEDURE addPlatillo :
 /*------------------------------------------------------------------------------
-        Purpose:     
-        Parameters:  <none>
-        Notes:           
+        Purpose: Agregar un Platillo
+        Parameters: 
+            INPUT pinCharPlatillo (NOMBRE DEL PLATILLO)
+            INPUT pinDecPrecio (PRECIO DEL PLATILLO)
+            INPUT pinIntClasificacion (CLASIFICACION DEL PLATILLO)
+            INPUT pinCharIngredientes (LISTA DE INGREDIENTES)
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE INPUT PARAMETER pinCharPlatillo AS CHARACTER.
     DEFINE INPUT PARAMETER pinDecPrecio AS DECIMAL.
@@ -193,23 +199,6 @@ END PROCEDURE.
 
 &ENDIF
 
-&IF DEFINED(EXCLUDE-updatePlatillo) = 0 &THEN
-
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE updatePlatillo Method-Library 
-PROCEDURE updatePlatillo :
-/*--    ----------------------------------------------------------------------------
-        Purpose:     
-        Parameters:  <none>
-        Notes:       
-    ------------------------------------------------------------------------------*/
-
-END PROCEDURE.
-
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
-
-&ENDIF
-
 /* ************************  Function Implementations ***************** */
 
 &IF DEFINED(EXCLUDE-getCatClasificacion) = 0 &THEN
@@ -218,8 +207,8 @@ END PROCEDURE.
 FUNCTION getCatClasificacion RETURNS CHARACTER
     ( /* parameter-definitions */ ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose: Obtener Catálogo de Clasificaciones
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vcharCatalogo AS CHARACTER INITIAL "".
 
@@ -243,8 +232,8 @@ END FUNCTION.
 FUNCTION getClasificacion RETURNS CHARACTER
     ( INPUT vintIdClasificacion AS INTEGER ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose: Obtener descripción de una Clasificación
+        Author: I.S.C. Fco. Javier Ortuño Colchado    
     ------------------------------------------------------------------------------*/
     FIND FIRST CLASIFICACION WHERE CLASIFICACION.ID_CLASIFICACION = vintIdClasificacion.
 
@@ -264,8 +253,8 @@ FUNCTION getCodigoPlatillo RETURNS CHARACTER
       INPUT vcharCaracter AS CHARACTER, 
       INPUT vintElementos AS INTEGER ) :
     /*------------------------------------------------------------------------------
-        Purpose:  
-        Notes:  
+        Purpose: Generar Código de un Platillo.
+        Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vintCount AS INTEGER.
     DEFINE VARIABLE vcharCodigo AS CHARACTER INITIAL "PT-".    

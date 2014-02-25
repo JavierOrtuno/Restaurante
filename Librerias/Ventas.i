@@ -252,7 +252,7 @@ FUNCTION CalcularIVA RETURNS DEC
 ------------------------------------------------------------------------------*/
   DEF VAR vdecIVA AS DEC.  
 
-  vdecIVA = vdecSubTotal * 0.15.
+  vdecIVA = vdecSubTotal * 0.16.
 
   RETURN vdecIVA.
 

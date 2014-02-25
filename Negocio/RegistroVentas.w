@@ -29,7 +29,7 @@
 
 /* Parameters Definitions ---                                           */
 
-/*DEF INPUT PARAMETER inintIDUsuario AS INT.*/
+DEF INPUT PARAMETER inintIDUsuario AS INT.
 
 /* Local Variable Definitions ---                                       */
 
@@ -480,7 +480,7 @@ DO:
     FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = vintIDMenu.
         vintIDProducto = Ingrediente.ID_Producto.
         vintDescuento = vintCantidad * Ingrediente.Cantidad.
-        DescontarExistencia(vintIDProducto,vintDescuento,1).
+        DescontarExistencia(vintIDProducto,vintDescuento,1,inintIDUsuario).
     END.
     vintPosicion = vintPosicion + 2.
  END.

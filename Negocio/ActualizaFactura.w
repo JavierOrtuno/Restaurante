@@ -46,8 +46,7 @@ DEF VAR vchrSalida AS CHAR.
 &Scoped-define FRAME-NAME Actualiza-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS FILL-IN-14 FILL-IN-15 FILL-IN-17 FILL-IN-18 ~
-FILL-IN-19 COMBO-BOX-2 COMBO-BOX-1 BUTTON-3 BUTTON-4 
+&Scoped-Define ENABLED-OBJECTS COMBO-BOX-2 COMBO-BOX-1 BUTTON-3 BUTTON-4 
 &Scoped-Define DISPLAYED-OBJECTS FILL-IN-14 FILL-IN-15 FILL-IN-17 ~
 FILL-IN-18 FILL-IN-19 COMBO-BOX-2 COMBO-BOX-1 FILL-IN-21 
 
@@ -77,14 +76,16 @@ DEFINE VARIABLE COMBO-BOX-1 AS CHARACTER FORMAT "X(256)":U
      VIEW-AS COMBO-BOX INNER-LINES 5
      LIST-ITEM-PAIRS "0","0"
      DROP-DOWN-LIST
-     SIZE 20 BY 1 NO-UNDO.
+     SIZE 20 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE COMBO-BOX-2 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Forma de Pago" 
      VIEW-AS COMBO-BOX INNER-LINES 5
      LIST-ITEM-PAIRS "0","0"
      DROP-DOWN-LIST
-     SIZE 20 BY 1 NO-UNDO.
+     SIZE 20 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-14 AS CHARACTER FORMAT "X(8)":U 
      LABEL "Folio" 
@@ -133,6 +134,7 @@ DEFINE FRAME Actualiza-Frame
      SPACE(11.39) SKIP(1.47)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
+         BGCOLOR 8 
          TITLE "Actualiza Factura".
 
 
@@ -166,18 +168,28 @@ ASSIGN
        FRAME Actualiza-Frame:SCROLLABLE       = FALSE
        FRAME Actualiza-Frame:HIDDEN           = TRUE.
 
+/* SETTINGS FOR FILL-IN FILL-IN-14 IN FRAME Actualiza-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-14:READ-ONLY IN FRAME Actualiza-Frame        = TRUE.
 
+/* SETTINGS FOR FILL-IN FILL-IN-15 IN FRAME Actualiza-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-15:READ-ONLY IN FRAME Actualiza-Frame        = TRUE.
 
+/* SETTINGS FOR FILL-IN FILL-IN-17 IN FRAME Actualiza-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-17:READ-ONLY IN FRAME Actualiza-Frame        = TRUE.
 
+/* SETTINGS FOR FILL-IN FILL-IN-18 IN FRAME Actualiza-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-18:READ-ONLY IN FRAME Actualiza-Frame        = TRUE.
 
+/* SETTINGS FOR FILL-IN FILL-IN-19 IN FRAME Actualiza-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-19:READ-ONLY IN FRAME Actualiza-Frame        = TRUE.
 
@@ -334,8 +346,7 @@ PROCEDURE enable_UI :
   DISPLAY FILL-IN-14 FILL-IN-15 FILL-IN-17 FILL-IN-18 FILL-IN-19 COMBO-BOX-2 
           COMBO-BOX-1 FILL-IN-21 
       WITH FRAME Actualiza-Frame.
-  ENABLE FILL-IN-14 FILL-IN-15 FILL-IN-17 FILL-IN-18 FILL-IN-19 COMBO-BOX-2 
-         COMBO-BOX-1 BUTTON-3 BUTTON-4 
+  ENABLE COMBO-BOX-2 COMBO-BOX-1 BUTTON-3 BUTTON-4 
       WITH FRAME Actualiza-Frame.
   VIEW FRAME Actualiza-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Actualiza-Frame}

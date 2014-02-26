@@ -202,3 +202,9 @@
 15:38:13 Inicio de la Fase de Physical Redo en 0 . (5326)
 15:38:13 Fase Física del "Redo" Terminada en blq 47 off 328 act 0. (7161)
 15:43:21 Fin de sesión Single-user. (334)
+
+                Wed Feb 26 14:39:34 2014
+14:39:34 Single-user comienza sesión Ruben Garay en CON:. (451)
+14:39:34 Inicio de la Fase de Physical Redo en 0 . (5326)
+14:39:34 Fase Física del "Redo" Terminada en blq 47 off 822 act 0. (7161)
+14:46:31 Fin de sesión Single-user. (334)

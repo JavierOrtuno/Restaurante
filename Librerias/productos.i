@@ -38,7 +38,7 @@
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getCatProducto Method-Library 
 FUNCTION getCatProducto RETURNS CHARACTER
-    ( /* parameter-definitions */ )  FORWARD.
+    ( INPUT vcharInitial AS CHARACTER )  FORWARD.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -209,17 +209,26 @@ END PROCEDURE.
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getCatProducto Method-Library 
 FUNCTION getCatProducto RETURNS CHARACTER
-    ( /* parameter-definitions */ ) :
+    ( INPUT vcharInitial AS CHARACTER ) :
     /*------------------------------------------------------------------------------
         Purpose:  Obtener Catálogo de Productos        
         Author: I.S.C. Fco. Javier Ortuño Colchado
     ------------------------------------------------------------------------------*/
     DEFINE VARIABLE vcharCatalogo AS CHARACTER.
 
-    FOR EACH PRODUCTO NO-LOCK BY PRODUCTO.DESCRIPCION:
-        vcharCatalogo = vcharCatalogo + 
-            PRODUCTO.DESCRIPCION + "," +
-            STRING(PRODUCTO.ID_PRODUCTO) + ",".
+    IF TRIM(vcharInitial) = "" THEN DO:
+        FOR EACH PRODUCTO NO-LOCK BY PRODUCTO.DESCRIPCION:
+            vcharCatalogo = vcharCatalogo + 
+                PRODUCTO.DESCRIPCION + "," +
+                STRING(PRODUCTO.ID_PRODUCTO) + ",".
+        END.
+    END.    
+    ELSE DO:
+        FOR EACH PRODUCTO WHERE PRODUCTO.DESCRIPCION BEGINS TRIM(vcharInitial) NO-LOCK BY PRODUCTO.DESCRIPCION:
+            vcharCatalogo = vcharCatalogo + 
+                PRODUCTO.DESCRIPCION + "," +
+                STRING(PRODUCTO.ID_PRODUCTO) + ",".
+        END.
     END.
     
     RETURN TRIM(vcharCatalogo, ",").

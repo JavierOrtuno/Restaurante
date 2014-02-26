@@ -48,11 +48,11 @@ DEFINE VARIABLE vcharIngredientes AS CHARACTER INITIAL "".
 &Scoped-define FRAME-NAME Dlg_CreacionP
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Btn_Salir Sel_Productos Fill_Descripcion ~
-Fill_Precio List_Clasificacion Sel_Ingredientes Btn_Agregar Btn_Producto ~
-RECT-18 RECT-24 
-&Scoped-Define DISPLAYED-OBJECTS Sel_Productos Fill_Descripcion Fill_Precio ~
-List_Clasificacion Sel_Ingredientes 
+&Scoped-Define ENABLED-OBJECTS Btn_Salir Fill_Search Sel_Productos ~
+Fill_Descripcion Fill_Precio List_Clasificacion Sel_Ingredientes ~
+Btn_Agregar Btn_Producto RECT-18 RECT-24 
+&Scoped-Define DISPLAYED-OBJECTS Fill_Search Sel_Productos Fill_Descripcion ~
+Fill_Precio List_Clasificacion Sel_Ingredientes 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -110,6 +110,12 @@ DEFINE VARIABLE Fill_Precio AS DECIMAL FORMAT "->>,>>9.99":U INITIAL 0
      SIZE 19.4 BY 1
      BGCOLOR 15  NO-UNDO.
 
+DEFINE VARIABLE Fill_Search AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Buscar" 
+     VIEW-AS FILL-IN 
+     SIZE 39 BY 1
+     BGCOLOR 15  NO-UNDO.
+
 DEFINE RECTANGLE RECT-18
      EDGE-PIXELS 8  
      SIZE 134 BY 2.38
@@ -136,13 +142,14 @@ DEFINE VARIABLE Sel_Productos AS CHARACTER
 
 DEFINE FRAME Dlg_CreacionP
      Btn_Salir AT ROW 1.67 COL 117.2
-     Sel_Productos AT ROW 4.71 COL 11.2 NO-LABEL
+     Fill_Search AT ROW 4.57 COL 17 COLON-ALIGNED
+     Sel_Productos AT ROW 6.76 COL 11.2 NO-LABEL
      Fill_Descripcion AT ROW 7.81 COL 80.2 COLON-ALIGNED
      Fill_Precio AT ROW 9.1 COL 80.2 COLON-ALIGNED
      List_Clasificacion AT ROW 10.38 COL 80.2 COLON-ALIGNED
      Sel_Ingredientes AT ROW 11.71 COL 82.2 NO-LABEL
      Btn_Agregar AT ROW 19.33 COL 86.8
-     Btn_Producto AT ROW 23.86 COL 11.4
+     Btn_Producto AT ROW 25.91 COL 11.4
      RECT-18 AT ROW 1 COL 1
      RECT-24 AT ROW 6.76 COL 65.4
      "Ingredientes:" VIEW-AS TEXT
@@ -153,8 +160,8 @@ DEFINE FRAME Dlg_CreacionP
      "Campos Requeridos:" VIEW-AS TEXT
           SIZE 40 BY .62 AT ROW 6.1 COL 65.6
      "Seleccionar Ingrediente:" VIEW-AS TEXT
-          SIZE 40 BY .62 AT ROW 3.91 COL 11.8
-     SPACE(83.19) SKIP(22.17)
+          SIZE 40 BY .62 AT ROW 5.95 COL 11.8
+     SPACE(83.19) SKIP(22.18)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -246,7 +253,7 @@ END.
 ON CHOOSE OF Btn_Producto IN FRAME Dlg_CreacionP /* Nuevo Producto */
 DO:
     RUN menuProductos.w.
-    ASSIGN Sel_Productos:LIST-ITEM-PAIRS IN FRAME {&FRAME-NAME} = getCatProducto().
+    ASSIGN Sel_Productos:LIST-ITEM-PAIRS IN FRAME {&FRAME-NAME} = getCatProducto("").
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -258,6 +265,17 @@ END.
 ON CHOOSE OF Btn_Salir IN FRAME Dlg_CreacionP /* Salir */
 DO:
     APPLY "WINDOW-CLOSE" TO FRAME Dlg_CreacionP.  
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Fill_Search
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Fill_Search Dlg_CreacionP
+ON VALUE-CHANGED OF Fill_Search IN FRAME Dlg_CreacionP /* Buscar */
+DO:
+    ASSIGN Sel_Productos:LIST-ITEM-PAIRS IN FRAME {&FRAME-NAME} = getCatProducto(Fill_Search:SCREEN-VALUE).
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -374,10 +392,10 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  DISPLAY Sel_Productos Fill_Descripcion Fill_Precio List_Clasificacion 
-          Sel_Ingredientes 
+  DISPLAY Fill_Search Sel_Productos Fill_Descripcion Fill_Precio 
+          List_Clasificacion Sel_Ingredientes 
       WITH FRAME Dlg_CreacionP.
-  ENABLE Btn_Salir Sel_Productos Fill_Descripcion Fill_Precio 
+  ENABLE Btn_Salir Fill_Search Sel_Productos Fill_Descripcion Fill_Precio 
          List_Clasificacion Sel_Ingredientes Btn_Agregar Btn_Producto RECT-18 
          RECT-24 
       WITH FRAME Dlg_CreacionP.
@@ -432,7 +450,7 @@ PROCEDURE setInitial :
     DEFINE VARIABLE vcharCatProductos AS CHARACTER.
     DEFINE VARIABLE vcharCatClasif AS CHARACTER.
 
-    vcharCatProductos = getCatProducto().
+    vcharCatProductos = getCatProducto("").
     ASSIGN Sel_Productos:LIST-ITEM-PAIRS IN FRAME {&FRAME-NAME} = vcharCatProductos.   
     
     ASSIGN Sel_Ingredientes:LIST-ITEM-PAIRS = ",".   

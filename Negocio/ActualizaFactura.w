@@ -29,6 +29,7 @@
 DEF INPUT PARAMETER crowid AS ROWID.
 
 /* Local Variable Definitions ---                                       */
+DEF VAR vchrSalida AS CHAR.
 
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
@@ -45,8 +46,8 @@ DEF INPUT PARAMETER crowid AS ROWID.
 &Scoped-define FRAME-NAME Actualiza-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS COMBO-BOX-2 COMBO-BOX-1 FILL-IN-21 BUTTON-3 ~
-BUTTON-4 
+&Scoped-Define ENABLED-OBJECTS FILL-IN-14 FILL-IN-15 FILL-IN-17 FILL-IN-18 ~
+FILL-IN-19 COMBO-BOX-2 COMBO-BOX-1 BUTTON-3 BUTTON-4 
 &Scoped-Define DISPLAYED-OBJECTS FILL-IN-14 FILL-IN-15 FILL-IN-17 ~
 FILL-IN-18 FILL-IN-19 COMBO-BOX-2 COMBO-BOX-1 FILL-IN-21 
 
@@ -76,16 +77,14 @@ DEFINE VARIABLE COMBO-BOX-1 AS CHARACTER FORMAT "X(256)":U
      VIEW-AS COMBO-BOX INNER-LINES 5
      LIST-ITEM-PAIRS "0","0"
      DROP-DOWN-LIST
-     SIZE 20 BY 1
-     BGCOLOR 15  NO-UNDO.
+     SIZE 20 BY 1 NO-UNDO.
 
 DEFINE VARIABLE COMBO-BOX-2 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Forma de Pago" 
      VIEW-AS COMBO-BOX INNER-LINES 5
      LIST-ITEM-PAIRS "0","0"
      DROP-DOWN-LIST
-     SIZE 20 BY 1
-     BGCOLOR 15  NO-UNDO.
+     SIZE 20 BY 1 NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-14 AS CHARACTER FORMAT "X(8)":U 
      LABEL "Folio" 
@@ -112,7 +111,7 @@ DEFINE VARIABLE FILL-IN-19 AS CHARACTER FORMAT "X(8)":U
      VIEW-AS FILL-IN 
      SIZE 14 BY 1 NO-UNDO.
 
-DEFINE VARIABLE FILL-IN-21 AS CHARACTER FORMAT "99:99":U 
+DEFINE VARIABLE FILL-IN-21 AS CHARACTER FORMAT "x(5)":U 
      LABEL "Hora Salida" 
      VIEW-AS FILL-IN 
      SIZE 11 BY 1 NO-UNDO.
@@ -134,7 +133,6 @@ DEFINE FRAME Actualiza-Frame
      SPACE(11.39) SKIP(1.47)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
-         BGCOLOR 8 
          TITLE "Actualiza Factura".
 
 
@@ -148,6 +146,15 @@ DEFINE FRAME Actualiza-Frame
  */
 &ANALYZE-RESUME _END-PROCEDURE-SETTINGS
 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _INCLUDED-LIB Actualiza-Frame 
+/* ************************* Included-Libraries *********************** */
+
+{ventas.i}
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 
 
 /* ***********  Runtime Attributes and AppBuilder Settings  *********** */
@@ -159,30 +166,25 @@ ASSIGN
        FRAME Actualiza-Frame:SCROLLABLE       = FALSE
        FRAME Actualiza-Frame:HIDDEN           = TRUE.
 
-/* SETTINGS FOR FILL-IN FILL-IN-14 IN FRAME Actualiza-Frame
-   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-14:READ-ONLY IN FRAME Actualiza-Frame        = TRUE.
 
-/* SETTINGS FOR FILL-IN FILL-IN-15 IN FRAME Actualiza-Frame
-   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-15:READ-ONLY IN FRAME Actualiza-Frame        = TRUE.
 
-/* SETTINGS FOR FILL-IN FILL-IN-17 IN FRAME Actualiza-Frame
-   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-17:READ-ONLY IN FRAME Actualiza-Frame        = TRUE.
 
-/* SETTINGS FOR FILL-IN FILL-IN-18 IN FRAME Actualiza-Frame
-   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-18:READ-ONLY IN FRAME Actualiza-Frame        = TRUE.
 
-/* SETTINGS FOR FILL-IN FILL-IN-19 IN FRAME Actualiza-Frame
-   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-19:READ-ONLY IN FRAME Actualiza-Frame        = TRUE.
+
+/* SETTINGS FOR FILL-IN FILL-IN-21 IN FRAME Actualiza-Frame
+   NO-ENABLE                                                            */
+ASSIGN 
+       FILL-IN-21:READ-ONLY IN FRAME Actualiza-Frame        = TRUE.
 
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
@@ -251,6 +253,8 @@ MAIN-BLOCK:
 DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
    ON END-KEY UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK:
   RUN enable_UI.
+  vchrSalida = HoraActual().
+  ASSIGN FILL-IN-21:SCREEN-VALUE = vchrSalida.
   RUN Desplegar.
   WAIT-FOR GO OF FRAME Actualiza-Frame.
 END.
@@ -330,7 +334,8 @@ PROCEDURE enable_UI :
   DISPLAY FILL-IN-14 FILL-IN-15 FILL-IN-17 FILL-IN-18 FILL-IN-19 COMBO-BOX-2 
           COMBO-BOX-1 FILL-IN-21 
       WITH FRAME Actualiza-Frame.
-  ENABLE COMBO-BOX-2 COMBO-BOX-1 FILL-IN-21 BUTTON-3 BUTTON-4 
+  ENABLE FILL-IN-14 FILL-IN-15 FILL-IN-17 FILL-IN-18 FILL-IN-19 COMBO-BOX-2 
+         COMBO-BOX-1 BUTTON-3 BUTTON-4 
       WITH FRAME Actualiza-Frame.
   VIEW FRAME Actualiza-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Actualiza-Frame}

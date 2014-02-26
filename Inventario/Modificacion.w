@@ -123,7 +123,8 @@ DEFINE FRAME Modificar-Frame
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
-         TITLE "Modificar".
+         TITLE "Modificar"
+         DEFAULT-BUTTON BUTTON-27.
 
 
 /* *********************** Procedure Settings ************************ */

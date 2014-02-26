@@ -67,7 +67,7 @@ PRODUCTO.DESCRIPCION PRODUCTO.CANT_MINIMA
     ~{&OPEN-QUERY-BROWSE-9}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BUTTON-24 BROWSE-9 BUTTON-26 RECT-18 RECT-26 
+&Scoped-Define ENABLED-OBJECTS BUTTON-24 BROWSE-9 BUTTON-33 RECT-18 RECT-26 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -86,9 +86,9 @@ DEFINE BUTTON BUTTON-24
      LABEL "Salir" 
      SIZE 13 BY .91.
 
-DEFINE BUTTON BUTTON-26 AUTO-GO 
+DEFINE BUTTON BUTTON-33 
      LABEL "Agregar" 
-     SIZE 14.2 BY 2.62.
+     SIZE 15 BY 2.62.
 
 DEFINE RECTANGLE RECT-18
      EDGE-PIXELS 8  
@@ -123,7 +123,7 @@ DEFINE BROWSE BROWSE-9
 DEFINE FRAME Product-Frame
      BUTTON-24 AT ROW 1.62 COL 110
      BROWSE-9 AT ROW 4.48 COL 11
-     BUTTON-26 AT ROW 9.67 COL 106.6
+     BUTTON-33 AT ROW 9.67 COL 106.2
      RECT-18 AT ROW 1 COL 1
      RECT-26 AT ROW 9.38 COL 105.4
      "NUEVO PRODUCTO" VIEW-AS TEXT
@@ -205,11 +205,11 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME BUTTON-26
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-26 Product-Frame
-ON CHOOSE OF BUTTON-26 IN FRAME Product-Frame /* Agregar */
+&Scoped-define SELF-NAME BUTTON-33
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-33 Product-Frame
+ON CHOOSE OF BUTTON-33 IN FRAME Product-Frame /* Agregar */
 DO:
-  RUN Insertar_Stock.w(ROWID(Producto),viniduser).
+    RUN Insertar_Stock.w(ROWID(Producto),viniduser).
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -273,7 +273,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE BUTTON-24 BROWSE-9 BUTTON-26 RECT-18 RECT-26 
+  ENABLE BUTTON-24 BROWSE-9 BUTTON-33 RECT-18 RECT-26 
       WITH FRAME Product-Frame.
   VIEW FRAME Product-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Product-Frame}

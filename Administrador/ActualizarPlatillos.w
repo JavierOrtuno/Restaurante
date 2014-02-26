@@ -49,7 +49,8 @@ DEFINE VARIABLE vcharIngredientes AS CHARACTER INITIAL "".
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Btn_Salir Sel_Productos Fill_Descripcion ~
-Fill_Precio List_Clasificacion Sel_Ingredientes Btn_Agregar RECT-18 RECT-24 
+Fill_Precio List_Clasificacion Sel_Ingredientes Btn_Agregar Btn_Producto ~
+RECT-18 RECT-24 
 &Scoped-Define DISPLAYED-OBJECTS Sel_Productos Fill_Descripcion Fill_Precio ~
 List_Clasificacion Sel_Ingredientes 
 
@@ -81,6 +82,10 @@ FUNCTION validatePlatillo RETURNS LOGICAL
 DEFINE BUTTON Btn_Agregar 
      LABEL "Agregar" 
      SIZE 20 BY 2.52.
+
+DEFINE BUTTON Btn_Producto 
+     LABEL "Nuevo Producto" 
+     SIZE 20 BY 2.5.
 
 DEFINE BUTTON Btn_Salir 
      LABEL "Salir" 
@@ -137,6 +142,7 @@ DEFINE FRAME Dlg_CreacionP
      List_Clasificacion AT ROW 10.38 COL 80.2 COLON-ALIGNED
      Sel_Ingredientes AT ROW 11.71 COL 82.2 NO-LABEL
      Btn_Agregar AT ROW 19.33 COL 86.8
+     Btn_Producto AT ROW 23.86 COL 11.4
      RECT-18 AT ROW 1 COL 1
      RECT-24 AT ROW 6.76 COL 65.4
      "Ingredientes:" VIEW-AS TEXT
@@ -148,7 +154,7 @@ DEFINE FRAME Dlg_CreacionP
           SIZE 40 BY .62 AT ROW 6.1 COL 65.6
      "Seleccionar Ingrediente:" VIEW-AS TEXT
           SIZE 40 BY .62 AT ROW 3.91 COL 11.8
-     SPACE(83.20) SKIP(19.89)
+     SPACE(83.19) SKIP(22.17)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -216,13 +222,31 @@ DO:
                 APPLY "WINDOW-CLOSE" TO FRAME Dlg_CreacionP.
             END.
             WHEN 2 THEN DO:
-                RUN updatePlatillo.
+                RUN updatePlatillo(
+                    pinRowId,
+                    STRING(Fill_Descripcion), 
+                    DECIMAL(Fill_Precio),
+                    INTEGER(List_Clasificacion),
+                    STRING(TRIM(vcharIng))).
+                APPLY "WINDOW-CLOSE" TO FRAME Dlg_CreacionP.
             END.
         END CASE.
     END.
     ELSE DO:
         MESSAGE "REGISTRO INCOMPLETO" VIEW-AS ALERT-BOX.
     END.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME Btn_Producto
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn_Producto Dlg_CreacionP
+ON CHOOSE OF Btn_Producto IN FRAME Dlg_CreacionP /* Nuevo Producto */
+DO:
+    RUN menuProductos.w.
+    ASSIGN Sel_Productos:LIST-ITEM-PAIRS IN FRAME {&FRAME-NAME} = getCatProducto().
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -354,7 +378,8 @@ PROCEDURE enable_UI :
           Sel_Ingredientes 
       WITH FRAME Dlg_CreacionP.
   ENABLE Btn_Salir Sel_Productos Fill_Descripcion Fill_Precio 
-         List_Clasificacion Sel_Ingredientes Btn_Agregar RECT-18 RECT-24 
+         List_Clasificacion Sel_Ingredientes Btn_Agregar Btn_Producto RECT-18 
+         RECT-24 
       WITH FRAME Dlg_CreacionP.
   VIEW FRAME Dlg_CreacionP.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_CreacionP}
@@ -414,6 +439,19 @@ PROCEDURE setInitial :
     
     vcharCatClasif = getCatClasificacion().
     ASSIGN List_Clasificacion:LIST-ITEM-PAIRS = vcharCatClasif.
+        
+    IF pinRowId <> ? THEN DO:
+        FIND FIRST MENU WHERE ROWID(MENU) = pinRowId.
+        ASSIGN 
+            Fill_Descripcion:SCREEN-VALUE = MENU.DESCRIPCION
+            Fill_Precio:SCREEN-VALUE = STRING(MENU.PRECIO)
+            List_Clasificacion:SCREEN-VALUE = STRING(MENU.ID_CLASIFICACION).
+        FOR EACH INGREDIENTE WHERE INGREDIENTE.ID_MENU = MENU.ID_MENU:
+            FIND FIRST PRODUCTO WHERE PRODUCTO.ID_PRODUCTO = INGREDIENTE.ID_PRODUCTO.
+            FIND FIRST UNIDAD_MEDIDA WHERE UNIDAD_MEDIDA.ID_UNIDAD = PRODUCTO.ID_UNIDAD.
+            RUN addIngredienteList(PRODUCTO.ID_PRODUCTO, PRODUCTO.DESCRIPCION + "/" + STRING(INGREDIENTE.CANTIDAD) + "-" + UNIDAD_MEDIDA.DESCRIPCION).
+        END.
+    END.
     
 END PROCEDURE.
 

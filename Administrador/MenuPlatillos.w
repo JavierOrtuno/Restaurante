@@ -246,6 +246,34 @@ END.
 &ANALYZE-RESUME
 
 
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bws_Platillos Dlg_Platillos
+ON MOUSE-SELECT-DBLCLICK OF Bws_Platillos IN FRAME Dlg_Platillos
+DO:
+    DEFINE VARIABLE vrowID AS ROWID.
+
+    vrowID = ROWID(MENU).
+    RUN ActualizarPlatillos.w(2, vrowID).
+    {&OPEN-QUERY-Bws_Platillos}
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bws_Platillos Dlg_Platillos
+ON RETURN OF Bws_Platillos IN FRAME Dlg_Platillos
+DO:
+    DEFINE VARIABLE vrowID AS ROWID.
+
+    vrowID = ROWID(MENU).
+    RUN ActualizarPlatillos.w(2, vrowID).
+    {&OPEN-QUERY-Bws_Platillos}
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dlg_Platillos 

@@ -199,6 +199,36 @@ END PROCEDURE.
 
 &ENDIF
 
+&IF DEFINED(EXCLUDE-updatePlatillo) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE updatePlatillo Method-Library 
+PROCEDURE updatePlatillo :
+/*------------------------------------------------------------------------------
+        Purpose:     
+        Parameters:  <none>
+        Notes:       
+    ------------------------------------------------------------------------------*/
+    DEFINE INPUT PARAMETER pinRowId AS ROWID.
+    DEFINE INPUT PARAMETER pinCharPlatillo AS CHARACTER.
+    DEFINE INPUT PARAMETER pinDecPrecio AS DECIMAL.
+    DEFINE INPUT PARAMETER pinIntClasificacion AS INTEGER.
+    DEFINE INPUT PARAMETER pinCharIngredientes AS CHARACTER.    
+
+    FIND FIRST MENU WHERE ROWID(MENU) = pinRowId.
+    ASSIGN         
+        MENU.DESCRIPCION = pinCharPlatillo
+        MENU.PRECIO = pinDecPrecio
+        MENU.ID_CLASIFICACION = pinIntClasificacion.
+        
+    DELETE FROM INGREDIENTE WHERE INGREDIENTE.ID_MENU = MENU.ID_MENU.
+    RUN addIngredientes(MENU.ID_MENU, pinCharIngredientes).   
+END PROCEDURE.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 /* ************************  Function Implementations ***************** */
 
 &IF DEFINED(EXCLUDE-getCatClasificacion) = 0 &THEN

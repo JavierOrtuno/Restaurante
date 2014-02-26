@@ -65,8 +65,9 @@ MENU.PRECIO getClasificacion(MENU.ID_CLASIFICACION)
     ~{&OPEN-QUERY-Bws_Platillos}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Btn_Salir Bws_Platillos Btn_Agregar RECT-18 ~
-RECT-23 
+&Scoped-Define ENABLED-OBJECTS Btn_Salir Fill_Search Bws_Platillos ~
+Btn_Agregar RECT-18 RECT-23 
+&Scoped-Define DISPLAYED-OBJECTS Fill_Search 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -88,6 +89,12 @@ DEFINE BUTTON Btn_Agregar
 DEFINE BUTTON Btn_Salir 
      LABEL "Salir" 
      SIZE 16 BY 1.19.
+
+DEFINE VARIABLE Fill_Search AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Buscar" 
+     VIEW-AS FILL-IN 
+     SIZE 46 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE RECTANGLE RECT-18
      EDGE-PIXELS 8  
@@ -122,14 +129,15 @@ DEFINE BROWSE Bws_Platillos
 
 DEFINE FRAME Dlg_Platillos
      Btn_Salir AT ROW 1.62 COL 122.4
-     Bws_Platillos AT ROW 4.86 COL 11
+     Fill_Search AT ROW 4.81 COL 17 COLON-ALIGNED
+     Bws_Platillos AT ROW 6.71 COL 11
      Btn_Agregar AT ROW 9.91 COL 121.8
      RECT-18 AT ROW 1 COL 1
      RECT-23 AT ROW 9.52 COL 120.6
      "MENU PLATILLOS" VIEW-AS TEXT
           SIZE 19 BY .95 AT ROW 1.71 COL 57.6
           FGCOLOR 15 
-     SPACE(66.00) SKIP(21.71)
+     SPACE(65.99) SKIP(23.43)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -153,7 +161,7 @@ DEFINE FRAME Dlg_Platillos
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR DIALOG-BOX Dlg_Platillos
                                                                         */
-/* BROWSE-TAB Bws_Platillos Btn_Salir Dlg_Platillos */
+/* BROWSE-TAB Bws_Platillos Fill_Search Dlg_Platillos */
 ASSIGN 
        FRAME Dlg_Platillos:SCROLLABLE       = FALSE
        FRAME Dlg_Platillos:HIDDEN           = TRUE.
@@ -274,6 +282,23 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Fill_Search
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Fill_Search Dlg_Platillos
+ON VALUE-CHANGED OF Fill_Search IN FRAME Dlg_Platillos /* Buscar */
+DO:
+    DEFINE VARIABLE vcharConsulta AS CHARACTER.
+    DEFINE VARIABLE vhandSearch AS HANDLE.
+
+    vhandSearch = (QUERY Bws_Platillos:HANDLE).
+    vcharConsulta = "FOR EACH MENU WHERE MENU.DESCRIPCION BEGINS '" + TRIM(Fill_Search:SCREEN-VALUE) + "'".
+    vhandSearch:QUERY-PREPARE(vcharConsulta).
+    vhandSearch:QUERY-OPEN().
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dlg_Platillos 
@@ -330,7 +355,9 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Btn_Salir Bws_Platillos Btn_Agregar RECT-18 RECT-23 
+  DISPLAY Fill_Search 
+      WITH FRAME Dlg_Platillos.
+  ENABLE Btn_Salir Fill_Search Bws_Platillos Btn_Agregar RECT-18 RECT-23 
       WITH FRAME Dlg_Platillos.
   VIEW FRAME Dlg_Platillos.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_Platillos}

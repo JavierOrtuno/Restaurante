@@ -66,8 +66,9 @@ getUnidadMedida(PRODUCTO.ID_UNIDAD)
     ~{&OPEN-QUERY-Bws_Productos}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS Btn_Salir Bws_Productos Btn_Agregar RECT-18 ~
-RECT-21 
+&Scoped-Define ENABLED-OBJECTS Btn_Salir Fill_Search Bws_Productos ~
+Btn_Agregar RECT-18 RECT-21 
+&Scoped-Define DISPLAYED-OBJECTS Fill_Search 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -89,6 +90,12 @@ DEFINE BUTTON Btn_Agregar
 DEFINE BUTTON Btn_Salir 
      LABEL "Salir" 
      SIZE 13.6 BY 1.1.
+
+DEFINE VARIABLE Fill_Search AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Buscar" 
+     VIEW-AS FILL-IN 
+     SIZE 53 BY 1
+     BGCOLOR 15  NO-UNDO.
 
 DEFINE RECTANGLE RECT-18
      EDGE-PIXELS 8  
@@ -124,7 +131,8 @@ DEFINE BROWSE Bws_Productos
 
 DEFINE FRAME Dlg_MenuProd
      Btn_Salir AT ROW 1.57 COL 145.8
-     Bws_Productos AT ROW 4.81 COL 11
+     Fill_Search AT ROW 4.1 COL 17 COLON-ALIGNED
+     Bws_Productos AT ROW 5.81 COL 11
      Btn_Agregar AT ROW 9 COL 142.2
      RECT-18 AT ROW 1 COL 1
      RECT-21 AT ROW 8.62 COL 141.2
@@ -155,7 +163,7 @@ DEFINE FRAME Dlg_MenuProd
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR DIALOG-BOX Dlg_MenuProd
                                                                         */
-/* BROWSE-TAB Bws_Productos Btn_Salir Dlg_MenuProd */
+/* BROWSE-TAB Bws_Productos Fill_Search Dlg_MenuProd */
 ASSIGN 
        FRAME Dlg_MenuProd:SCROLLABLE       = FALSE
        FRAME Dlg_MenuProd:HIDDEN           = TRUE.
@@ -270,6 +278,23 @@ END.
 &ANALYZE-RESUME
 
 
+&Scoped-define SELF-NAME Fill_Search
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Fill_Search Dlg_MenuProd
+ON VALUE-CHANGED OF Fill_Search IN FRAME Dlg_MenuProd /* Buscar */
+DO:
+    DEFINE VARIABLE vcharConsulta AS CHARACTER.
+    DEFINE VARIABLE vhandSearch AS HANDLE.
+
+    vhandSearch = (QUERY Bws_Productos:HANDLE).
+    vcharConsulta = "FOR EACH PRODUCTO WHERE PRODUCTO.DESCRIPCION BEGINS '" + TRIM(Fill_Search:SCREEN-VALUE) + "'".
+    vhandSearch:QUERY-PREPARE(vcharConsulta).
+    vhandSearch:QUERY-OPEN().
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &UNDEFINE SELF-NAME
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Dlg_MenuProd 
@@ -326,7 +351,9 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE Btn_Salir Bws_Productos Btn_Agregar RECT-18 RECT-21 
+  DISPLAY Fill_Search 
+      WITH FRAME Dlg_MenuProd.
+  ENABLE Btn_Salir Fill_Search Bws_Productos Btn_Agregar RECT-18 RECT-21 
       WITH FRAME Dlg_MenuProd.
   VIEW FRAME Dlg_MenuProd.
   {&OPEN-BROWSERS-IN-QUERY-Dlg_MenuProd}

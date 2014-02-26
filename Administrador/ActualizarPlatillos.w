@@ -85,7 +85,7 @@ DEFINE BUTTON Btn_Agregar
 
 DEFINE BUTTON Btn_Producto 
      LABEL "Nuevo Producto" 
-     SIZE 20 BY 2.5.
+     SIZE 20 BY 2.52.
 
 DEFINE BUTTON Btn_Salir 
      LABEL "Salir" 
@@ -161,7 +161,7 @@ DEFINE FRAME Dlg_CreacionP
           SIZE 40 BY .62 AT ROW 6.1 COL 65.6
      "Seleccionar Ingrediente:" VIEW-AS TEXT
           SIZE 40 BY .62 AT ROW 5.95 COL 11.8
-     SPACE(83.19) SKIP(22.18)
+     SPACE(83.20) SKIP(22.18)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -517,11 +517,22 @@ FUNCTION validatePlatillo RETURNS LOGICAL
         Purpose:  
         Notes:  
     ------------------------------------------------------------------------------*/        
-    IF TRIM(vcharDesc) = "" OR 
-       vdecPrecio <= 0 OR 
-       vintClas = 0 OR 
-       vintIng <= 1 THEN DO:
-        RETURN FALSE.
+        
+    IF vintClas = 13 THEN DO:    
+        IF TRIM(vcharDesc) = "" OR 
+           vdecPrecio < 0 OR 
+           vintClas = 0 OR 
+           vintIng <= 1 THEN DO:
+            RETURN FALSE.
+        END.
+    END.
+    ELSE DO:
+        IF TRIM(vcharDesc) = "" OR 
+           vdecPrecio <= 0 OR 
+           vintClas = 0 OR 
+           vintIng <= 1 THEN DO:
+            RETURN FALSE.
+        END.
     END.
 
     RETURN TRUE.

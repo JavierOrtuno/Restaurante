@@ -77,7 +77,7 @@ COMANDA.HORA_SALIDA
     ~{&OPEN-QUERY-BROWSE-21}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BROWSE-21 BUTTON-2 BtnCancel 
+&Scoped-Define ENABLED-OBJECTS BROWSE-21 BUTTON-2 BtnCancel RECT-1 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -94,12 +94,17 @@ COMANDA.HORA_SALIDA
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON BtnCancel AUTO-END-KEY DEFAULT 
      LABEL "Cancel" 
-     SIZE 15 BY 1.14
+     SIZE 15 BY 1.81
      BGCOLOR 8 .
 
 DEFINE BUTTON BUTTON-2 
      LABEL "Actualizar" 
-     SIZE 15 BY 1.14.
+     SIZE 15 BY 1.91.
+
+DEFINE RECTANGLE RECT-1
+     EDGE-PIXELS 8  
+     SIZE 170 BY 2.38
+     BGCOLOR 8 .
 
 /* Query definitions                                                    */
 &ANALYZE-SUSPEND
@@ -114,8 +119,8 @@ DEFINE QUERY BROWSE-21 FOR
 DEFINE BROWSE BROWSE-21
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-21 Factura-Frame _STRUCTURED
   QUERY BROWSE-21 NO-LOCK DISPLAY
-      FACTURA.FOLIO FORMAT "X(14)":U
-      FACTURA.FECHA FORMAT "99/99/99":U
+      FACTURA.FOLIO FORMAT "X(14)":U WIDTH 16.8
+      FACTURA.FECHA FORMAT "99/99/99":U WIDTH 15.2
       FACTURA.SUBTOTAL FORMAT "->>,>>9.99":U
       FACTURA.IVA FORMAT "->>,>>9.99":U
       COMANDA.PROPINA FORMAT "->>,>>9.99":U
@@ -123,21 +128,27 @@ DEFINE BROWSE BROWSE-21
       FORMA_PAGO.DESCRIPCION FORMAT "X(14)":U
       ESTATUS.DESCRIPCION FORMAT "X(14)":U
       COMANDA.HORA_LLEGADA FORMAT "X(5)":U
-      COMANDA.HORA_SALIDA FORMAT "X(5)":U
+      COMANDA.HORA_SALIDA FORMAT "X(5)":U WIDTH 17.4
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 153 BY 4.52 EXPANDABLE.
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 149.6 BY 4.52
+         BGCOLOR 15  EXPANDABLE.
 
 
 /* ************************  Frame Definitions  *********************** */
 
 DEFINE FRAME Factura-Frame
-     BROWSE-21 AT ROW 2.67 COL 14
-     BUTTON-2 AT ROW 8.14 COL 14
-     BtnCancel AT ROW 8.14 COL 31
-     SPACE(139.19) SKIP(1.28)
+     BROWSE-21 AT ROW 4.52 COL 11.4
+     BUTTON-2 AT ROW 10.05 COL 14
+     BtnCancel AT ROW 10.14 COL 31
+     RECT-1 AT ROW 1 COL 1
+     "ACTUALIZAR PRODUCTOS" VIEW-AS TEXT
+          SIZE 28 BY 1.19 AT ROW 1.62 COL 32
+          BGCOLOR 8 FGCOLOR 15 FONT 12
+     SPACE(110.99) SKIP(10.42)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
+         BGCOLOR 8 
          TITLE "Facturas"
          CANCEL-BUTTON BtnCancel.
 
@@ -181,8 +192,9 @@ ASSIGN
      _JoinCode[3]      = "FORMA_PAGO.ID_PAGO = FACTURA.ID_PAGO"
      _JoinCode[4]      = "ESTATUS.ID_ESTATUS = FACTURA.ID_ESTATUS"
      _FldNameList[1]   > Restaurante.FACTURA.FOLIO
-"FACTURA.FOLIO" ? "X(14)" "character" ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
-     _FldNameList[2]   = Restaurante.FACTURA.FECHA
+"FACTURA.FOLIO" ? "X(14)" "character" ? ? ? ? ? ? no ? no no "16.8" yes no no "U" "" ""
+     _FldNameList[2]   > Restaurante.FACTURA.FECHA
+"FACTURA.FECHA" ? ? "date" ? ? ? ? ? ? no ? no no "15.2" yes no no "U" "" ""
      _FldNameList[3]   = Restaurante.FACTURA.SUBTOTAL
      _FldNameList[4]   = Restaurante.FACTURA.IVA
      _FldNameList[5]   = Restaurante.COMANDA.PROPINA
@@ -192,7 +204,8 @@ ASSIGN
      _FldNameList[8]   > Restaurante.ESTATUS.DESCRIPCION
 "ESTATUS.DESCRIPCION" ? "X(14)" "character" ? ? ? ? ? ? no ? no no ? yes no no "U" "" ""
      _FldNameList[9]   = Restaurante.COMANDA.HORA_LLEGADA
-     _FldNameList[10]   = Restaurante.COMANDA.HORA_SALIDA
+     _FldNameList[10]   > Restaurante.COMANDA.HORA_SALIDA
+"COMANDA.HORA_SALIDA" ? ? "character" ? ? ? ? ? ? no ? no no "17.4" yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE BROWSE-21 */
 &ANALYZE-RESUME
@@ -285,7 +298,7 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE BROWSE-21 BUTTON-2 BtnCancel 
+  ENABLE BROWSE-21 BUTTON-2 BtnCancel RECT-1 
       WITH FRAME Factura-Frame.
   VIEW FRAME Factura-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Factura-Frame}

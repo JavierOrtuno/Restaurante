@@ -177,6 +177,9 @@ DEFINE FRAME Dialog-Frame-Menu
      "MENU PRINCIPAL" VIEW-AS TEXT
           SIZE 39.6 BY 1.91 AT ROW 2.19 COL 51.4
           BGCOLOR 8 FGCOLOR 15 FONT 70
+     "           MENU" VIEW-AS TEXT
+          SIZE 19 BY .81 AT ROW 19.81 COL 29.4
+          BGCOLOR 15 FGCOLOR 1 
      "                                 INVENTARIO" VIEW-AS TEXT
           SIZE 52 BY .81 AT ROW 17.57 COL 12.6
           BGCOLOR 15 FGCOLOR 1 
@@ -201,10 +204,7 @@ DEFINE FRAME Dialog-Frame-Menu
      "       PERSONAS" VIEW-AS TEXT
           SIZE 19 BY .81 AT ROW 8.24 COL 40.6
           BGCOLOR 15 FGCOLOR 1 
-     "           MENU" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 19.81 COL 29.4
-          BGCOLOR 15 FGCOLOR 1 
-     SPACE(92.99) SKIP(7.61)
+     SPACE(81.79) SKIP(19.18)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS THREE-D  SCROLLABLE 
          BGCOLOR 8 

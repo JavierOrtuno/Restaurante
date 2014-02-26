@@ -152,7 +152,7 @@ DEFINE FRAME Insertar-Frame
           FGCOLOR 15 
      "Campos Requeridos:" VIEW-AS TEXT
           SIZE 23 BY .62 AT ROW 3.86 COL 6.4
-     SPACE(51.59) SKIP(13.61)
+     SPACE(51.60) SKIP(13.61)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -291,7 +291,11 @@ FUNCTION Insertar RETURNS CHARACTER
 ------------------------------------------------------------------------------*/
   /*Comprueba que los campos Nombre, Domicilio y Correo no esten vacios*/
   IF NAME:SCREEN-VALUE IN FRAME Insertar-Frame = "" OR address:SCREEN-VALUE = "" OR e-mail:SCREEN-VALUE = ""
-    THEN MESSAGE "Nombre, Domicilio y Correo son obligatorios" VIEW-AS ALERT-BOX.  
+    THEN DO:
+      MESSAGE "Nombre, Domicilio y Correo son obligatorios" VIEW-AS ALERT-BOX. 
+      RETURN NO-APPLY.
+  END.
+         
         
   /*Registra un nuevo cliente en la base de datos*/ 
   ELSE DO TRANSACTION:      

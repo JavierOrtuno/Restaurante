@@ -121,15 +121,15 @@ DEFINE QUERY BROWSE-2 FOR
 DEFINE BROWSE BROWSE-2
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _DISPLAY-FIELDS BROWSE-2 Dialog-Frame _STRUCTURED
   QUERY BROWSE-2 SHARE-LOCK NO-WAIT DISPLAY
-      PERSONA.NOMBRES FORMAT "X(50)":U
-      PERSONA.A_PATERNO FORMAT "X(50)":U
-      PERSONA.A_MATERNO FORMAT "X(50)":U
-      PERSONA.DOMICILIO FORMAT "X(50)":U
-      PERSONA.F_NACIMIENTO FORMAT "99/99/99":U
-      PERSONA.CORREO FORMAT "X(50)":U
+      PERSONA.NOMBRES FORMAT "X(50)":U WIDTH 40.4
+      PERSONA.A_PATERNO FORMAT "X(50)":U WIDTH 33.2
+      PERSONA.A_MATERNO FORMAT "X(50)":U WIDTH 31.2
+      PERSONA.DOMICILIO FORMAT "X(50)":U WIDTH 32.2
+      PERSONA.F_NACIMIENTO FORMAT "99/99/99":U WIDTH 13.2
+      PERSONA.CORREO FORMAT "X(50)":U WIDTH 18.4
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 183.2 BY 10.81
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 177.2 BY 10.81
          BGCOLOR 15  ROW-HEIGHT-CHARS .62 EXPANDABLE.
 
 
@@ -186,12 +186,18 @@ ASSIGN
      _TblList          = "Restaurante.PERSONA,Restaurante.CLIENTE WHERE Restaurante.PERSONA ..."
      _Options          = "SHARE-LOCK INDEXED-REPOSITION"
      _JoinCode[2]      = "CLIENTE.ID_PERSONA = PERSONA.ID_PERSONA"
-     _FldNameList[1]   = Restaurante.PERSONA.NOMBRES
-     _FldNameList[2]   = Restaurante.PERSONA.A_PATERNO
-     _FldNameList[3]   = Restaurante.PERSONA.A_MATERNO
-     _FldNameList[4]   = Restaurante.PERSONA.DOMICILIO
-     _FldNameList[5]   = Restaurante.PERSONA.F_NACIMIENTO
-     _FldNameList[6]   = Restaurante.PERSONA.CORREO
+     _FldNameList[1]   > Restaurante.PERSONA.NOMBRES
+"PERSONA.NOMBRES" ? ? "character" ? ? ? ? ? ? no ? no no "40.4" yes no no "U" "" ""
+     _FldNameList[2]   > Restaurante.PERSONA.A_PATERNO
+"PERSONA.A_PATERNO" ? ? "character" ? ? ? ? ? ? no ? no no "33.2" yes no no "U" "" ""
+     _FldNameList[3]   > Restaurante.PERSONA.A_MATERNO
+"PERSONA.A_MATERNO" ? ? "character" ? ? ? ? ? ? no ? no no "31.2" yes no no "U" "" ""
+     _FldNameList[4]   > Restaurante.PERSONA.DOMICILIO
+"PERSONA.DOMICILIO" ? ? "character" ? ? ? ? ? ? no ? no no "32.2" yes no no "U" "" ""
+     _FldNameList[5]   > Restaurante.PERSONA.F_NACIMIENTO
+"PERSONA.F_NACIMIENTO" ? ? "date" ? ? ? ? ? ? no ? no no "13.2" yes no no "U" "" ""
+     _FldNameList[6]   > Restaurante.PERSONA.CORREO
+"PERSONA.CORREO" ? ? "character" ? ? ? ? ? ? no ? no no "18.4" yes no no "U" "" ""
      _Query            is OPENED
 */  /* BROWSE BROWSE-2 */
 &ANALYZE-RESUME

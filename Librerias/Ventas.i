@@ -311,15 +311,20 @@ FUNCTION DescontarInventario RETURNS LOGICAL
 DEF VAR vintNumero AS INT.
 DEF VAR vlogBandera AS LOG.
 DEF VAR vlogLinterna AS LOG.
+DEF VAR vchrIngrediente AS CHAR.
 
 FIND CURRENT MENU.
 
 FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = MENU.ID_Menu:
     vintNumero = Ingrediente.Cantidad * vintCantidad.
     vlogLinterna = FALSE.
+    FIND Producto WHERE Producto.ID_Producto = Ingrediente.ID_Producto.
+    vchrIngrediente = Producto.descripcion.
     FOR EACH Stock WHERE Stock.ID_Producto = Ingrediente.ID_Producto AND Stock.Cantidad > 0 AND Stock.F_Caducidad > TODAY.
     IF AVAILABLE Stock 
-        THEN DO:
+        THEN DO:    
+                    FIND Producto WHERE Producto.ID_Producto = Stock.ID_Producto.
+                    vchrIngrediente = Producto.Descripcion.
                     IF  Stock.Cantidad >= vintNumero THEN DO:
                         vlogLinterna = TRUE.
                         LEAVE.
@@ -336,6 +341,7 @@ FOR EACH Ingrediente WHERE Ingrediente.ID_Menu = MENU.ID_Menu:
     IF vlogLinterna = FALSE THEN DO:
         IF vintNumero > 0 THEN DO:
             vlogBandera = TRUE.
+            MESSAGE "No hay suficiente " vchrIngrediente VIEW-AS ALERT-BOX.
             LEAVE.   
         END.
     END.

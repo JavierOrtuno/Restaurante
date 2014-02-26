@@ -217,8 +217,8 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-1 Dialog-Frame
 ON CHOOSE OF BUTTON-1 IN FRAME Dialog-Frame /* Agregar */
 DO:
-
   RUN InsertarClientes.w.
+  {&OPEN-query-BROWSE-2}
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -234,7 +234,8 @@ DO:
     THEN DO TRANSACTION:
             DELETE Cliente.
             DELETE Persona.
-         END. 
+         END.
+    {&OPEN-query-BROWSE-2}
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -248,6 +249,7 @@ DO:
   FIND CURRENT Persona.
   crowid = ROWID(Persona).
   RUN ActualizaCliente.w(crowid).
+  {&OPEN-query-BROWSE-2}
 END.
 
 /* _UIB-CODE-BLOCK-END */

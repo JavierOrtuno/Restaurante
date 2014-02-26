@@ -236,6 +236,30 @@ END.
 &Scoped-define BROWSE-NAME Bws_Productos
 &Scoped-define SELF-NAME Bws_Productos
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bws_Productos Dlg_MenuProd
+ON DELETE-CHARACTER OF Bws_Productos IN FRAME Dlg_MenuProd
+DO:
+    DEFINE VARIABLE vrowID AS ROWID.       
+    DEFINE VARIABLE vlogAceptar AS LOGICAl.
+
+    vrowID = ROWID(PRODUCTO).
+          
+    IF canDeleteProducto(vrowID) THEN DO:
+        MESSAGE "¿REALMENTE DESEA ELIMINAR EL REGISTRO?" VIEW-AS ALERT-BOX BUTTONS YES-NO SET vlogAceptar.
+        IF vlogAceptar = TRUE THEN DO:                    
+            FIND FIRST PRODUCTO WHERE ROWID(PRODUCTO) = vrowID.
+            DELETE PRODUCTO.
+            Bws_Productos:DELETE-SELECTED-ROW(1).
+        END.
+    END.
+    ELSE 
+        MESSAGE "¡IMPOSIBLE ELIMINAR PLATILLO, EL REGISTRO YA TIENE RELACIONES!" VIEW-AS ALERT-BOX.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Bws_Productos Dlg_MenuProd
 ON MOUSE-SELECT-DBLCLICK OF Bws_Productos IN FRAME Dlg_MenuProd
 DO:    
     RUN selectedItem.

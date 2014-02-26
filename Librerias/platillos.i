@@ -34,6 +34,17 @@
 
 /* ************************  Function Prototypes ********************** */
 
+&IF DEFINED(EXCLUDE-canDeletePlatillo) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD canDeletePlatillo Method-Library 
+FUNCTION canDeletePlatillo RETURNS LOGICAL
+    ( INPUT vrowID AS ROWID )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 &IF DEFINED(EXCLUDE-getCatClasificacion) = 0 &THEN
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getCatClasificacion Method-Library 
@@ -230,6 +241,30 @@ END PROCEDURE.
 &ENDIF
 
 /* ************************  Function Implementations ***************** */
+
+&IF DEFINED(EXCLUDE-canDeletePlatillo) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION canDeletePlatillo Method-Library 
+FUNCTION canDeletePlatillo RETURNS LOGICAL
+    ( INPUT vrowID AS ROWID ) :
+    /*------------------------------------------------------------------------------
+        Purpose:  
+        Notes:  
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vlogResponse AS LOGICAL INITIAL TRUE.
+
+    FIND FIRST MENU WHERE ROWID(MENU) = vrowID.
+
+    IF CAN-FIND(CONSUMO WHERE CONSUMO.ID_MENU = MENU.ID_MENU) THEN
+        vlogResponse = FALSE.
+    
+    RETURN vlogResponse.
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
 
 &IF DEFINED(EXCLUDE-getCatClasificacion) = 0 &THEN
 

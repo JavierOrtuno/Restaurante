@@ -34,6 +34,17 @@
 
 /* ************************  Function Prototypes ********************** */
 
+&IF DEFINED(EXCLUDE-canDeleteProducto) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD canDeleteProducto Method-Library 
+FUNCTION canDeleteProducto RETURNS LOGICAL
+    ( INPUT vrowID AS ROWID )  FORWARD.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
+
 &IF DEFINED(EXCLUDE-getCatProducto) = 0 &THEN
 
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getCatProducto Method-Library 
@@ -204,6 +215,31 @@ END PROCEDURE.
 &ENDIF
 
 /* ************************  Function Implementations ***************** */
+
+&IF DEFINED(EXCLUDE-canDeleteProducto) = 0 &THEN
+
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION canDeleteProducto Method-Library 
+FUNCTION canDeleteProducto RETURNS LOGICAL
+    ( INPUT vrowID AS ROWID ) :
+    /*------------------------------------------------------------------------------
+        Purpose:  
+        Notes:  
+    ------------------------------------------------------------------------------*/
+    DEFINE VARIABLE vlogResponse AS LOGICAl INITIAL TRUE.
+
+    FIND FIRST PRODUCTO WHERE ROWID(PRODUCTO) = vrowID.
+    IF CAN-FIND(STOCK WHERE STOCK.ID_PRODUCTO = PRODUCTO.ID_PRODUCTO) OR 
+       CAN-FIND(INGREDIENTE WHERE INGREDIENTE.ID_PRODUCTO = PRODUCTO.ID_PRODUCTO) 
+        THEN
+            vlogResponse = FALSE.
+
+    RETURN vlogResponse.
+END FUNCTION.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+&ENDIF
 
 &IF DEFINED(EXCLUDE-getCatProducto) = 0 &THEN
 

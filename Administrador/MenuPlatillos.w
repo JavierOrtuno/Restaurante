@@ -237,17 +237,21 @@ DO:
     DEFINE VARIABLE vlogAceptar AS LOGICAl.
 
     vrowID = ROWID(MENU).
-            
-    MESSAGE "¿REALMENTE DESEA ELIMINAR EL REGISTRO?" VIEW-AS ALERT-BOX BUTTONS YES-NO SET vlogAceptar.
-    IF vlogAceptar = TRUE THEN DO:
-                
-        FIND FIRST MENU WHERE ROWID(MENU) = vrowID.
-        FOR EACH INGREDIENTE WHERE INGREDIENTE.ID_MENU = MENU.ID_MENU:
-            DELETE INGREDIENTE. 
-        END.       
-        DELETE MENU.
-        Bws_Platillos:DELETE-SELECTED-ROW(1).
+          
+    IF canDeletePlatillo(vrowID) THEN DO:    
+        MESSAGE "¿REALMENTE DESEA ELIMINAR EL REGISTRO?" VIEW-AS ALERT-BOX BUTTONS YES-NO SET vlogAceptar.
+        IF vlogAceptar = TRUE THEN DO:
+                    
+            FIND FIRST MENU WHERE ROWID(MENU) = vrowID.
+            FOR EACH INGREDIENTE WHERE INGREDIENTE.ID_MENU = MENU.ID_MENU:
+                DELETE INGREDIENTE. 
+            END.       
+            DELETE MENU.
+            Bws_Platillos:DELETE-SELECTED-ROW(1).
+        END.
     END.
+    ELSE 
+        MESSAGE "¡IMPOSIBLE ELIMINAR PLATILLO, EL REGISTRO YA TIENE RELACIONES!" VIEW-AS ALERT-BOX.
 END.
 
 /* _UIB-CODE-BLOCK-END */

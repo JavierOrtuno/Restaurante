@@ -286,7 +286,6 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Sel_Ingredientes Dlg_CreacionP
 ON DELETE-CHARACTER OF Sel_Ingredientes IN FRAME Dlg_CreacionP
 DO:
-    MESSAGE Sel_Ingredientes:SCREEN-VALUE VIEW-AS ALERT-BOX.
     IF Sel_Ingredientes:SCREEN-VALUE <> "" AND 
        Sel_Ingredientes:SCREEN-VALUE <> "0" AND 
        Sel_Ingredientes:SCREEN-VALUE <> ? THEN

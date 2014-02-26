@@ -46,8 +46,8 @@ DEF INPUT PARAM viniduser AS INT.
 &Scoped-define FRAME-NAME Insert-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BUTTON-23 FILL-IN-26 FILL-IN-27 FILL-IN-28 ~
-FILL-IN-29 FILL-IN-30 Btn_OK RECT-18 RECT-25 
+&Scoped-Define ENABLED-OBJECTS BUTTON-23 FILL-IN-29 FILL-IN-30 Btn_OK ~
+RECT-18 RECT-25 
 &Scoped-Define DISPLAYED-OBJECTS FILL-IN-26 FILL-IN-27 FILL-IN-28 ~
 FILL-IN-29 FILL-IN-30 
 
@@ -77,19 +77,19 @@ DEFINE VARIABLE FILL-IN-26 AS CHARACTER FORMAT "X(256)":U
      LABEL "Codigo" 
      VIEW-AS FILL-IN 
      SIZE 14 BY 1
-     BGCOLOR 15  NO-UNDO.
+     BGCOLOR 8  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-27 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Descripcion" 
      VIEW-AS FILL-IN 
      SIZE 30.6 BY 1
-     BGCOLOR 15  NO-UNDO.
+     BGCOLOR 8  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-28 AS INTEGER FORMAT "->,>>>,>>9":U INITIAL 0 
      LABEL "Cantidad Minima" 
      VIEW-AS FILL-IN 
      SIZE 14 BY 1
-     BGCOLOR 15  NO-UNDO.
+     BGCOLOR 8  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-29 AS INTEGER FORMAT "->,>>>,>>9":U INITIAL 0 
      LABEL "Cantidad" 
@@ -168,12 +168,18 @@ ASSIGN
        FRAME Insert-Frame:SCROLLABLE       = FALSE
        FRAME Insert-Frame:HIDDEN           = TRUE.
 
+/* SETTINGS FOR FILL-IN FILL-IN-26 IN FRAME Insert-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-26:READ-ONLY IN FRAME Insert-Frame        = TRUE.
 
+/* SETTINGS FOR FILL-IN FILL-IN-27 IN FRAME Insert-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-27:READ-ONLY IN FRAME Insert-Frame        = TRUE.
 
+/* SETTINGS FOR FILL-IN FILL-IN-28 IN FRAME Insert-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-28:READ-ONLY IN FRAME Insert-Frame        = TRUE.
 
@@ -304,8 +310,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY FILL-IN-26 FILL-IN-27 FILL-IN-28 FILL-IN-29 FILL-IN-30 
       WITH FRAME Insert-Frame.
-  ENABLE BUTTON-23 FILL-IN-26 FILL-IN-27 FILL-IN-28 FILL-IN-29 FILL-IN-30 
-         Btn_OK RECT-18 RECT-25 
+  ENABLE BUTTON-23 FILL-IN-29 FILL-IN-30 Btn_OK RECT-18 RECT-25 
       WITH FRAME Insert-Frame.
   VIEW FRAME Insert-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Insert-Frame}

@@ -44,8 +44,8 @@ DEF INPUT PARAM inrowReg AS ROWID.
 &Scoped-define FRAME-NAME Modificar-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BUTTON-26 FILL-IN-1 FILL-IN-2 FILL-IN-31 ~
-FILL-IN-32 BUTTON-27 RECT-18 RECT-25 
+&Scoped-Define ENABLED-OBJECTS BUTTON-26 FILL-IN-31 FILL-IN-32 BUTTON-27 ~
+RECT-18 RECT-25 
 &Scoped-Define DISPLAYED-OBJECTS FILL-IN-1 FILL-IN-2 FILL-IN-31 FILL-IN-32 
 
 /* Custom List Definitions                                              */
@@ -73,13 +73,13 @@ DEFINE VARIABLE FILL-IN-1 AS CHARACTER FORMAT "X(256)":U
      LABEL "Codigo" 
      VIEW-AS FILL-IN 
      SIZE 14 BY 1
-     BGCOLOR 15  NO-UNDO.
+     BGCOLOR 8  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-2 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Descripcion" 
      VIEW-AS FILL-IN 
      SIZE 24.4 BY 1
-     BGCOLOR 15  NO-UNDO.
+     BGCOLOR 8  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-31 AS DATE FORMAT "99/99/99":U 
      LABEL "Fecha de Caducidad" 
@@ -147,9 +147,13 @@ ASSIGN
        FRAME Modificar-Frame:SCROLLABLE       = FALSE
        FRAME Modificar-Frame:HIDDEN           = TRUE.
 
+/* SETTINGS FOR FILL-IN FILL-IN-1 IN FRAME Modificar-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-1:READ-ONLY IN FRAME Modificar-Frame        = TRUE.
 
+/* SETTINGS FOR FILL-IN FILL-IN-2 IN FRAME Modificar-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-2:READ-ONLY IN FRAME Modificar-Frame        = TRUE.
 
@@ -258,8 +262,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY FILL-IN-1 FILL-IN-2 FILL-IN-31 FILL-IN-32 
       WITH FRAME Modificar-Frame.
-  ENABLE BUTTON-26 FILL-IN-1 FILL-IN-2 FILL-IN-31 FILL-IN-32 BUTTON-27 RECT-18 
-         RECT-25 
+  ENABLE BUTTON-26 FILL-IN-31 FILL-IN-32 BUTTON-27 RECT-18 RECT-25 
       WITH FRAME Modificar-Frame.
   VIEW FRAME Modificar-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Modificar-Frame}

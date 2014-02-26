@@ -47,8 +47,8 @@ DEF INPUT PARAM viniduser AS INT.
 &Scoped-define FRAME-NAME Delete-Frame
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BUTTON-32 FILL-IN-31 FILL-IN-32 FILL-IN-33 ~
-FILL-IN-34 BUTTON-31 RECT-18 RECT-25 
+&Scoped-Define ENABLED-OBJECTS BUTTON-32 FILL-IN-34 BUTTON-31 RECT-18 ~
+RECT-25 
 &Scoped-Define DISPLAYED-OBJECTS FILL-IN-31 FILL-IN-32 FILL-IN-33 ~
 FILL-IN-34 
 
@@ -65,7 +65,7 @@ FILL-IN-34
 /* Define a dialog box                                                  */
 
 /* Definitions of the field level widgets                               */
-DEFINE BUTTON BUTTON-31 
+DEFINE BUTTON BUTTON-31 AUTO-GO 
      LABEL "Eliminar" 
      SIZE 20 BY 1.91.
 
@@ -77,19 +77,19 @@ DEFINE VARIABLE FILL-IN-31 AS CHARACTER FORMAT "X(256)":U
      LABEL "Descripción" 
      VIEW-AS FILL-IN 
      SIZE 23.8 BY 1
-     BGCOLOR 15  NO-UNDO.
+     BGCOLOR 8  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-32 AS CHARACTER FORMAT "X(256)":U 
      LABEL "Cantidad" 
      VIEW-AS FILL-IN 
      SIZE 14 BY 1
-     BGCOLOR 15  NO-UNDO.
+     BGCOLOR 8  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-33 AS DATE FORMAT "99/99/99":U 
      LABEL "Caducidad" 
      VIEW-AS FILL-IN 
      SIZE 14 BY 1
-     BGCOLOR 15  NO-UNDO.
+     BGCOLOR 8  NO-UNDO.
 
 DEFINE VARIABLE FILL-IN-34 AS INTEGER FORMAT "->,>>>,>>9":U INITIAL 0 
      LABEL "Cantidad a Eliminar" 
@@ -160,12 +160,18 @@ ASSIGN
        FRAME Delete-Frame:SCROLLABLE       = FALSE
        FRAME Delete-Frame:HIDDEN           = TRUE.
 
+/* SETTINGS FOR FILL-IN FILL-IN-31 IN FRAME Delete-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-31:READ-ONLY IN FRAME Delete-Frame        = TRUE.
 
+/* SETTINGS FOR FILL-IN FILL-IN-32 IN FRAME Delete-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-32:READ-ONLY IN FRAME Delete-Frame        = TRUE.
 
+/* SETTINGS FOR FILL-IN FILL-IN-33 IN FRAME Delete-Frame
+   NO-ENABLE                                                            */
 ASSIGN 
        FILL-IN-33:READ-ONLY IN FRAME Delete-Frame        = TRUE.
 
@@ -306,8 +312,7 @@ PROCEDURE enable_UI :
 ------------------------------------------------------------------------------*/
   DISPLAY FILL-IN-31 FILL-IN-32 FILL-IN-33 FILL-IN-34 
       WITH FRAME Delete-Frame.
-  ENABLE BUTTON-32 FILL-IN-31 FILL-IN-32 FILL-IN-33 FILL-IN-34 BUTTON-31 
-         RECT-18 RECT-25 
+  ENABLE BUTTON-32 FILL-IN-34 BUTTON-31 RECT-18 RECT-25 
       WITH FRAME Delete-Frame.
   VIEW FRAME Delete-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Delete-Frame}

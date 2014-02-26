@@ -47,8 +47,8 @@ DEF INPUT PARAM inintIdUsuario AS INT.
 
 /* Standard List Definitions                                            */
 &Scoped-Define ENABLED-OBJECTS Bttn-MSalir Btn-Ventas Btn-Menu Btn-Usuario ~
-Btn-Clientes Btn-Facturas Btn-Productos Btn-Inventario Btn-Repeorte ~
-Btn-Desperdicio RECT-18 RECT-2 RECT-3 RECT-31 RECT-4 RECT-5 RECT-6 RECT-7 ~
+Btn-Clientes Btn-Facturas Btn-Productos Btn-Inventario Btn-Reporte ~
+Btn-Desperdicio RECT-10 RECT-18 RECT-2 RECT-3 RECT-4 RECT-5 RECT-6 RECT-7 ~
 RECT-8 RECT-9 
 
 /* Custom List Definitions                                              */
@@ -65,73 +65,73 @@ RECT-8 RECT-9
 
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON Btn-Clientes 
-     LABEL "Clientes" 
+     LABEL "&Clientes" 
      SIZE 16 BY 1.14.
 
 DEFINE BUTTON Btn-Desperdicio 
-     LABEL "Desperdicio" 
+     LABEL "Merm&a" 
      SIZE 16 BY 1.14.
 
 DEFINE BUTTON Btn-Facturas 
-     LABEL "Facturas" 
+     LABEL "&Facturas" 
      SIZE 16.6 BY 1.14.
 
 DEFINE BUTTON Btn-Inventario 
-     LABEL "Inventario" 
+     LABEL "&Inventario" 
      SIZE 16 BY 1.14.
 
 DEFINE BUTTON Btn-Menu 
-     LABEL "Menú" 
+     LABEL "&Menú" 
      SIZE 16 BY 1.14.
 
 DEFINE BUTTON Btn-Productos 
-     LABEL "Productos" 
+     LABEL "&Productos" 
      SIZE 16 BY 1.14
      BGCOLOR 16 .
 
-DEFINE BUTTON Btn-Repeorte 
-     LABEL "Reportes" 
+DEFINE BUTTON Btn-Reporte 
+     LABEL "&Reportes" 
      SIZE 16 BY 1.14.
 
 DEFINE BUTTON Btn-Usuario 
-     LABEL "Usuarios" 
+     LABEL "&Usuarios" 
      SIZE 16 BY 1.14.
 
 DEFINE BUTTON Btn-Ventas 
-     LABEL "Ventas" 
+     LABEL "&Ventas" 
      SIZE 16.2 BY 1.14.
 
 DEFINE BUTTON Bttn-MSalir 
      LABEL "Salir" 
      SIZE 15.6 BY 1.57.
 
+DEFINE RECTANGLE RECT-10
+     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
+     SIZE 19.4 BY 5.33.
+
 DEFINE RECTANGLE RECT-18
-     EDGE-PIXELS 8  
+     EDGE-PIXELS 8  NO-FILL 
      SIZE 132 BY 3.33
      BGCOLOR 8 .
 
 DEFINE RECTANGLE RECT-2
-     EDGE-PIXELS 8  
+     EDGE-PIXELS 8  NO-FILL 
      SIZE 54.6 BY 9.52
      BGCOLOR 8 .
 
 DEFINE RECTANGLE RECT-3
-     EDGE-PIXELS 8  
+     EDGE-PIXELS 8  NO-FILL 
      SIZE 55 BY 9.52
      BGCOLOR 8 .
 
-DEFINE RECTANGLE RECT-31
-     EDGE-PIXELS 2 GRAPHIC-EDGE  NO-FILL 
-     SIZE 20 BY 5.48.
-
 DEFINE RECTANGLE RECT-4
-     EDGE-PIXELS 8  
+     EDGE-PIXELS 8  NO-FILL 
      SIZE 54.4 BY 9.48
      BGCOLOR 8 .
 
 DEFINE RECTANGLE RECT-5
-     EDGE-PIXELS 8  
-     SIZE 55 BY 9.52
+     EDGE-PIXELS 8  NO-FILL 
+     SIZE 54.4 BY 9.48
      BGCOLOR 8 .
 
 DEFINE RECTANGLE RECT-6
@@ -162,14 +162,14 @@ DEFINE FRAME Dialog-Frame-Menu
      Btn-Facturas AT ROW 11.38 COL 95.8
      Btn-Productos AT ROW 11.43 COL 19.2
      Btn-Inventario AT ROW 21.38 COL 30.8
-     Btn-Repeorte AT ROW 22.38 COL 96.6
+     Btn-Reporte AT ROW 22.24 COL 96
      Btn-Desperdicio AT ROW 23.14 COL 31
+     RECT-10 AT ROW 19.71 COL 94.2
      RECT-18 AT ROW 1.43 COL 5
      RECT-2 AT ROW 5.76 COL 76.4
      RECT-3 AT ROW 5.76 COL 11
-     RECT-31 AT ROW 19.71 COL 94.6
      RECT-4 AT ROW 17.24 COL 11.2
-     RECT-5 AT ROW 17.24 COL 76
+     RECT-5 AT ROW 17.24 COL 76.4
      RECT-6 AT ROW 8.14 COL 17.4
      RECT-7 AT ROW 8.14 COL 40.4
      RECT-8 AT ROW 7.76 COL 94
@@ -177,6 +177,18 @@ DEFINE FRAME Dialog-Frame-Menu
      "MENU PRINCIPAL" VIEW-AS TEXT
           SIZE 39.6 BY 1.91 AT ROW 2.19 COL 51.4
           BGCOLOR 8 FGCOLOR 15 FONT 70
+     "                                 INVENTARIO" VIEW-AS TEXT
+          SIZE 52 BY .81 AT ROW 17.57 COL 12.6
+          BGCOLOR 15 FGCOLOR 1 
+     "           MENU" VIEW-AS TEXT
+          SIZE 19 BY .81 AT ROW 7.86 COL 94.4
+          BGCOLOR 15 FGCOLOR 1 
+     "           MENU" VIEW-AS TEXT
+          SIZE 19 BY .81 AT ROW 19.81 COL 94.6
+          BGCOLOR 15 FGCOLOR 1 
+     "                                   REPORTES" VIEW-AS TEXT
+          SIZE 52 BY .81 AT ROW 17.57 COL 77.8
+          BGCOLOR 15 FGCOLOR 1 
      "                                     VENTAS" VIEW-AS TEXT
           SIZE 52.2 BY .81 AT ROW 5.95 COL 77.8
           BGCOLOR 15 FGCOLOR 1 
@@ -192,19 +204,7 @@ DEFINE FRAME Dialog-Frame-Menu
      "           MENU" VIEW-AS TEXT
           SIZE 19 BY .81 AT ROW 19.81 COL 29.4
           BGCOLOR 15 FGCOLOR 1 
-     "                                 INVENTARIO" VIEW-AS TEXT
-          SIZE 52 BY .81 AT ROW 17.57 COL 12.6
-          BGCOLOR 15 FGCOLOR 1 
-     "           MENU" VIEW-AS TEXT
-          SIZE 19.6 BY .81 AT ROW 19.81 COL 94.8
-          BGCOLOR 15 FGCOLOR 1 
-     "                                   REPORTES" VIEW-AS TEXT
-          SIZE 53.4 BY .81 AT ROW 17.62 COL 130 RIGHT-ALIGNED
-          BGCOLOR 15 FGCOLOR 1 
-     "           MENU" VIEW-AS TEXT
-          SIZE 19 BY .81 AT ROW 7.86 COL 94.4
-          BGCOLOR 15 FGCOLOR 1 
-     SPACE(27.99) SKIP(19.56)
+     SPACE(92.99) SKIP(7.61)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -235,13 +235,6 @@ ASSIGN
 ASSIGN 
        Bttn-MSalir:HIDDEN IN FRAME Dialog-Frame-Menu           = TRUE.
 
-ASSIGN 
-       RECT-5:HIDDEN IN FRAME Dialog-Frame-Menu           = TRUE
-       RECT-5:SELECTABLE IN FRAME Dialog-Frame-Menu       = TRUE.
-
-/* SETTINGS FOR TEXT-LITERAL "                                   REPORTES"
-          SIZE 53.4 BY .81 AT ROW 17.62 COL 130 RIGHT-ALIGNED           */
-
 /* _RUN-TIME-ATTRIBUTES-END */
 &ANALYZE-RESUME
 
@@ -252,6 +245,29 @@ ASSIGN
 /* ************************  Control Triggers  ************************ */
 
 &Scoped-define SELF-NAME Dialog-Frame-Menu
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame-Menu Dialog-Frame-Menu
+ON 0 OF FRAME Dialog-Frame-Menu /* Menu Principal */
+OR "m","p","u","c","v","f","i","a","r" OF FRAME {&FRAME-NAME} ANYWHERE DO:
+   
+    CASE CHR(LASTKEY):
+        
+        WHEN "m" THEN APPLY "CHOOSE" TO Btn-Menu.
+        WHEN "p" THEN APPLY "CHOOSE" TO Btn-Productos.
+        WHEN "u" THEN APPLY "CHOOSE" TO Btn-Usuario.
+        WHEN "c" THEN APPLY "CHOOSE" TO Btn-Clientes.
+        WHEN "v" THEN APPLY "CHOOSE" TO Btn-Ventas.
+        WHEN "f" THEN APPLY "CHOOSE" TO Btn-Facturas.
+        WHEN "i" THEN APPLY "CHOOSE" TO Btn-Inventario.
+        WHEN "a" THEN APPLY "CHOOSE" TO Btn-Desperdicio.
+        WHEN "r" THEN APPLY "CHOOSE" TO Btn-Reporte.
+
+    END CASE.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Dialog-Frame-Menu Dialog-Frame-Menu
 ON WINDOW-CLOSE OF FRAME Dialog-Frame-Menu /* Menu Principal */
 DO:
@@ -275,7 +291,7 @@ END.
 
 &Scoped-define SELF-NAME Btn-Desperdicio
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Desperdicio Dialog-Frame-Menu
-ON CHOOSE OF Btn-Desperdicio IN FRAME Dialog-Frame-Menu /* Desperdicio */
+ON CHOOSE OF Btn-Desperdicio IN FRAME Dialog-Frame-Menu /* Merma */
 DO:
   RUN Perdida_Diaria.w(inintIdUsuario).
 END.
@@ -328,9 +344,9 @@ END.
 &ANALYZE-RESUME
 
 
-&Scoped-define SELF-NAME Btn-Repeorte
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Repeorte Dialog-Frame-Menu
-ON CHOOSE OF Btn-Repeorte IN FRAME Dialog-Frame-Menu /* Reportes */
+&Scoped-define SELF-NAME Btn-Reporte
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Btn-Reporte Dialog-Frame-Menu
+ON CHOOSE OF Btn-Reporte IN FRAME Dialog-Frame-Menu /* Reportes */
 DO:
   RUN Reportes.w.
 END.
@@ -472,8 +488,8 @@ PROCEDURE enable_UI :
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
   ENABLE Bttn-MSalir Btn-Ventas Btn-Menu Btn-Usuario Btn-Clientes Btn-Facturas 
-         Btn-Productos Btn-Inventario Btn-Repeorte Btn-Desperdicio RECT-18 
-         RECT-2 RECT-3 RECT-31 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
+         Btn-Productos Btn-Inventario Btn-Reporte Btn-Desperdicio RECT-10 
+         RECT-18 RECT-2 RECT-3 RECT-4 RECT-5 RECT-6 RECT-7 RECT-8 RECT-9 
       WITH FRAME Dialog-Frame-Menu.
   VIEW FRAME Dialog-Frame-Menu.
   {&OPEN-BROWSERS-IN-QUERY-Dialog-Frame-Menu}

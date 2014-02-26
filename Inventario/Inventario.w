@@ -93,15 +93,15 @@ BUTTON-20 RECT-1 RECT-18
 
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON BUTTON-1 
-     LABEL "Agregar Producto" 
+     LABEL "&Agregar Producto" 
      SIZE 20 BY 2.86.
 
 DEFINE BUTTON BUTTON-20 
-     LABEL "Borrar" 
+     LABEL "&Borrar" 
      SIZE 20 BY 2.86.
 
 DEFINE BUTTON BUTTON-22 
-     LABEL "Modificar" 
+     LABEL "&Modificar" 
      SIZE 20 BY 2.86.
 
 DEFINE BUTTON BUTTON-25 
@@ -231,6 +231,23 @@ ASSIGN
 /* ************************  Control Triggers  ************************ */
 
 &Scoped-define SELF-NAME Inventario-Frame
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Inventario-Frame Inventario-Frame
+ON 0 OF FRAME Inventario-Frame /* Inventario */
+OR "a","m","b" OF FRAME {&FRAME-NAME} ANYWHERE DO:
+   
+    CASE CHR(LASTKEY):
+        
+        WHEN "a" THEN APPLY "CHOOSE" TO BUTTON-1.
+        WHEN "m" THEN APPLY "CHOOSE" TO BUTTON-22.
+        WHEN "b" THEN APPLY "CHOOSE" TO BUTTON-20.
+        
+    END CASE.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Inventario-Frame Inventario-Frame
 ON WINDOW-CLOSE OF FRAME Inventario-Frame /* Inventario */
 DO:

@@ -89,7 +89,7 @@ RECT-26
 
 /* Definitions of the field level widgets                               */
 DEFINE BUTTON BUTTON-29 
-     LABEL "Quitar" 
+     LABEL "&Quitar" 
      SIZE 15 BY 2.38.
 
 DEFINE BUTTON BUTTON-30 
@@ -205,6 +205,21 @@ END.
 
 
 &Scoped-define SELF-NAME BUTTON-29
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-29 Perdida-Frame
+ON 0 OF BUTTON-29 IN FRAME Perdida-Frame /* Quitar */
+OR "m" OF FRAME {&FRAME-NAME} ANYWHERE DO:
+   
+    CASE CHR(LASTKEY):
+        
+        WHEN "q" THEN APPLY "CHOOSE" TO BUTTON-29.
+
+    END CASE.
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL BUTTON-29 Perdida-Frame
 ON CHOOSE OF BUTTON-29 IN FRAME Perdida-Frame /* Quitar */
 DO:

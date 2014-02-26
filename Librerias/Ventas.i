@@ -71,8 +71,8 @@ FUNCTION DescontarInventario RETURNS LOGICAL
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD HoraActual Include 
-FUNCTION HoraActual RETURNS CHARACTER
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD HoraEntrada Include 
+FUNCTION HoraEntrada RETURNS CHARACTER
   ( /* parameter-definitions */ )  FORWARD.
 
 /* _UIB-CODE-BLOCK-END */
@@ -354,8 +354,8 @@ END FUNCTION.
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION HoraActual Include 
-FUNCTION HoraActual RETURNS CHARACTER
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION HoraEntrada Include 
+FUNCTION HoraEntrada RETURNS CHARACTER
   ( /* parameter-definitions */ ) :
 /*------------------------------------------------------------------------------
   Purpose:  

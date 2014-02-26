@@ -608,7 +608,7 @@ DO ON ERROR   UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK
    ON END-KEY UNDO MAIN-BLOCK, LEAVE MAIN-BLOCK:
   RUN enable_UI.
   ASSIGN Fecha:SCREEN-VALUE = string(FechaActual()).
-  vchrEntrada = HoraActual().
+  vchrEntrada = HoraEntrada().
   ASSIGN HoraEntrada:SCREEN-VALUE = vchrEntrada.
   WAIT-FOR GO OF FRAME {&FRAME-NAME}.
 END.

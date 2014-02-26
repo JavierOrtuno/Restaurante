@@ -67,7 +67,9 @@ PRODUCTO.DESCRIPCION PRODUCTO.CANT_MINIMA
     ~{&OPEN-QUERY-BROWSE-9}
 
 /* Standard List Definitions                                            */
-&Scoped-Define ENABLED-OBJECTS BUTTON-24 BROWSE-9 BUTTON-33 RECT-18 RECT-26 
+&Scoped-Define ENABLED-OBJECTS BUTTON-24 FILL-IN-1 BROWSE-9 BUTTON-33 ~
+RECT-18 RECT-26 
+&Scoped-Define DISPLAYED-OBJECTS FILL-IN-1 
 
 /* Custom List Definitions                                              */
 /* List-1,List-2,List-3,List-4,List-5,List-6                            */
@@ -89,6 +91,11 @@ DEFINE BUTTON BUTTON-24
 DEFINE BUTTON BUTTON-33 
      LABEL "Agregar" 
      SIZE 15 BY 2.62.
+
+DEFINE VARIABLE FILL-IN-1 AS CHARACTER FORMAT "X(256)":U 
+     LABEL "Busqueda" 
+     VIEW-AS FILL-IN 
+     SIZE 54 BY 1 NO-UNDO.
 
 DEFINE RECTANGLE RECT-18
      EDGE-PIXELS 8  
@@ -114,7 +121,7 @@ DEFINE BROWSE BROWSE-9
       PRODUCTO.CANT_MINIMA FORMAT "->,>>>,>>9":U
 /* _UIB-CODE-BLOCK-END */
 &ANALYZE-RESUME
-    WITH NO-ROW-MARKERS SEPARATORS SIZE 90 BY 18.1
+    WITH NO-ROW-MARKERS SEPARATORS SIZE 90 BY 16.33
          BGCOLOR 15  ROW-HEIGHT-CHARS .67 EXPANDABLE.
 
 
@@ -122,7 +129,8 @@ DEFINE BROWSE BROWSE-9
 
 DEFINE FRAME Product-Frame
      BUTTON-24 AT ROW 1.62 COL 110
-     BROWSE-9 AT ROW 4.48 COL 11
+     FILL-IN-1 AT ROW 4.33 COL 11 COLON-ALIGNED
+     BROWSE-9 AT ROW 6.24 COL 11
      BUTTON-33 AT ROW 9.67 COL 106.2
      RECT-18 AT ROW 1 COL 1
      RECT-26 AT ROW 9.38 COL 105.4
@@ -153,7 +161,7 @@ DEFINE FRAME Product-Frame
 &ANALYZE-SUSPEND _RUN-TIME-ATTRIBUTES
 /* SETTINGS FOR DIALOG-BOX Product-Frame
                                                                         */
-/* BROWSE-TAB BROWSE-9 BUTTON-24 Product-Frame */
+/* BROWSE-TAB BROWSE-9 FILL-IN-1 Product-Frame */
 ASSIGN 
        FRAME Product-Frame:SCROLLABLE       = FALSE
        FRAME Product-Frame:HIDDEN           = TRUE.
@@ -210,6 +218,24 @@ END.
 ON CHOOSE OF BUTTON-33 IN FRAME Product-Frame /* Agregar */
 DO:
     RUN Insertar_Stock.w(ROWID(Producto),viniduser).
+END.
+
+/* _UIB-CODE-BLOCK-END */
+&ANALYZE-RESUME
+
+
+&Scoped-define SELF-NAME FILL-IN-1
+&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL FILL-IN-1 Product-Frame
+ON VALUE-CHANGED OF FILL-IN-1 IN FRAME Product-Frame /* Busqueda */
+DO:
+    DEFINE VARIABLE vcharConsulta AS CHARACTER.
+    DEFINE VARIABLE vhandSearch AS HANDLE.
+
+    vhandSearch = (QUERY BROWSE-9:HANDLE).
+    vcharConsulta = "FOR EACH PRODUCTO WHERE PRODUCTO.DESCRIPCION BEGINS '" + TRIM(Fill-in-1:SCREEN-VALUE) + "'".
+    vhandSearch:QUERY-PREPARE(vcharConsulta).
+    vhandSearch:QUERY-OPEN().
+
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -273,7 +299,9 @@ PROCEDURE enable_UI :
                These statements here are based on the "Other 
                Settings" section of the widget Property Sheets.
 ------------------------------------------------------------------------------*/
-  ENABLE BUTTON-24 BROWSE-9 BUTTON-33 RECT-18 RECT-26 
+  DISPLAY FILL-IN-1 
+      WITH FRAME Product-Frame.
+  ENABLE BUTTON-24 FILL-IN-1 BROWSE-9 BUTTON-33 RECT-18 RECT-26 
       WITH FRAME Product-Frame.
   VIEW FRAME Product-Frame.
   {&OPEN-BROWSERS-IN-QUERY-Product-Frame}

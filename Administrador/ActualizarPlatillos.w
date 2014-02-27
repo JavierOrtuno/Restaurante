@@ -160,8 +160,8 @@ DEFINE FRAME Dlg_CreacionP
      "Campos Requeridos:" VIEW-AS TEXT
           SIZE 40 BY .62 AT ROW 6.1 COL 65.6
      "Seleccionar Ingrediente:" VIEW-AS TEXT
-          SIZE 40 BY .62 AT ROW 5.95 COL 11.8
-     SPACE(83.20) SKIP(22.18)
+          SIZE 40 BY .62 AT ROW 5.95 COL 11.2
+     SPACE(83.80) SKIP(22.18)
     WITH VIEW-AS DIALOG-BOX KEEP-TAB-ORDER 
          SIDE-LABELS NO-UNDERLINE THREE-D  SCROLLABLE 
          BGCOLOR 8 
@@ -275,7 +275,12 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Fill_Search Dlg_CreacionP
 ON VALUE-CHANGED OF Fill_Search IN FRAME Dlg_CreacionP /* Buscar */
 DO:
-    ASSIGN Sel_Productos:LIST-ITEM-PAIRS IN FRAME {&FRAME-NAME} = getCatProducto(Fill_Search:SCREEN-VALUE).
+    DEFINE VARIABLE vcharCatalogo AS CHARACTER.
+
+    vcharCatalogo = getCatProducto(Fill_Search:SCREEN-VALUE).
+    IF TRIM(vcharCatalogo) = "" THEN
+        vcharCatalogo = ",".
+    ASSIGN Sel_Productos:LIST-ITEM-PAIRS IN FRAME {&FRAME-NAME} = vcharCatalogo.
 END.
 
 /* _UIB-CODE-BLOCK-END */
@@ -300,7 +305,11 @@ END.
 &ANALYZE-SUSPEND _UIB-CODE-BLOCK _CONTROL Sel_Productos Dlg_CreacionP
 ON MOUSE-SELECT-DBLCLICK OF Sel_Productos IN FRAME Dlg_CreacionP
 DO:
-    RUN validarAgregado.
+    DEFINE VARIABLE vcharId AS CHARACTER.
+
+    vcharId = Sel_Productos:SCREEN-VALUE IN FRAME Dlg_CreacionP.
+    IF vcharId <> ? AND vcharId <> "" THEN
+        RUN validarAgregado.
 END.
 
 /* _UIB-CODE-BLOCK-END */

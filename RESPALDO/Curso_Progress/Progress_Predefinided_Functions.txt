@@ -1,0 +1,74 @@
+AMBIGUOUS        logica       Devuelve YES si la última búsqueda con FIND encontró más de un registro que cumpliera con el criterio de búsqueda.
+AVAILABLE        logica       Devuelve YES si se tiene un registro disponible de la tabla referida.
+CAN-DO           logica       Devuelve YES si la cadena indicada en el segundo parámetro se encuentra dentro de la primera.
+CAN-FIND         logica       Devuelve YES si la expresión de búsqueda contenida como parámetro es capaz de localizar un registro.
+CONNECTED        logica       Devuelve YES si la base de dstos indicada como parámetro se encuentra conectada.
+CURRENT-CHANGED  logica       Devuelve YES si la información del buffer de pantalla es diferente al buffer de registro.
+FIRST-OF         logica       Devuelve YES si el registro dentro de un ciclo FOR EACH con una cláusula BREAK-BY es el primero de un grupo.
+LAST-OF          logica       Devuelve YES si el registro dentro de un ciclo FOR EACH con una cláusula BREAK-BY es el último de un grupo.
+LOCKED           logica       Devuelve YES si el registro se encuentra bloqueado en forma exclusiva por otro usuario.
+SETUSERID        logica       Devuelve YES si se logró modificar al usuario de acceso a la base de datos con los parámetros enviados.
+TRANSACTION      logica       Devuelve YES si existe una transacción en curso en la línea de código donde se indica.
+VALID-EVENT      logica       Devuelve YES si el evento es aplicable al tipo de objeto indicados como parámetros.
+VALID-HANDLE     logica       Devuelve YES si la variable handle indicada como parámetro apunta a una estructura de objeto válida.
+
+ABSOLUTE         numerica     Devuelve el valor absoluto de una expresion numérica.
+ASC              numerica     Devuelve el valor del código ASCII del caracter indicado como parámetro.
+CURRENT-VALUE    numerica     Devuelve el valor alcanzado por una secuencia en ese momento.
+LOOKUP           numerica     Devuelve la posición de una expresión caracter dentro de una LISTA.
+DAY              numerica     Devuelve el día del mes de una expresion tipo fecha.
+MONTH            numerica     Devuelve el mes de año de una expresion tipo fecha.
+YEAR             numerica     Devuelve el año de una expresion tipo fecha.
+DECIMAL          numerica     Devuelve el equivalente valor decimal de una expresión representada como cadena.
+INTEGER          numerica     Devuelve el equivalente valor entero de de una expresión representada como cadena.
+TIME             numerica     Devuelve el tiempo trascurrido desde la media noche en segundos.
+ETIME            numerica     Devuelve el tiempo trascurrido desde la media noche en milisegundos.
+EXP              numerica     Devuelve el resultado de elevar una base a un exponente enviados como parámetros.
+EXTENT           numerica     Devuelve el número de elementos que componen un arreglo.
+INDEX            numerica     Devuelve la posición de un caracter dentro de una cadena.
+LOG              numerica     Devuelve el logaritmo de una expresión.
+MAXIMUM          numerica     Devuelve el valor mayor de una lista de expresiones.
+MINIMUM          numerica     Devuelve el valor menor de una lista de expresiones.
+NEXT-VALUE       numerica     Devuelve el siguiente valor que le corresponde a una secuencia y la incrementa al mimso tiempo.
+NUM-ENTRIES      numerica     Devuelve el número de elementos de una lista de acuerdo a cierto separador.
+RANDOM           numerica     Devuelve un número aleatorio que se encuentra dentro de un rango determinado.
+RECID            numerica     Devuelve el valor entero único aosociado al registro correspondiente disponible en un momento determinado.
+ROUND            numerica     Devuelve el valor correspondiente a redondear con una precisión determinada una expresión decimal.
+ROWID            numerica     Devuelve el apuntador único asociado a un registro determinado-
+SQRT             numerica     Devuelve la raiz cuadrada de una expresión numérica.
+WEEKDAY          numerica     Devuelve el dia de la semana que le corresponde a una fecha específica.
+
+CAPS             carácter     Devuelve una cadena convertida a mayúsculas.
+LC               carácter     Devuelve una cadena de cracteres convertida a minúsculas.
+CHR              carácter     Devuelve el caracter que le corresponde al código ASCII indicado como parametro.
+STRING           carácter     Devuelve como cadena de catacteres una expresión de cualquier tipo.
+FILL             carácter     Devuelve una cadena resultado de replicar un caracter determinado número de veces.
+LASTKEY          carácter     Devuelve el código ASCII del último caracter recibido desde el teclado.
+LDBNAME          carácter     Devuelve el nómbre lógico de una base de datos.
+TRIM             carácter     Devuelve una cadena resultado de eliminar de ambos lados de una cadena el caracter indicado como parámetro.
+LEFT-TRIM        carácter     Devuelve una cadena resultado de eliminar del lado izquierdo de una cadena el caracter indicado como parámetro.
+RIGTH-TRIM       carácter     Devuelve una cadena resultado de eliminar del lado derecho de una cadena el caracter indicado como parámetro.
+OPSYS            carácter     Devuelve el nombre del sistema operativo en el que se encuentra ejecutándose la aplicación.
+PROGRAM-NAME     carácter     Devuelve el nombre del programa que se encuentra ejecutándose y quien lo mandó a ejecutar.
+PROPATH          carácter     Delvuelve el valor del PROPATH de la sesión en curso.
+REPLACE          carácter     Delvuelve el resultado de sustituir una cadena por otra dentro de una tercera expresión caracter.
+SEARCH           carácter     Devuelve la ruta en la que el nombre de un archivo fue localizado.
+SUBSTITUTE       carácter     Devuelve una cadena resultado de susutiruir en una o más posiciones señaladas con "&n" igual número de expresiones
+                                       caracter indicadas como parámetro.
+SUBSTRING        carácter     Devuelve una subcadena formada a partir de otra. Los parámetros son la posición unicial y el número de carateres
+                                       tomados a partir de dicha posición.
+INPUT            caracter     Devuelve el valor del buffer de pantalla de un campo en particular.
+ENTRY            caracter     Devuelve la entrada n-ésima de una lista.
+
+DATE             fecha        Devuelve un valor tipo fecha a partir de una expresión caracter.
+TODAY            fecha        Devuelve la fecha del sistema. Se toma de acuerdo al valor del atributo SESSION:TIME-SOURCE.
+
+WIDGET-HANDLE    handle       Devuelve una apuntador tipo handle a partir de una expersión caracter.
+
+TO-ROWID         rowid        Devuelve un apuntador tipo rowid a partir de una expresión caracter.
+
+DYNAMIC-FUNCTION multitipo    Ejecuta una función cuyo nombre es indicado como parámetro caracter localizada dentro del alcance del programa
+                                       actual y devuelve el valor que le corresponde de acuerdo al tipo de la función invocada.
+IF...THEN...ELSE multitipo    Devuelve el valor correspondiente a la expresión indicada después del THEN si la expresión lógica después del IF
+                                       es verdadera. Devolverá el resultado de la expresión despupes del ELSE si ésta es falsa.
+RETURN-VALUE     multitipo    Devuelve el resultado depositado arrojado por la última sentencia RETURN.

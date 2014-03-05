@@ -1,0 +1,4 @@
+REPEAT:
+    INSERT stock WITH 1 COL.
+END.
+

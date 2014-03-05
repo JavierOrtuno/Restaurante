@@ -1,0 +1,369 @@
+Examen teórico individual:
+
+Selecciona la respuesta correcta de acuerdo a las opciones:
+
+1.- Cómo se llama a la disciplina a la que concierne a las teorías, métodos y
+    herramientas para el desarrollo, administración y evolución de productos
+    de software.
+
+    (A) Programación estructurada
+    (B) CMMI
+    (C) Ingenieria de Software
+    (D) RUP
+
+2.- ¿Qué es lo que comprende el término "Software"?
+
+    (A) Sólo Programas
+    (B) Programas y Equipo de cómputo
+    (C) Programas y toda la Documentación
+    (D) Requisitos y minutas
+
+3.- Es toda persona o entidad afectada por un proyecto en particular.
+
+    (A) Stakeholder
+    (B) Tester
+    (C) Usuario
+    (D) Damnificado
+
+4.- Es una condición o capacidad que debe cumplir o poseer un sistema  o componente
+    de un sistema para satisfacer un contrato, Standard, o especificación o algún
+    otro documento impuesto.
+
+    (A) Entrevista
+    (B) Requisito
+    (C) Diseño
+    (D) Sintaxis
+
+5.- Son todas las etapas de desarrollo de software mediante Ingeniería de Software.
+
+    (A) Análisis y Diseño
+    (B) Aseguramiento de la Calidad, liberación, postimplementación
+    (C) Pruebas, Implementación y soporte
+    (D) Captura de Requisitos, Análisis, Diseño, Pruebas, Implementación
+
+6.- ¿Cúal es el origen de la metodologías más importantes hoy en día?
+
+    (A) El trabajo en equipo
+    (B) El esfuerzo y la perseverancia
+    (C) Las buenas prácticas
+    (D) Los gurús del Software
+
+7.- ¿Que significa UML?
+
+    (A) Unificated Modeling Language
+    (B) Lenguaje de Modelado Unificado
+    (C) La dos anteriores
+    (D) Ninguna de las tres anteriores
+
+8.- ¿Cúal de las siguientes NO es una buena práctica en el desarrollo de software?
+
+    (A) Reutilización de código
+    (B) Uso de nomenclatura estándar
+    (C) Regresar a tiempo de comer
+    (D) Modularización
+
+9.- ¿Son los componentes básicos de Progress?
+
+    (A) Sentencias y funciones predefinidas
+    (B) Diccionario de Datos, RDBMS, 4GL, Procedure Editor
+    (C) Bases de Datos Relacionales
+    (D) Ninguna de los anteriores
+
+10.- ¿Por qué se dice que el LMD de Progress es un 4GL?
+
+    (A) Por que es un lenguaje de cuarta generación o de uso específico 
+    (B) Para que se pareciera a la marca de un auto
+    (C) Por tener un nombre elegante
+    (D) Para que fuera fácil de pronunciar
+
+11.- ¿Progress soporta el SQL estándar?
+
+    (A) Si
+    (B) No
+    (C) Tal vez
+    (D) Sólo por la noche
+
+12.- ¿Que extensión tienen los archivos compilados de Progress?
+
+    (A) *.exe
+    (B) *.p
+    (C) *.r
+    (D) *.i
+
+13.- Es un generador de código Progress 4GL que facilita la elaboración de
+     aplicaciones gráficas. 
+
+    (A) Procedure Editor 
+    (B) Desktop
+    (C) Results
+    (D) AppBuilder
+
+14.- NO es un tipo de datos de Progress 4GL v9.1d
+
+    (A) Rowid
+    (B) Stream
+    (C) Handle 
+    (D) Date
+
+15.- NO es un operador booleano de Progress 4GL v9.1d
+
+    (A) EOF
+    (B) GE
+    (C) >=
+    (D) LT
+
+16.- Es un operador lógico que localiza patrones de caracteres dentro de una cadena.
+
+    (A) Begins
+    (B) Round
+    (C) String
+    (D) Matches
+
+17.- Es una constante caracter válida.
+
+    (A) "For each Call_Click where Call_Click.Nombre = vchrNombre no-lock
+    (B) "For each Call_Click where Call_Click.Nombre = 'Leopoldo' no-lock"
+    (C)  For each Call_Click where Call_Click.Nombre = vchrNombre no-lock"
+    (D)  For each Call_Click where Call_Click.Nombre = "Leopoldo" no-lock
+
+18.- Define de manera correcta una variable de tipo caracter.
+
+    (A) Define variable vchrNombre as character.
+    (B) Def var vchrNombre as string.
+    (C) Def var vchrNombre as date.
+    (D) Define variable vchrNombre as cadena.
+
+19.- Es el tipo de dato de Progress diseñado para almacenar información numérica en punto
+     flotante.
+
+     (A) INTEGER 
+     (B) STRING
+     (C) CHARACTER
+     (D) DECIMAL
+
+20.- Es el tipo de dato de Progress diseñado para almacenar los valores de verdad TRUE y FALSE.
+
+     (A) DATE
+     (B) BOOLEAN
+     (C) CHARACTER
+     (D) LOGICAL
+
+21.- Es el tipo de dato de Progress diseñado para almacenar cadenas de caracteres.
+
+     (A) DATE
+     (B) STRING
+     (C) CHARACTER
+     (D) LOGICAL
+
+22.- Sentencia que representa una variante estructurada de la sentencia IF THEN ELSE.
+
+    (A) FOR EACH
+    (B) WHEN
+    (C) CASE
+    (D) AVAILABLE
+
+23.- Sentencia de entrada de datos que equivale al DISPLAY, PROMPT-FOR y ASSIGN juntas.
+
+    (A) SET
+    (B) ASSIGN
+    (C) MESSAGE
+    (D) UPDATE
+
+24.- NO es un tipo de bloqueo sobre registros que existe en Progress.
+
+    (A) no-lock 
+    (B) unique-lock
+    (C) exclusive-lock
+    (D) share-lock
+
+25.- Tipo de bloqueo por default en Progress.
+
+    (A) no-lock 
+    (B) unique-lock
+    (C) exclusive-lock
+    (D) share-lock
+
+26.- Sentencia cuya función es crear un registro tabla sin entrada interactiva del usuario.
+
+    (A) INSERT
+    (B) CREATE
+    (C) DELETE
+    (D) ASSIGN
+
+27.- Para poder ejecutar una sentencia DELETE que tipo de bloqueo debe de tener el registro.
+
+    (A) no-lock 
+    (B) unique-lock
+    (C) exclusive-lock
+    (D) share-lock
+
+28.- ¿En qué momento una sentencia RELEASE se ejecuta de forma efectiva?
+
+    (A) Justo en el momento en el que se ejecuta.
+    (B) Al terminar la sesión del usuario.
+    (C) Al concluir la transacción en curso.
+    (D) Nunca.
+
+
+29.- Es la función que nos indica si una sentencia FIND fue exitosa.
+
+    (A) FOUND 
+    (B) ROWID
+    (C) SEARCH
+    (D) AVAILABLE
+
+30.- Nos proporciona la lectura de una bloque de registros de acuerdo a un criterio de consulta.
+
+    (A) FOR EACH
+    (B) REPEAT
+    (C) WHILE
+    (D) CAN-FIND
+
+31.- Objeto gráfico de Progress diseñado para la lectura de un datos en forma de casilla o
+     campo unifila.
+
+    (A) Editor
+    (B) Combo-Box
+    (C) Fill-In
+    (D) Selection-List
+
+32.- Objeto gráfico de Progress diseñado para visualizar de forma tabular (fila - columna) el
+     contenido de una tabla.
+
+    (A) Slider
+    (B) Fill-In
+    (C) Toggle-Box
+    (D) Browse
+
+33.- Objeto gráfico de Progress diseñado para recibir de forma INTERACTIVA cualquier cantidad de lineas
+     de texto.
+
+    (A) Editor
+    (B) Selection-List
+    (C) Combo-Box
+    (D) Fill-In
+
+34.- Objetos de Progress cuya funcion es la de contenedores de los demás objetos de intefaz gráfica.
+
+    (A) Fill-Ins y Editors
+    (B) Windows y Dialogs
+    (C) Toggle-Box y Combo-Box
+    (D) Querys y Browses
+
+35.- Variable de ambiente de Progress representada por una lista separada por comas de los directorios
+     en los que se trata de localizar los archivos a los que se les hace referencia.
+
+    (A) SESSION
+    (B) SELF
+    (C) PrOPATH
+    (D) LAST-EVENT
+
+36.- Parte del AppBuilder en los que se dan de alta y actualizan las Functiones, Procedimientos y Triggers.
+
+    (A) Data Dictionary
+    (B) Data Administration
+    (C) Pro-Tools
+    (D) Section Editor
+
+37.- NO es un componente del AppBuilder.
+
+    (A) Acctuate
+    (B) Pro Tools
+    (C) Data Diccionary
+    (D) Application Compiler
+
+38.- Estructura de datos muy parecida a una tabla de la base de datos pero definida dentro de un programa
+     Progress 4GL y cuyo alcance de vida es el procedimiento donde se definió.
+
+    (A) Arreglo
+    (B) Lista
+    (C) Procedimiento
+    (D) Tabla temporal
+
+39.- Principal diferencia entre una Work-Table y una Temp-Table.
+
+    (A) Una se almacena en disco y la otra sólo en memoria
+    (B) Una puede pasar como parámetro y la otra no
+    (C) Una puede definirse SHARED y la otra no
+    (D) Una existe dentro del Progress 4GL y la otra no
+
+40.- Tipo de subprograma cuyo objetivo principal es la de devolver un valor.
+
+    (A) Procedimiento
+    (B) Widget
+    (C) Fill-In
+    (D) Función
+
+41.- Función predefinida por Progress que trunca los espacios en blanco al principio y 
+     final de una cadena.
+
+    (A) TRIM
+    (B) AVAILABLE
+    (C) LAST-OF
+    (D) LOCKED
+
+42.- Función predefinida por Progress que devuelve la fecha del sistema.
+
+    (A) SESSION
+    (B) TODAY
+    (C) DATE
+    (D) ERROR-STATUS
+
+43.- Función predefinida por Progress que convierte cualquier tipo de dato a una cadena.
+
+    (A) CHARACTER
+    (B) INTEGER
+    (C) EXP
+    (D) STRING
+
+44.- Función predefinida por Progress que devuelve el Seno de un ángulo dado en radianes.
+
+    (A) SIN
+    (B) COS
+    (C) EXP
+    (D) Ninguna
+
+45.- Función predefinida por Progress que eleva a un potencia un expresión numérica.
+
+    (A) EXP
+    (B) LOG
+    (C) POW
+    (D) LC
+
+46.- Función predefinida por Progress que devuelve la entrada en la que se encuentra una
+     expresión caracter dentro de una lista.
+
+    (A) UPPER
+    (B) NUM-ENTRIES
+    (C) LOOKUP
+    (D) INDEX
+
+47.- Función predefinida por Progress que devuelve la entrada n de una lista.
+
+    (A) LOOKUP
+    (B) NUM-ENTRIES
+    (C) ENTRY
+    (D) CAN-FIND
+
+48.- Función predefinida por Progress que sustituye una cierta subcadena por otra dentro de una
+     cadena fuente.
+
+    (A) SUBSTITUTE
+    (B) LOOKUP
+    (C) NUM-ENTRIES
+    (D) REPLACE
+
+49.- Función predefinida por Progress que sustituye una a una un conjunto subcadenas por una
+     lista de patrones &<Num> dentro de una cadena fuente.
+
+    (A) REPLACE
+    (B) INDEX
+    (C) SUBSTITUTE
+    (D) LENGTH
+
+50.- Función predefinida por Progress que convierte una expresión caracter a una fecha.
+
+    (A) VALID-HANDLE
+    (B) TODAY
+    (C) STRING
+    (D) DATE

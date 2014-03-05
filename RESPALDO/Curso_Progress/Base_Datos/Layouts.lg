@@ -1,0 +1,84 @@
+
+                Thu Jan 16 11:48:47 2014
+11:48:47 prostrct create comienza sesión Sebastian García en CON:. (451)
+11:48:47 Error en el Registry 5: No se pudo crear la llave 'LAYOUTS_PROGRESS' para el Visualizador de Evento. (5175)
+11:48:48 Fin de sesión prostrct create. (334)
+11:48:48 procopy comienza sesión Sebastian García en CON:. (451)
+11:48:48 Fin de sesión procopy. (334)
+
+                Thu Jan 16 11:48:48 2014
+11:48:48 procopy get default SQL DBA comienza sesión Sebastian García en CON:. (451)
+11:48:48 Fin de sesión procopy get default SQL DBA. (334)
+
+                Thu Jan 16 11:49:12 2014
+11:49:12 Single-user comienza sesión Sebastian García en CON:. (451)
+11:49:12 Inicio de la Fase de Physical Redo en 0 . (5326)
+11:49:12 Fase Física del "Redo" Terminada en blq 0 off 406 act 0. (7161)
+
+                Thu Jan 16 12:10:34 2014
+12:10:34 Single-user comienza sesión Sebastian García en CON:. (451)
+12:10:34 Inicio de la Fase de Physical Redo en 0 . (5326)
+12:10:34 Fase Física del "Redo" Terminada en blq 5 off 3506 act 201. (7161)
+16:03:21 Fin de sesión Single-user. (334)
+
+                Fri Jan 17 15:17:53 2014
+15:17:53 Single-user comienza sesión Sebastian García en CON:. (451)
+15:17:53 Error en el Registry 5: No se pudo crear la llave 'LAYOUTS_PROGRESS' para el Visualizador de Evento. (5175)
+15:17:53 Inicio de la Fase de Physical Redo en 0 . (5326)
+15:17:53 Fase Física del "Redo" Terminada en blq 5 off 3506 act 0. (7161)
+16:01:56 Fin de sesión Single-user. (334)
+
+                Mon Jan 20 09:41:47 2014
+09:41:47 Single-user comienza sesión Sebastian García en CON:. (451)
+09:41:47 Error en el Registry 5: No se pudo crear la llave 'LAYOUTS_PROGRESS' para el Visualizador de Evento. (5175)
+09:41:47 Inicio de la Fase de Physical Redo en 0 . (5326)
+09:41:47 Fase Física del "Redo" Terminada en blq 6 off 286 act 0. (7161)
+16:10:21 Fin de sesión Single-user. (334)
+
+                Tue Jan 21 09:22:08 2014
+09:22:08 Single-user comienza sesión Sebastian García en CON:. (451)
+09:22:08 Error en el Registry 5: No se pudo crear la llave 'LAYOUTS_PROGRESS' para el Visualizador de Evento. (5175)
+09:22:08 Inicio de la Fase de Physical Redo en 0 . (5326)
+09:22:09 Fase Física del "Redo" Terminada en blq 9 off 2417 act 0. (7161)
+16:03:52 Fin de sesión Single-user. (334)
+
+                Wed Jan 22 09:29:24 2014
+09:29:24 Single-user comienza sesión Sebastian García en CON:. (451)
+09:29:24 Error en el Registry 5: No se pudo crear la llave 'LAYOUTS_PROGRESS' para el Visualizador de Evento. (5175)
+09:29:24 Inicio de la Fase de Physical Redo en 0 . (5326)
+09:29:24 Fase Física del "Redo" Terminada en blq 16 off 3166 act 0. (7161)
+16:03:03 Fin de sesión Single-user. (334)
+
+                Thu Jan 23 09:21:51 2014
+09:21:51 Single-user comienza sesión Sebastian García en CON:. (451)
+09:21:51 Error en el Registry 5: No se pudo crear la llave 'LAYOUTS_PROGRESS' para el Visualizador de Evento. (5175)
+09:21:51 Inicio de la Fase de Physical Redo en 0 . (5326)
+09:21:51 Fase Física del "Redo" Terminada en blq 16 off 6793 act 0. (7161)
+
+                Thu Jan 23 15:26:22 2014
+15:26:22 Single-user comienza sesión Sebastian García en CON:. (451)
+15:26:22 Error en el Registry 5: No se pudo crear la llave 'LAYOUTS_PROGRESS' para el Visualizador de Evento. (5175)
+15:26:22 Inicio de la Fase de Physical Redo en 0 . (5326)
+15:26:22 Fase Física del "Redo" Terminada en blq 20 off 3031 act 347. (7161)
+15:58:56 Fin de sesión Single-user. (334)
+
+                Fri Jan 24 10:02:29 2014
+10:02:29 Single-user comienza sesión Sebastian García en CON:. (451)
+10:02:29 Error en el Registry 5: No se pudo crear la llave 'LAYOUTS_PROGRESS' para el Visualizador de Evento. (5175)
+10:02:29 Inicio de la Fase de Physical Redo en 0 . (5326)
+10:02:29 Fase Física del "Redo" Terminada en blq 20 off 3031 act 0. (7161)
+15:55:02 Fin de sesión Single-user. (334)
+
+                Fri Jan 24 15:55:52 2014
+15:55:52 Single-user comienza sesión Sebastian García en CON:. (451)
+15:55:52 Error en el Registry 5: No se pudo crear la llave 'LAYOUTS_PROGRESS' para el Visualizador de Evento. (5175)
+15:55:59 Inicio de la Fase de Physical Redo en 0 . (5326)
+15:55:59 Fase Física del "Redo" Terminada en blq 20 off 4073 act 0. (7161)
+15:56:20 Fin de sesión Single-user. (334)
+
+                Mon Jan 27 09:51:51 2014
+09:51:51 Single-user comienza sesión Sebastian García en CON:. (451)
+09:51:51 Error en el Registry 5: No se pudo crear la llave 'LAYOUTS_PROGRESS' para el Visualizador de Evento. (5175)
+09:51:51 Inicio de la Fase de Physical Redo en 0 . (5326)
+09:51:51 Fase Física del "Redo" Terminada en blq 20 off 4073 act 0. (7161)
+16:02:07 Fin de sesión Single-user. (334)

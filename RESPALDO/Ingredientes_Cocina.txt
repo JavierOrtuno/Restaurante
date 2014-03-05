@@ -1,0 +1,159 @@
+Aceite de soja
+Aceite de maíz
+Aceite de oliva
+Nata o crema de leche
+Yogur
+Leche
+Helado
+Queso
+Setas
+Hongos
+Coles
+Legumbres
+Alubias
+Garbanzos
+Lentejas
+Soja
+Pimientas
+Patata
+Raíces y tubérculos
+Lechugas
+Acelga
+Alcachofa
+Batata
+Berenjena
+Berro
+Brócoli
+Brecol
+Calabacín
+Calabaza
+Cardo
+Cebolla
+Cebolleta
+Coles de Bruselas
+Coliflor
+Endivia
+Tomate
+Zanahoria
+Escarola
+Espárrago
+Espinaca
+Guisante
+Habas
+Hinojo
+Judías
+Maíz
+Palmito
+Pepino
+Pimiento
+Puerro
+Remolacha
+Albaricoque
+Aguacate
+Cereza
+Mango
+Melocotones
+Nectarina
+Ciruela
+Fruta del bosque
+Frutos secos
+Membrillo
+Peras
+Manzanas
+Uvas
+Fruta seca
+Frambuesa
+Fresa
+Granada
+Higos
+Kiwi
+Limón
+Mandarina
+Melón
+Naranja
+Piña
+Plátano
+Pomelo
+Sandía
+Cereales
+Harinas
+Panes
+Arroz
+Pasta
+Atún
+Anchoa
+Bacalao
+Bonito
+Boquerón
+Caballa
+Chicharro
+Corvina
+Dorada
+Lenguado
+Lubina
+Merluza
+Mero
+Palometa
+Pejerrey
+Rape
+Rodaballo
+Salmón
+Sardina
+Trucha
+Camarón
+Cigala
+Gamba
+Langostino
+Percebe
+Almeja
+Calamar
+Mejillón
+Ostra
+Pulpo
+Sepia
+Vieira
+Cordero
+Ovejas
+Ternera
+Buey
+Caballo
+Cabra
+Cerdo
+Vaca
+Avestruz
+Paloma
+Perdiz
+Patos
+Pavos
+Ocas
+Gallinas
+Pollo
+capones
+huevos
+Conejo
+Liebre
+Venado
+Cerdo
+Res
+Cordero
+Cabra
+Patos
+Faisanes
+Ancas de rana
+Caracoles
+Cervezas
+Sidras
+Licores
+Vino blanco
+Vino caliente
+Vino tinto
+Vino rosado
+Whisky
+Cafés
+Cola
+Agua
+Agua mineral
+Agua gaseosa
+Zumo
+Tés
+Horchata
